@@ -14,7 +14,7 @@ export class GameObject {
 
     getStyle(containerSize) {
         return {
-            border: `${Math.round(0.006 * containerSize)}px solid gray`,
+            border: `${Math.round(0.002 * containerSize)}px solid gray`,
             width: `${this.size}%`,
             height: `${this.size}%`,
             transform: new Vector(0.5).add(new Vector(-0.5 * this.size / 100)).add(this.pos.scale(1/100)).scale(containerSize).asTranslate(),
@@ -37,11 +37,11 @@ export class GameObject {
     }
 
     tryCollision(other){
-        let diff = this.pos.subtract(other.pos);
+        let diff = this.pos.add(this.vel).subtract(other.pos.add(other.vel));
         let thresh = (this.size + other.size) / 2;
         if(diff.magnitude() > thresh) return;
 
-        let overlap = diff.scaleTo(thresh).scale(.04);
+        let overlap = diff.scaleTo(thresh).scale(.2);
 
         let t = this.phy_mass / (this.phy_mass + other.phy_mass);
         this.vel = this.vel.add(overlap.scale(1-t));

@@ -8,8 +8,8 @@ const Simulation = () => {
     let simRef = useRef(null);
 
     const initSim = () => {
-        for(let i = 0; i < 360; i += 22.5){
-            objects.current.push(new Voter(30+-1+2*Math.random(), i));
+        for(var i = 0; i < 200; i++){
+            objects.current.push(new Voter(80+-1+2*Math.random(), (i/200)*360));
         }
     }
 

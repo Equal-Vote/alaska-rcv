@@ -3,7 +3,7 @@ import Vector from "./Vector";
 
 class Voter extends GameObject{
     constructor(r, angle) {
-        super(r, angle, 10, 1)
+        super(r, angle, 2, 1)
     }
 
     update(){

@@ -28,6 +28,7 @@ class GameObject {
 
     getStyle(containerSize){
         return {
+            border: `${Math.round(.006*containerSize)}px solid gray`,
             width: `${this.size}%`,
             height: `${this.size}%`,
             transform: new Vector(.5).add(new Vector(-.5 * this.size / 100)).add(new Vector(this.x /100, this.y /100)).scale(containerSize).asTranslate(),

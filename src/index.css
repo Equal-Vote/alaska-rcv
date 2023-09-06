@@ -18,8 +18,8 @@ body, .root, .app, .simulation{
 
 .simulation{
   position: relative;
-  width: 750px;
-  height: 750px;
+  width: min(75vw, 75vh);
+  height: min(75vw, 75vh);
   margin: auto;
   background: black;
   border: 0;
@@ -28,6 +28,7 @@ body, .root, .app, .simulation{
 .object{
   position: absolute;
   border-radius: 50%;
-  border: 4px solid gray;
+  border-color: gray;
+  border-block: solid;
   background: darkgrey;
 }

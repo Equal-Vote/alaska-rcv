@@ -1,44 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-class Vector{
-    constructor(x, y=undefined){
-        this.x = x;
-        this.y = y ?? x;
-    }
-
-    scale(f){
-        return new Vector(this.x * f, this.y * f);
-    }
-
-    add(v){
-        return new Vector(this.x + v.x, this.y + v.y);
-    }
-
-    asTranslate(){
-        return `translate(${this.x}px, ${this.y}px)`;
-    }
-}
-
-class GameObject {
-    constructor(r, angle, size){
-        this.x = r * Math.cos(Math.PI*angle/180);
-        this.y = r * Math.sin(Math.PI*angle/180);
-        this.size = size;
-    }
-
-    getStyle(containerSize){
-        return {
-            border: `${Math.round(.006*containerSize)}px solid gray`,
-            width: `${this.size}%`,
-            height: `${this.size}%`,
-            transform: new Vector(.5).add(new Vector(-.5 * this.size / 100)).add(new Vector(this.x /100, this.y /100)).scale(containerSize).asTranslate(),
-        }
-    } 
-
-    asComponent(containerSize){
-        return <div className='object' style={this.getStyle(containerSize)}/>
-    }
-}
+import Voter from "./Voter";
 
 const Simulation = () => {
     let objects = useRef([]);
@@ -46,15 +7,36 @@ const Simulation = () => {
     let [bool, setBool] = useState(false);
     let simRef = useRef(null);
 
+    const initSim = () => {
+        for(let i = 0; i < 360; i += 22.5){
+            objects.current.push(new Voter(30+-1+2*Math.random(), i));
+        }
+    }
+
     const gameLoop = (timestamp) => {
-        if(objects.current.length == 0){
-            for(let i = 0; i < 360; i += 22.5){
-                objects.current.push(new GameObject(30, i, 10));
-            }
-        }else{
-            // objects.current.forEach(o => o.x += 5);
+        let objs = objects.current;
+        // init
+        if(objs.length == 0){
+            initSim();
         }
 
+        // update
+        objs.forEach(o => o.update());
+
+        // collisions
+        // TODO: figure out cleaner way to iterate over all pair
+        // TODO: we might do more passes to get more accurate results, but this is fine for now
+        let phy_objs = objs.filter(o => o.phy_mass != -1);
+        for(var i = 0; i < phy_objs.length; i++){
+            for(var j = i+1; j < phy_objs.length; j++){
+                objs[i].tryCollision(objs[j]);
+            }
+        }
+
+        // move
+        objs.forEach(o => o.applyVelocity());
+
+        // refresh
         setBool(bool => !bool);
         animID.current = requestAnimationFrame(gameLoop);
     }

@@ -1,16 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 import Voter from "./Voter";
+import VoterCamp from "./VoterCamp";
 
 const Simulation = () => {
     let objects = useRef([]);
+    let camps = useRef({});
     let animID = useRef(null);
     let [bool, setBool] = useState(false);
     let simRef = useRef(null);
+    let moveTriggered = useRef(false);
 
     const initSim = () => {
-        for(var i = 0; i < 200; i++){
-            objects.current.push(new Voter(80+-1+2*Math.random(), (i/200)*360));
+        let voter_radius = 30;
+        let candidate_radius = 40;
+        camps.current = {
+            home: new VoterCamp(0, 0),
+            beigich_bullet: new VoterCamp(30, 90),
+            beigich_lean_palin: new VoterCamp(30, 60),
+            palin_lean_beigich: new VoterCamp(30, 0),
+            palin_bullet: new VoterCamp(30, 330),
+            palin_lean_peltola: new VoterCamp(30, 300),
+            peltola_lean_palin: new VoterCamp(30, 240),
+            peltola_bullet: new VoterCamp(30, 210),
+            peltola_lean_beigich: new VoterCamp(30, 180),
+            beigich_lean_peltola: new VoterCamp(30, 120),
         }
+        for(var i = 0; i < 200; i++){
+            objects.current.push(new Voter(80+10*Math.random(), (i/200)*360, camps.current.home));
+        }
+    }
+
+    const moveVoters = (n, from, to) => {
+
     }
 
     const gameLoop = (timestamp) => {

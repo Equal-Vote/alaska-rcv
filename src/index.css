@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body, .root, .app, .simulation{
   width: 100vw;
   height: 100vh;
@@ -5,13 +9,20 @@ body, .root, .app, .simulation{
 }
 
 .app{
-  position: relative;
-  background: black;
+  display: flex;
+  background: gray;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .simulation{
+  position: relative;
+  width: 750px;
+  height: 750px;
+  margin: auto;
   background: black;
-  overflow: hidden;
+  border: 0;
 }
 
 .object{

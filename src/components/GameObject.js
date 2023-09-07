@@ -1,4 +1,5 @@
 import { Vector } from "./Vector";
+import Voter from "./Voter";
 
 export class GameObject {
     constructor(r, angle, size, phy_mass=-1) {
@@ -27,7 +28,7 @@ export class GameObject {
         this.vel = this.vel.scale(.9); // friction
     }
     
-    onCollide(){}
+    onCollide(other){}
 
     applyVelocity(){
         this.pos = this.pos.add(this.vel);
@@ -41,12 +42,15 @@ export class GameObject {
         let thresh = (this.size + other.size) / 2;
         if(diff.magnitude() > thresh) return;
 
-        let overlap = diff.scale(.05);
+        let overlap = diff.scale(.1);
         //if(overlap.magnitude() < .05) overlap.scaleTo(.05);
 
         let t = this.phy_mass / (this.phy_mass + other.phy_mass);
         this.vel = this.vel.add(overlap.scale(1-t));
         other.vel = other.vel.add(overlap.scale(-t));
+
+        other.onCollide(this);
+        this.onCollide(other);
     }
 }
 

@@ -53,6 +53,9 @@ const Simulation = () => {
             peltola_then_begich: new VoterCamp(voter_radius, 180),
             begich_then_peltola: new VoterCamp(voter_radius, 120),
         }
+        Object.entries(camps.current).forEach(([_, o]) => {
+            objects.current.push(o);
+        });
         for(var i = 0; i < 200; i++){
             objects.current.push(new Voter(80+Math.random()*10, (i/200)*360, camps.current.home));
         }
@@ -63,11 +66,14 @@ const Simulation = () => {
             .filter(o => o instanceof Voter)
             .filter(o => o.camp == camps.current[from])
             .sort((l, r) => {
-                let dist = (o) => o.pos.subtract(camps.current[ to ].pos).magnitude()
+                let dist = (o) => o.pos.subtract(camps.current[ to ].pos).magnitude();
                 return dist(l) - dist(r);
             })
-            .filter( (o, i) => i < n)
-            .forEach( o => o.camp = camps.current[to]);
+            .filter( (_, i) => i < n)
+            .forEach( o => o.camp = camps.current[to]
+        );
+
+        camps.current[from].refreshMembers();
     }
 
     const gameLoop = (timestamp) => {

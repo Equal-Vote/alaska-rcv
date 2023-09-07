@@ -53,12 +53,19 @@ const Simulation = () => {
             peltola_then_begich: new VoterCamp(voter_radius, 180),
             begich_then_peltola: new VoterCamp(voter_radius, 120),
         }
+        
+        //objects.current.push(new VoterCamp(1,0));
+
         Object.entries(camps.current).forEach(([_, o]) => {
             objects.current.push(o);
         });
         for(var i = 0; i < 200; i++){
             objects.current.push(new Voter(80+Math.random()*10, (i/200)*360, camps.current.home));
         }
+        //let n = 3;
+        //for(var i = 0; i < n; i++){
+        //    objects.current.push(new Voter(.001, i*(360/n), camps.current.home));
+        //}
     }
 
     const moveVoters = (n, from, to) => {
@@ -86,18 +93,31 @@ const Simulation = () => {
         // update
         objs.forEach(o => o.update());
 
+        // move
+        objs.forEach(o => o.applyVelocity());
+
         // collisions
         // TODO: figure out cthener way to iterate over all pair
         // TODO: we might do more passes to get more accurate results, but this is fine for now
-        let phy_objs = objs.filter(o => o.phy_mass != -1);
-        for(var i = 0; i < phy_objs.length; i++){
-            for(var j = i+1; j < phy_objs.length; j++){
-                objs[i].tryCollision(objs[j]);
+        let any_collision = true;
+        let k = 0;
+        let max_steps = 20;
+        while(any_collision && k < max_steps){
+            any_collision = false;
+            let phy_objs = objs.filter(o => o.phy_mass != -1);
+            for(var i = 0; i < phy_objs.length; i++){
+                for(var j = i+1; j < phy_objs.length; j++){
+                    any_collision = phy_objs[i].tryCollision(phy_objs[j]) || any_collision;
+                }
             }
+            k++;
         }
 
-        // move
-        objs.forEach(o => o.applyVelocity());
+        // this is an attempt to detect unnecessary rotations
+        //if(k == max_steps){
+        //    objs.forEach(o => o.revertPos());
+        //}
+
 
         // refresh
         setBool(bool => !bool);

@@ -5,9 +5,9 @@ export class GameObject {
     constructor(r, angle, size, phy_mass=-1) {
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
-        //this.normal = new Vector(0);
         this.size = size;
         this.phy_mass = phy_mass;
+        this.prev_pos = this.pos.clone();
     }
 
     getStyle(containerSize) {
@@ -24,33 +24,35 @@ export class GameObject {
     }
 
     update(){
-        //this.normal = new Vector(0);
         this.vel = this.vel.scale(.9); // friction
     }
     
     onCollide(other){}
 
     applyVelocity(){
+        this.prev_pos = this.pos.clone();
         this.pos = this.pos.add(this.vel);
-        //this.pos = this.pos.add(this.normal);
+    }
+
+    revertPos(){
+        this.pos = this.prev_pos.clone();
     }
 
     tryCollision(other){
-        let diff = this.pos.add(this.vel).subtract(other.pos.add(other.vel));
-        //let diff = this.pos.add(this.vel.add(this.normal)).subtract(other.pos.add(other.vel.add(other.normal)));
-        //let diff = this.pos.subtract(other.pos);
+        let diff = this.pos.subtract(other.pos);
         let thresh = (this.size + other.size) / 2;
-        if(diff.magnitude() > thresh) return;
+        if(diff.magnitude() > thresh) return false;
 
-        let overlap = diff.scale(.1);
-        //if(overlap.magnitude() < .05) overlap.scaleTo(.05);
+        let overlap = diff.scaleTo(thresh - diff.magnitude())
 
         let t = this.phy_mass / (this.phy_mass + other.phy_mass);
-        this.vel = this.vel.add(overlap.scale(1-t));
-        other.vel = other.vel.add(overlap.scale(-t));
+        this.pos = this.pos.add(overlap.scale(1-t));
+        other.pos = other.pos.add(overlap.scale(-t));
 
         other.onCollide(this);
         this.onCollide(other);
+
+        return true;
     }
 }
 

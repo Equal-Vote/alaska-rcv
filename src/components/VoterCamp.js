@@ -12,11 +12,11 @@ class Voter extends GameObject{
         this.members = this.members.filter(o => o.camp == this);
     }
 
-    update(){
-        let target = 5 + this.members.length / 10;
-        let t = .1;
-        this.size = this.size*(1-t) + target*t;
-    }
+    //update(){
+    //    let target = 5 + this.members.length / 10;
+    //    let t = .1;
+    //    this.size = this.size*(1-t) + target*t;
+    //}
 }
 
 export default Voter

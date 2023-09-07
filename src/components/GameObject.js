@@ -2,12 +2,9 @@ import { Vector } from "./Vector";
 
 export class GameObject {
     constructor(r, angle, size, phy_mass=-1) {
-        this.pos = new Vector(
-            r * Math.cos(Math.PI * angle / 180),
-            r * Math.sin(Math.PI * angle / 180)
-        );
+        this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
-        this.normal = new Vector(0);
+        //this.normal = new Vector(0);
         this.size = size;
         this.phy_mass = phy_mass;
     }
@@ -26,6 +23,7 @@ export class GameObject {
     }
 
     update(){
+        //this.normal = new Vector(0);
         this.vel = this.vel.scale(.9); // friction
     }
     
@@ -33,15 +31,18 @@ export class GameObject {
 
     applyVelocity(){
         this.pos = this.pos.add(this.vel);
-        this.pos = this.pos.add(this.normal);
+        //this.pos = this.pos.add(this.normal);
     }
 
     tryCollision(other){
         let diff = this.pos.add(this.vel).subtract(other.pos.add(other.vel));
+        //let diff = this.pos.add(this.vel.add(this.normal)).subtract(other.pos.add(other.vel.add(other.normal)));
+        //let diff = this.pos.subtract(other.pos);
         let thresh = (this.size + other.size) / 2;
         if(diff.magnitude() > thresh) return;
 
-        let overlap = diff.scaleTo(thresh).scale(.2);
+        let overlap = diff.scale(.05);
+        //if(overlap.magnitude() < .05) overlap.scaleTo(.05);
 
         let t = this.phy_mass / (this.phy_mass + other.phy_mass);
         this.vel = this.vel.add(overlap.scale(1-t));

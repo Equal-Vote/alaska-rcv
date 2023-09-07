@@ -1,8 +1,13 @@
 
 export class Vector {
-    constructor(x, y = undefined) {
-        this.x = x;
-        this.y = y ?? x;
+    constructor(x, y, radial=false) {
+        if(!radial){
+            this.x = x;
+            this.y = y ?? x;
+        }else{
+            this.x = x * Math.cos(Math.PI * y / 180);
+            this.y = x * -Math.sin(Math.PI * y / 180);
+        }
     }
 
     scale(f) {
@@ -35,6 +40,7 @@ export class Vector {
         if(m == 0) return new Vector(0);
         return this.scale(new_mag / m);
     }
+
 }
 
 

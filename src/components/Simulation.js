@@ -1,37 +1,64 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Voter from "./Voter";
 import VoterCamp from "./VoterCamp";
 
 const Simulation = () => {
+    let [bool, setBool] = useState(false);
+    let stateIndex = useRef(0);
     let objects = useRef([]);
     let camps = useRef({});
     let animID = useRef(null);
-    let [bool, setBool] = useState(false);
     let simRef = useRef(null);
-    let moveTriggered = useRef(false);
+    const handleKeyPress = useCallback((event) => {
+        if(event.key != 'a') return;
+        stateIndex.current++;
+        moveVoters(10, 'home', 'begich_bullet')  
+        //if(stateIndex.current % 2 == 0){
+        //}else{
+
+        //}
+    }, []);
+
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener('keydown', handleKeyPress);
+
+        // remove the event listener
+        return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     const initSim = () => {
         let voter_radius = 30;
         let candidate_radius = 40;
         camps.current = {
             home: new VoterCamp(0, 0),
-            beigich_bullet: new VoterCamp(30, 90),
-            beigich_lean_palin: new VoterCamp(30, 60),
-            palin_lean_beigich: new VoterCamp(30, 0),
-            palin_bullet: new VoterCamp(30, 330),
-            palin_lean_peltola: new VoterCamp(30, 300),
-            peltola_lean_palin: new VoterCamp(30, 240),
-            peltola_bullet: new VoterCamp(30, 210),
-            peltola_lean_beigich: new VoterCamp(30, 180),
-            beigich_lean_peltola: new VoterCamp(30, 120),
+            begich_bullet: new VoterCamp(voter_radius, 90),
+            begich_lean_palin: new VoterCamp(voter_radius, 60),
+            palin_lean_begich: new VoterCamp(voter_radius, 0),
+            palin_bullet: new VoterCamp(voter_radius, 330),
+            palin_lean_peltola: new VoterCamp(voter_radius, 300),
+            peltola_lean_palin: new VoterCamp(voter_radius, 240),
+            peltola_bullet: new VoterCamp(voter_radius, 210),
+            peltola_lean_begich: new VoterCamp(voter_radius, 180),
+            begich_lean_peltola: new VoterCamp(voter_radius, 120),
         }
         for(var i = 0; i < 200; i++){
-            objects.current.push(new Voter(80+10*Math.random(), (i/200)*360, camps.current.home));
+            objects.current.push(new Voter(80+Math.random()*10, (i/200)*360, camps.current.home));
         }
     }
 
     const moveVoters = (n, from, to) => {
-
+        objects.current
+            .filter(o => o instanceof Voter)
+            .filter(o => o.camp == camps.current[from])
+            .sort((l, r) => {
+                let dist = (o) => o.pos.subtract(camps.current[ to ].pos).magnitude()
+                return dist(l) - dist(r);
+            })
+            .filter( (o, i) => i < n)
+            .forEach( o => o.camp = camps.current[to]);
     }
 
     const gameLoop = (timestamp) => {

@@ -11,8 +11,17 @@ const Simulation = () => {
     let simRef = useRef(null);
     const handleKeyPress = useCallback((event) => {
         if(event.key != 'a') return;
-        stateIndex.current++;
-        moveVoters(10, 'home', 'begich_bullet')  
+        switch(++stateIndex.current){
+        case 1: moveVoters(12, 'home', 'begich_bullet'); break;  
+        case 2: moveVoters(29, 'home', 'begich_then_palin'); break;  
+        case 3: moveVoters(36, 'home', 'palin_then_begich'); break;  
+        case 4: moveVoters(23, 'home', 'palin_bullet'); break;  
+        case 5: moveVoters( 4, 'home', 'palin_then_peltola'); break;  
+        case 6: moveVoters( 5, 'home', 'peltola_then_palin'); break;  
+        case 7: moveVoters(25, 'home', 'peltola_bullet'); break;  
+        case 8: moveVoters(50, 'home', 'peltola_then_begich'); break;  
+        case 9: moveVoters(16, 'home', 'begich_then_peltola'); break;  
+        }
         //if(stateIndex.current % 2 == 0){
         //}else{
 
@@ -35,14 +44,14 @@ const Simulation = () => {
         camps.current = {
             home: new VoterCamp(0, 0),
             begich_bullet: new VoterCamp(voter_radius, 90),
-            begich_lean_palin: new VoterCamp(voter_radius, 60),
-            palin_lean_begich: new VoterCamp(voter_radius, 0),
+            begich_then_palin: new VoterCamp(voter_radius, 60),
+            palin_then_begich: new VoterCamp(voter_radius, 0),
             palin_bullet: new VoterCamp(voter_radius, 330),
-            palin_lean_peltola: new VoterCamp(voter_radius, 300),
-            peltola_lean_palin: new VoterCamp(voter_radius, 240),
+            palin_then_peltola: new VoterCamp(voter_radius, 300),
+            peltola_then_palin: new VoterCamp(voter_radius, 240),
             peltola_bullet: new VoterCamp(voter_radius, 210),
-            peltola_lean_begich: new VoterCamp(voter_radius, 180),
-            begich_lean_peltola: new VoterCamp(voter_radius, 120),
+            peltola_then_begich: new VoterCamp(voter_radius, 180),
+            begich_then_peltola: new VoterCamp(voter_radius, 120),
         }
         for(var i = 0; i < 200; i++){
             objects.current.push(new Voter(80+Math.random()*10, (i/200)*360, camps.current.home));
@@ -72,7 +81,7 @@ const Simulation = () => {
         objs.forEach(o => o.update());
 
         // collisions
-        // TODO: figure out cleaner way to iterate over all pair
+        // TODO: figure out cthener way to iterate over all pair
         // TODO: we might do more passes to get more accurate results, but this is fine for now
         let phy_objs = objs.filter(o => o.phy_mass != -1);
         for(var i = 0; i < phy_objs.length; i++){

@@ -1,6 +1,6 @@
 import { Vector } from "./Vector";
 import Voter from "./Voter";
-import VoterCamp from "./VoterCamp";
+//import VoterCamp from "./VoterCamp";
 
 export class GameObject {
     constructor(r, angle, size, phyMass=-1) {
@@ -50,8 +50,10 @@ export class GameObject {
 
     tryCollision(other){
         let diff = this.pos.subtract(other.pos);
+        
         // normalize
         diff = diff.scale(this.size.add(other.size).scale(.5).invert());
+
 
         //let thresh;
         //if(this.is_rect || other.is_rect){
@@ -68,14 +70,16 @@ export class GameObject {
         //}
 
         let thresh = 1;
-        //if(other instanceof VoterCamp) console.log(diff.magnitude());
+
 
         if(diff.magnitude() > thresh) return false;
 
-        let overlap = diff.scaleTo(thresh - diff.magnitude())
-        overlap = overlap.scale(this.size.add(other.size).scale(.5));
+        //if(isNaN(this.pos) || isNaN(other.pos)) return false;
 
-        let t = this.phyMass / (this.phyMass + other.phy_mass);
+        let overlap = diff.scaleTo(thresh - diff.magnitude())
+        //overlap = overlap.scale(this.size.add(other.size).scale(.5));
+
+        let t = this.phyMass / (this.phyMass + other.phyMass);
         this.pos = this.pos.add(overlap.scale(1-t));
         other.pos = other.pos.add(overlap.scale(-t));
 

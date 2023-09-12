@@ -1,26 +1,32 @@
 import { Vector } from "./Vector";
 import Voter from "./Voter";
+import VoterCamp from "./VoterCamp";
 
 export class GameObject {
-    constructor(r, angle, size, phy_mass=-1) {
+    constructor(r, angle, size, phyMass=-1) {
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
-        this.size = size;
-        this.phy_mass = phy_mass;
+        this.size = new Vector(size);
+        this.phyMass = phyMass;
         this.prev_pos = this.pos.clone();
+        this.is_rect = false;
     }
 
     getStyle(containerSize) {
         return {
-            border: `${Math.round(0.002 * containerSize)}px solid gray`,
-            width: `${this.size}%`,
-            height: `${this.size}%`,
-            transform: new Vector(0.5).add(new Vector(-0.5 * this.size / 100)).add(this.pos.scale(1/100)).scale(containerSize).asTranslate(),
+            borderWidth: `${Math.round(0.002 * containerSize)}px`,
+            width: `${this.size.x}%`,
+            height: `${this.size.y}%`,
+            transform: new Vector(50)
+                .add(this.pos)
+                .add(this.size.scale(-.5))
+                .scale(containerSize / 100)
+                .asTranslate(),
         };
     }
 
     asComponent(containerSize) {
-        return <div className='object' style={this.getStyle(containerSize)} />;
+        return <div className={`object ${this.constructor.name}`} style={this.getStyle(containerSize)} />;
     }
 
     update(){
@@ -38,14 +44,38 @@ export class GameObject {
         this.pos = this.prev_pos.clone();
     }
 
+    radius(){
+        return this.size.x / 2;
+    }
+
     tryCollision(other){
         let diff = this.pos.subtract(other.pos);
-        let thresh = (this.size + other.size) / 2;
+        // normalize
+        diff = diff.scale(this.size.add(other.size).scale(.5).invert());
+
+        //let thresh;
+        //if(this.is_rect || other.is_rect){
+            //if(normDiff.magnitude() > .5) return false;
+            //if(normDiff.x > normDiff.y){
+                //diff = new Vector(diff.x, 0);
+                //thresh = (this.size.x + other.size.x) / 2;
+            //}else{
+                //diff = new Vector(0, diff.y);
+                //thresh = (this.size.y + other.size.y) / 2;
+            //}
+        //}else{
+            //thresh = this.radius() + other.radius();
+        //}
+
+        let thresh = 1;
+        //if(other instanceof VoterCamp) console.log(diff.magnitude());
+
         if(diff.magnitude() > thresh) return false;
 
         let overlap = diff.scaleTo(thresh - diff.magnitude())
+        overlap = overlap.scale(this.size.add(other.size).scale(.5));
 
-        let t = this.phy_mass / (this.phy_mass + other.phy_mass);
+        let t = this.phyMass / (this.phyMass + other.phy_mass);
         this.pos = this.pos.add(overlap.scale(1-t));
         other.pos = other.pos.add(overlap.scale(-t));
 

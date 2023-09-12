@@ -54,8 +54,6 @@ const Simulation = () => {
             begich_then_peltola: new VoterCamp(voter_radius, 120),
         }
         
-        //objects.current.push(new VoterCamp(1,0));
-
         Object.entries(camps.current).forEach(([_, o]) => {
             objects.current.push(o);
         });

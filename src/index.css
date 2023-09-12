@@ -27,8 +27,24 @@ body, .root, .app, .simulation{
 
 .object{
   position: absolute;
+}
+
+.Voter{
   border-radius: 50%;
   border-color: gray;
   border-block: solid;
   background: darkgrey;
+}
+
+.VoterCamp{
+  background: black;
+  border-color: #00000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.VoterCamp h3{
+  color: white;
+  text-align: center;
 }

@@ -1,17 +1,25 @@
 
 export class Vector {
     constructor(x, y, radial=false) {
-        if(!radial){
-            this.x = x;
-            this.y = y ?? x;
-        }else{
+        if(radial){
             this.x = x * Math.cos(Math.PI * y / 180);
             this.y = x * -Math.sin(Math.PI * y / 180);
+        }else{
+            this.x = x;
+            this.y = y ?? x;
         }
     }
 
     scale(f) {
-        return new Vector(this.x * f, this.y * f);
+        if(f instanceof Vector){
+            return new Vector(this.x * f.x, this.y * f.y);
+        }else{
+            return new Vector(this.x * f, this.y * f);
+        }
+    }
+
+    invert(){
+        return new Vector(1 / this.x, 1 / this.y);
     }
 
     add(v) {

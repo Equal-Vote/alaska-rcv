@@ -3,6 +3,7 @@ import VoterCamp from "./VoterCamp"
 
 class Voter extends GameObject{
     constructor(r, angle, camp) {
+        //let startMass = 1;
         super(r, angle, 2, 1)
         this.camp = camp;
     }
@@ -13,6 +14,7 @@ class Voter extends GameObject{
         let toCamp = this.camp.pos.subtract(this.pos);
         //if(toCamp.magnitude() < 5) return;
         this.vel = this.vel.add(toCamp.scaleTo(grav));
+        //if(!this.isMember()) this.phyMass = this.startMass;
     }
 
     isMember(){
@@ -21,6 +23,7 @@ class Voter extends GameObject{
 
     onCollide(other){
         if(other==this.camp && !this.isMember()){
+            //this.phyMass = 99999999;
             other.members.push(this);
         }
 

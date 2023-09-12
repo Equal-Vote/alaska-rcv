@@ -3,13 +3,13 @@ import Voter from "./Voter";
 //import VoterCamp from "./VoterCamp";
 
 export class GameObject {
-    constructor(r, angle, size, phyMass=-1) {
+    constructor(r, angle, size, phyMass=undefined) {
+        // undefined means doesn't do physics, negative means static
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
         this.size = new Vector(size);
         this.phyMass = phyMass;
         this.prev_pos = this.pos.clone();
-        this.is_rect = false;
     }
 
     getStyle(containerSize) {
@@ -55,7 +55,6 @@ export class GameObject {
         diff = diff.scale(this.size.add(other.size).scale(.5).invert());
 
 
-        //let thresh;
         //if(this.is_rect || other.is_rect){
             //if(normDiff.magnitude() > .5) return false;
             //if(normDiff.x > normDiff.y){
@@ -71,15 +70,24 @@ export class GameObject {
 
         let thresh = 1;
 
-
         if(diff.magnitude() > thresh) return false;
 
-        //if(isNaN(this.pos) || isNaN(other.pos)) return false;
-
         let overlap = diff.scaleTo(thresh - diff.magnitude())
-        //overlap = overlap.scale(this.size.add(other.size).scale(.5));
+        overlap = overlap.scale(this.size.add(other.size).scale(.5));
 
-        let t = this.phyMass / (this.phyMass + other.phyMass);
+        let t = 0;
+        if(this.phyMass > 0 && other.phyMass > 0 ){
+            t = this.phyMass / (this.phyMass + other.phyMass);
+        }else if(this.phyMass > 0){
+            t = 0;
+        }else if(other.phyMass > 0){
+            t = 1;
+        }else if(this.phyMass == other.phyMass){
+            t = .5;
+        }else{
+            t = (this.phyMass > other.phyMass)? 1 : 0;
+        }
+
         this.pos = this.pos.add(overlap.scale(1-t));
         other.pos = other.pos.add(overlap.scale(-t));
 

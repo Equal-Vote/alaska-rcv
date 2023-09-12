@@ -1,10 +1,13 @@
 import GameObject from "./GameObject"
+import Vector from "./Vector";
 import VoterCamp from "./VoterCamp"
 
+const startMass = 1;
+
 class Voter extends GameObject{
+
     constructor(r, angle, camp) {
-        //let startMass = 1;
-        super(r, angle, 2, 1)
+        super(r, angle, 2, startMass);
         this.camp = camp;
     }
 
@@ -12,9 +15,11 @@ class Voter extends GameObject{
         super.update();
         let grav = .08;
         let toCamp = this.camp.pos.subtract(this.pos);
-        //if(toCamp.magnitude() < 5) return;
         this.vel = this.vel.add(toCamp.scaleTo(grav));
         //if(!this.isMember()) this.phyMass = this.startMass;
+
+        // more extreme friction once we're touching the thing
+        //if(this.phyMass < 0) this.vel = this.vel.scale(.95);
     }
 
     isMember(){
@@ -22,9 +27,14 @@ class Voter extends GameObject{
     }
 
     onCollide(other){
-        if(other==this.camp && !this.isMember()){
-            //this.phyMass = 99999999;
-            other.members.push(this);
+        if(other==this.camp){
+            //this.phyMass = -2;
+            if(!this.camp.directMembers.includes(this)){
+                other.directMembers.push(this);
+            }
+            if(!this.isMember()){
+                other.members.push(this);
+            }
         }
 
         if(this.isMember()){
@@ -32,6 +42,11 @@ class Voter extends GameObject{
                 this.camp.members.push(other);
             }
         }
+    }
+
+    asComponent(containerSize) {
+        // ${(this.phyMass < 0)? 'stable' : ''}
+        return <div className={`object ${this.constructor.name}`} style={this.getStyle(containerSize)} />;
     }
 }
 

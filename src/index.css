@@ -36,6 +36,10 @@ body, .root, .app, .simulation{
   background: darkgrey;
 }
 
+.stable{
+  background: blue;
+}
+
 .VoterCamp{
   background: black;
   border-color: #00000000;

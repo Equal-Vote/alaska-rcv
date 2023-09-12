@@ -75,8 +75,10 @@ const Simulation = () => {
                 return dist(l) - dist(r);
             })
             .filter( (_, i) => i < n)
-            .forEach( o => o.camp = camps.current[to]
-        );
+            .forEach( o => {
+                o.camp = camps.current[to];
+                o.phyMass = 1;
+            });
 
         camps.current[from].refreshMembers();
     }
@@ -97,15 +99,15 @@ const Simulation = () => {
         // collisions
         // TODO: figure out cthener way to iterate over all pair
         // TODO: we might do more passes to get more accurate results, but this is fine for now
-        let any_collision = true;
+        let anyCollision = true;
         let k = 0;
-        let max_steps = 20;
-        while(any_collision && k < max_steps){
-            any_collision = false;
-            let phy_objs = objs.filter(o => o.phy_mass != -1);
-            for(var i = 0; i < phy_objs.length; i++){
-                for(var j = i+1; j < phy_objs.length; j++){
-                    any_collision = phy_objs[i].tryCollision(phy_objs[j]) || any_collision;
+        let max_steps = 15;
+        while(anyCollision && k < max_steps){
+            anyCollision = false;
+            let phyObjs = objs.filter(o => o.phyMass != undefined);
+            for(var i = 0; i < phyObjs.length; i++){
+                for(var j = i+1; j < phyObjs.length; j++){
+                    anyCollision = phyObjs[i].tryCollision(phyObjs[j]) || anyCollision;
                 }
             }
             k++;

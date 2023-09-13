@@ -29,7 +29,7 @@ class VoterCamp extends GameObject{
     asComponent(containerSize) {
         return <div className='object VoterCamp' style={this.getStyle(containerSize)}>
             {this.members.length > 0 &&
-                <h3>{this.members.length}</h3>
+                <p>{this.members.length}</p>
             }
         </div>;
     }

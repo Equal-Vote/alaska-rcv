@@ -3,7 +3,7 @@ const Explainer = () => {
     return (
         <div className="explainer">
             <h1>
-                "hi"    
+                explainer text here
             </h1>
         </div>
     )

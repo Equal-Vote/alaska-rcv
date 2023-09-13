@@ -15,6 +15,7 @@ export class GameObject {
     getStyle(containerSize) {
         return {
             borderWidth: `${Math.round(0.002 * containerSize)}px`,
+            fontSize: `${Math.round(0.03 * containerSize)}px`,
             width: `${this.size.x}%`,
             height: `${this.size.y}%`,
             transform: new Vector(50)

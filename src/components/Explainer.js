@@ -1,7 +1,7 @@
 const Explainer = () => {
 
     return (
-        <div className="Explainer">
+        <div className="explainer">
             <h1>
                 "hi"    
             </h1>

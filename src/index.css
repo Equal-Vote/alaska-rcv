@@ -2,27 +2,52 @@
   box-sizing: border-box;
 }
 
-body, .root, .app, .simulation{
+body, #root{
   width: 100vw;
   height: 100vh;
   margin: 0;
+  background: gray;
 }
 
 .app{
   display: flex;
-  background: gray;
-  align-items: center;
   justify-content: center;
+  flex-direction: row;
+  align-items: center;
+
+  position: relative;
   overflow: hidden;
+  margin: auto;
+
+  padding: 5vh;
+  width: 100%;
+  height: 100%;
 }
 
 .simulation{
   position: relative;
-  width: min(75vw, 75vh);
-  height: min(75vw, 75vh);
-  margin: auto;
+  width: min(90vh, 60vw);
+  height: min(90vh, 60vw);
   background: black;
   border: 0;
+}
+
+.explainer{
+  background: black;
+
+  flex-grow: 1;
+  text-align: center;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.explainer h1{
+  color: white;
 }
 
 .object{

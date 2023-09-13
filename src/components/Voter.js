@@ -1,13 +1,11 @@
-import GameObject from "./GameObject"
-import Vector from "./Vector";
-import VoterCamp from "./VoterCamp"
+import GameObject from "./GameObject";
 
 const startMass = 1;
 
 class Voter extends GameObject{
 
     constructor(r, angle, camp) {
-        super(r, angle, 2, startMass);
+        super(r, angle, 1.7, startMass);
         this.camp = camp;
     }
 
@@ -16,10 +14,6 @@ class Voter extends GameObject{
         let grav = .08;
         let toCamp = this.camp.pos.subtract(this.pos);
         this.vel = this.vel.add(toCamp.scaleTo(grav));
-        //if(!this.isMember()) this.phyMass = this.startMass;
-
-        // more extreme friction once we're touching the thing
-        //if(this.phyMass < 0) this.vel = this.vel.scale(.95);
     }
 
     isMember(){

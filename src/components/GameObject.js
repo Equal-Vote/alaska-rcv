@@ -4,7 +4,7 @@ import Voter from "./Voter";
 
 export class GameObject {
     constructor(r, angle, size, phyMass=undefined) {
-        // undefined means doesn't do physics, negative means static
+        // undefined means don't do physics, negative means static
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
         this.size = new Vector(size);

@@ -72,6 +72,17 @@ body, #root{
 
 .object{
   position: absolute;
+  transition-property: 'opacity';
+  transition-duration: 1s;
+  transition-timing-function: ease;
+}
+
+.objectVisible{
+  opacity: 1;
+}
+
+.objectInvisible{
+  opacity: 0;
 }
 
 .Voter{

@@ -9,7 +9,7 @@ const Simulation = () => {
     const {simState} = useContext(SimContext);
 
     const gameLoop = (timestamp) => {
-        let objs = simState.objects;
+        let objs = simState.visibleObjects();
 
         // update
         objs.forEach(o => o.update());
@@ -46,7 +46,7 @@ const Simulation = () => {
 
     return (
         <div ref={simRef} className='simulation'>
-            {simState.objects.map(o => o.asComponent(simRef.current == null ? 100 : simRef.current.clientHeight))}
+            {simState.objects.map(o => o.asComponent(simState, simRef.current == null ? 800 : simRef.current.clientHeight))}
         </div>
     )
 }

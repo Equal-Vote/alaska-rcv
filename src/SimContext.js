@@ -39,6 +39,12 @@ export function SimContextProvider({children}){
 
         ctx = {...ctx, objects, visible: [], focused: [], explainerStart: -1, explainerEnd: 0}
 
+        ctx.visibleObjects = function(){
+            return this.objects.filter(o => o.isVisible(this));
+        }
+
+        transitions[0].apply(ctx);
+
         return ctx;
     }
 
@@ -47,8 +53,11 @@ export function SimContextProvider({children}){
 
         // this was a hacky way to make sure we're using the correct simIndex
         setSimIndex((simIndex) => {
-            transitions[simIndex].apply(simState)
-            return simIndex+1
+            transitions[simIndex+1].apply(simState)
+            setTimeout(() => {
+                setSimIndex(simIndex+1)
+            }, 1000);
+            return simIndex;
         });
     }, []);
 

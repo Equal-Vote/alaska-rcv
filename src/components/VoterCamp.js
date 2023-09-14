@@ -26,8 +26,8 @@ class VoterCamp extends GameObject{
         }
     }
 
-    asComponent(containerSize) {
-        return <div className='object VoterCamp' style={this.getStyle(containerSize)}>
+    asComponent(simState, containerSize) {
+        return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)}>
             {this.members.length > 0 &&
                 <p>{this.members.length}</p>
             }

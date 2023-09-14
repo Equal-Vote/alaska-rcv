@@ -37,11 +37,6 @@ class Voter extends GameObject{
             }
         }
     }
-
-    asComponent(containerSize) {
-        // ${(this.phyMass < 0)? 'stable' : ''}
-        return <div className={`object ${this.constructor.name}`} style={this.getStyle(containerSize)} />;
-    }
 }
 
 export default Voter

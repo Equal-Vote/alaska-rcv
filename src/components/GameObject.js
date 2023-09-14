@@ -10,6 +10,7 @@ export class GameObject {
         this.size = new Vector(size);
         this.phyMass = phyMass;
         this.prev_pos = this.pos.clone();
+        this.simKey = undefined;
     }
 
     getStyle(containerSize) {
@@ -26,12 +27,34 @@ export class GameObject {
         };
     }
 
-    asComponent(containerSize) {
-        return <div className={`object ${this.constructor.name}`} style={this.getStyle(containerSize)} />;
+    getClassNames(simState){
+        return `object ${this.constructor.name} ${this.isVisible(simState)? 'objectVisible': 'objectInvisible'}`;
+    }
+
+    asComponent(simState, containerSize) {
+        return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)} />;
+    }
+
+    getSimKey(simState){
+        if(this.simKey != undefined) return this.simKey;
+        let arr = Object.entries(simState).filter(([k, v]) => v == this);
+        if(arr.length == 0){
+            this.simKey = '';
+        }else{
+            this.simKey = arr[0][0];
+        }
+        return this.simKey;
     }
 
     update(){
         this.vel = this.vel.scale(.9); // friction
+    }
+
+    isVisible(simState){
+        if(simState.visible.includes(this.constructor)) return true;
+        let key = this.getSimKey(simState);
+        if(key == '') return false;
+        return simState.visible.includes(key);
     }
     
     onCollide(other){}

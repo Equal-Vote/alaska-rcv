@@ -48,6 +48,28 @@ body, #root{
 
 .explainer h1{
   color: white;
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: ease;
+}
+
+.explainerPrev h1{
+  transform: translate(0, -100vh);
+   /* //display: none; */
+
+}
+
+.explainerNext h1{
+  transform: translate(0, 200vh);
+  /* //display: none; */
+}
+
+.explainerCurrent, .explainerPrev, .explainerNext {
+  position: fixed;
+}
+
+.explainerCurrent h1{
+  transform: translate(0, 0);
 }
 
 .object{

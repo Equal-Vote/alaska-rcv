@@ -1,12 +1,24 @@
+import { useContext, useEffect, useState } from "react";
+import { SimContext } from "../SimContext";
+
 const Explainer = () => {
+    const {simState} = useContext(SimContext);
+
+    let explainers = simState.allExplainers.map((e,i) => {
+        let c;
+        if(i < simState.explainerStart) c = 'explainerPrev';
+        if(simState.explainerStart <= i && i < simState.explainerEnd) c = 'explainerCurrent';
+        if(simState.explainerEnd <= i) c = 'explainerNext';
+
+        return <div className={c} key={`explainer-${i}`}>{e}</div>
+    })
 
     return (
         <div className="explainer">
-            <h1>
-                explainer text here
-            </h1>
+            {explainers}
         </div>
     )
+
 }
 
 export default Explainer

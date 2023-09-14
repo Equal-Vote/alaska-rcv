@@ -6,7 +6,7 @@ const Simulation = () => {
     let animID = useRef(null);
     let simRef = useRef(null);
 
-    const simState = useContext(SimContext);
+    const {simState} = useContext(SimContext);
 
     const gameLoop = (timestamp) => {
         let objs = simState.objects;

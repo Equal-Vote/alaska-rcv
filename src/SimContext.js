@@ -1,6 +1,6 @@
 import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
-import {createContext, useRef, useCallback, useEffect} from 'react';
+import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 
 class VoterMovement{
     constructor(count, from, to){
@@ -36,7 +36,7 @@ class VoterMovement{
 }
 
 class SimTransition{
-    constructor({visible=[], focused=[], explainer=<></>, voterMovement=undefined, sticky=false, }){
+    constructor({visible=[], focused=[], explainer=<></>, voterMovement=undefined, sticky=false}){
         this.visible = visible;
         this.focused = focused;
         this.voterMovement = voterMovement;
@@ -104,7 +104,7 @@ export const SimContext = createContext({});
 
 export function SimContextProvider({children}){
     let simState = useRef(initSimContext()).current;
-    let simIndex = useRef(0);
+    let [simIndex, setSimIndex] = useState(0);
 
     function initSimContext(){
         let voter_radius = 30;
@@ -134,8 +134,7 @@ export function SimContextProvider({children}){
 
         ctx.allExplainers = transitions.map(t => t.explainer);
 
-        ctx = {...ctx, objects, visible: [], focused: [], explainerStart: 0, explainerEnd: 1}
-
+        ctx = {...ctx, objects, visible: [], focused: [], explainerStart: -1, explainerEnd: 0}
 
         return ctx;
     }
@@ -143,7 +142,11 @@ export function SimContextProvider({children}){
     const handleKeyPress = useCallback((event) => {
         if(event.key != 'a') return;
 
-        transitions[simIndex.current++].apply(simState)
+        // this was a hacky way to make sure we're using the correct simIndex
+        setSimIndex((simIndex) => {
+            transitions[simIndex].apply(simState)
+            return simIndex+1
+        });
     }, []);
 
     useEffect(() => {
@@ -156,5 +159,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={simState}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, simIndex}}>{children}</SimContext.Provider>;
 }

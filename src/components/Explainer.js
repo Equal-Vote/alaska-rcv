@@ -6,9 +6,12 @@ const Explainer = () => {
 
     let explainers = simState.allExplainers.map((e,i) => {
         let c;
-        if(i < simState.explainerStart) c = 'explainerPrev';
-        if(simState.explainerStart <= i && i < simState.explainerEnd) c = 'explainerCurrent';
-        if(simState.explainerEnd <= i) c = 'explainerNext';
+        if(i < simState.explainerStart)
+            c = 'explainerPrev';
+        if(simState.explainerStart <= i && i < simState.explainerEnd)
+            c = 'explainerCurrent';
+        if(simState.explainerEnd <= i)
+            c = 'explainerNext';
 
         return <div className={c} key={`explainer-${i}`}>{e}</div>
     })

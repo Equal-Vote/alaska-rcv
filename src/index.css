@@ -55,13 +55,11 @@ body, #root{
 
 .explainerPrev h1{
   transform: translate(0, -100vh);
-   /* //display: none; */
 
 }
 
 .explainerNext h1{
   transform: translate(0, 200vh);
-  /* //display: none; */
 }
 
 .explainerCurrent, .explainerPrev, .explainerNext {

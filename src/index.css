@@ -67,14 +67,17 @@ body, #root{
 }
 
 .explainerCurrent h1{
+  transition-delay: 1200ms;
   transform: translate(0, 0);
 }
 
 .object{
   position: absolute;
+  /* // transitioning opacity causes jittering for some reason
   transition-property: 'opacity';
   transition-duration: 1s;
   transition-timing-function: ease;
+  */
 }
 
 .objectVisible{

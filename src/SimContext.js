@@ -54,10 +54,12 @@ export function SimContextProvider({children}){
         // this was a hacky way to make sure we're using the correct simIndex
         setSimIndex((simIndex) => {
             transitions[simIndex+1].apply(simState)
-            setTimeout(() => {
-                setSimIndex(simIndex+1)
-            }, 1000);
-            return simIndex;
+            return simIndex+1;
+            //setSimIndex(simIndex+1)
+            //setTimeout(() => {
+            //    setSimIndex(simIndex+1)
+            //}, 1000);
+            //return simIndex;
         });
     }, []);
 

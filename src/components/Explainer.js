@@ -4,7 +4,7 @@ import { SimContext } from "../SimContext";
 const Explainer = () => {
     const {simState} = useContext(SimContext);
 
-    let explainers = simState.allExplainers.map((e,i) => {
+    let explainers = simState.allExplainers.map(({explainer, delay},i) => {
         let c;
         if(i < simState.explainerStart)
             c = 'explainerPrev';
@@ -13,7 +13,7 @@ const Explainer = () => {
         if(simState.explainerEnd <= i)
             c = 'explainerNext';
 
-        return <div className={c} key={`explainer-${i}`}>{e}</div>
+        return <div className={c} key={`explainer-${i}`} style={{transitionDelay: `${delay}s`}}>{explainer}</div>
     })
 
     return (

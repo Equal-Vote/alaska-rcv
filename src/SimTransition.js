@@ -1,10 +1,11 @@
 export class SimTransition {
-    constructor({ visible = [], focused = [], explainer = <></>, voterMovement = undefined, sticky = false }) {
+    constructor({ visible = [], focused = [], explainer = <></>, voterMovement = undefined, explainerDelaySeconds=0, sticky = false }) {
         this.visible = visible;
         this.focused = focused;
         this.voterMovement = voterMovement;
 
         this.explainer = explainer;
+        this.explainerDelaySeconds = explainerDelaySeconds;
         this.sticky = sticky;
     }
 

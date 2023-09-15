@@ -35,10 +35,12 @@ body, #root{
 }
 
 .explainer{
+  position: relative;
   flex-grow: 1;
   text-align: center;
 
   height: 100%;
+  max-width: 1000px;
 
   display: flex;
   flex-direction: column;
@@ -48,26 +50,24 @@ body, #root{
 
 .explainer h1{
   color: white;
+}
+.explainerCurrent, .explainerPrev, .explainerNext {
+  position: absolute;
   transition-property: transform;
   transition-duration: 1s;
   transition-timing-function: ease;
 }
 
-.explainerPrev h1{
+.explainerPrev{
   transform: translate(0, -100vh);
-
 }
 
-.explainerNext h1{
+.explainerNext{
   transform: translate(0, 200vh);
 }
 
-.explainerCurrent, .explainerPrev, .explainerNext {
-  position: fixed;
-}
-
-.explainerCurrent h1{
-  transition-delay: 1200ms;
+.explainerCurrent{
+  transition-delay: 1.2s;
   transform: translate(0, 0);
 }
 
@@ -80,12 +80,28 @@ body, #root{
   */
 }
 
+.ImageObject{
+  background-position: center;
+  background-size: cover;
+  border-width: 0;
+  transition-property: opacity;
+  transition-duration: .2s;
+}
+
 .objectVisible{
   opacity: 1;
 }
 
 .objectInvisible{
   opacity: 0;
+}
+
+.ImageObject.objectInvisible{
+  transition-delay: 0s;
+}
+
+.ImageObject.objectVisible{
+  transition-delay: .5s;
 }
 
 .Voter{

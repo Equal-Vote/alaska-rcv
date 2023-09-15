@@ -1,5 +1,6 @@
 import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
+import ImageObject from './components/ImageObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 import { transitions } from './Transitions';
 
@@ -13,6 +14,7 @@ export function SimContextProvider({children}){
         let voter_radius = 30;
         //let candidate_radius = 40;
         let ctx = {
+            // camps
             home: new VoterCamp(0, 0),
             begich_bullet: new VoterCamp(voter_radius, 90),
             begich_then_palin: new VoterCamp(voter_radius, 60),
@@ -23,6 +25,9 @@ export function SimContextProvider({children}){
             peltola_bullet: new VoterCamp(voter_radius, 210),
             peltola_then_begich: new VoterCamp(voter_radius, 180),
             begich_then_peltola: new VoterCamp(voter_radius, 120),
+            // images
+            choose_one: new ImageObject(0, 0, 'images/chooseOneBallot.png'),
+            alaska: new ImageObject(0, 0, 'images/alaska.png'),
         };
 
         let objects = [];
@@ -35,7 +40,7 @@ export function SimContextProvider({children}){
         }
         ctx.objects = objects;
 
-        ctx.allExplainers = transitions.map(t => t.explainer);
+        ctx.allExplainers = transitions.map(t => {return {explainer: t.explainer, delay: t.explainerDelaySeconds}});
 
         ctx = {...ctx, objects, visible: [], focused: [], explainerStart: -1, explainerEnd: 0}
 

@@ -5,8 +5,13 @@ import VoterCamp from './components/VoterCamp';
 
 export const transitions = [
     new SimTransition({
-        visible: [],
-        explainer: <h1>The Beginning</h1>,
+        visible: ['choose_one'],
+        explainer: <h1>For decades, we've been cursed with a voting method where it's not safe to pick your favorite</h1>,
+    }),
+    new SimTransition({
+        visible: ['alaska'],
+        explainer: <h1>But in 2022, Alaska made a change and adopted Ranked Choice Voting</h1>,
+        explainerDelaySeconds: .5,
     }),
     new SimTransition({
         visible: [Voter, VoterCamp],

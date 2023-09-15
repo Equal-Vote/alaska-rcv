@@ -1,4 +1,5 @@
 import GameObject from "./GameObject";
+import VoterCamp from "./VoterCamp";
 
 const startMass = 1;
 
@@ -36,6 +37,10 @@ class Voter extends GameObject{
                 this.camp.members.push(other);
             }
         }
+    }
+
+    canCollidWith(other){
+        return !(other instanceof VoterCamp && other != this.camp);
     }
 }
 

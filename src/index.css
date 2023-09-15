@@ -34,6 +34,7 @@ body, #root{
   border: 0;
 }
 
+/**** EXPLAINER ****/
 .explainer{
   position: relative;
   flex-grow: 1;
@@ -70,6 +71,9 @@ body, #root{
   transition-delay: 1.2s;
   transform: translate(0, 0);
 }
+
+
+/***** OBJECTS ***/
 
 .object{
   position: absolute;
@@ -124,4 +128,28 @@ body, #root{
 
 .VoterCamp p{
   color: white;
+}
+
+.Candidate{
+  border-radius: 100%;
+  border-block: solid;
+  background-position: center;
+  background-size: cover;
+  transition-property: opacity;
+  transition-duration: 1s;
+}
+
+.Candidate.begich{
+  border-color: #C21C1E;
+  transition-delay: 0s;
+}
+
+.Candidate.palin{
+  border-color: #F11E01;
+  transition-delay: .5s;
+}
+
+.Candidate.peltola{
+  border-color: #C1E8F5;
+  transition-delay: 1s;
 }

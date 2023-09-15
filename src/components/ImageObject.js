@@ -1,8 +1,8 @@
 import GameObject from "./GameObject";
 
 class ImageObject extends GameObject{
-    constructor(r, angle, url){
-        super(r, angle, 70, undefined);
+    constructor(r, angle, size, url){
+        super(r, angle, size, undefined);
         this.url = url;
     }
 

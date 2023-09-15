@@ -1,6 +1,4 @@
 import { Vector } from "./Vector";
-import Voter from "./Voter";
-//import VoterCamp from "./VoterCamp";
 
 export class GameObject {
     constructor(r, angle, size, phyMass=undefined) {
@@ -11,6 +9,7 @@ export class GameObject {
         this.phyMass = phyMass;
         this.prev_pos = this.pos.clone();
         this.simKey = undefined;
+        this.customClass = ''
     }
 
     getStyle(containerSize) {
@@ -28,7 +27,7 @@ export class GameObject {
     }
 
     getClassNames(simState){
-        return `object ${this.constructor.name} ${this.isVisible(simState)? 'objectVisible': 'objectInvisible'}`;
+        return `object ${this.constructor.name} ${this.isVisible(simState)? 'objectVisible': 'objectInvisible'} ${this.customClass}`;
     }
 
     asComponent(simState, containerSize) {
@@ -49,6 +48,8 @@ export class GameObject {
     update(){
         this.vel = this.vel.scale(.9); // friction
     }
+
+    canCollidWith(other){ return true; }
 
     isVisible(simState){
         if(simState.visible.includes(this.constructor)) return true;
@@ -73,11 +74,12 @@ export class GameObject {
     }
 
     tryCollision(other){
+        if(!this.canCollidWith(other) || ! other.canCollidWith(this)) return;
+
         let diff = this.pos.subtract(other.pos);
         
         // normalize
         diff = diff.scale(this.size.add(other.size).scale(.5).invert());
-
 
         //if(this.is_rect || other.is_rect){
             //if(normDiff.magnitude() > .5) return false;

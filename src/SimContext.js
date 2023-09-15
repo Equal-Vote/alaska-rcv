@@ -3,6 +3,7 @@ import VoterCamp from './components/VoterCamp';
 import ImageObject from './components/ImageObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 import { transitions } from './Transitions';
+import Candidate from './components/Candidate';
 
 export const SimContext = createContext({});
 
@@ -12,8 +13,15 @@ export function SimContextProvider({children}){
 
     function initSimContext(){
         let voter_radius = 30;
-        //let candidate_radius = 40;
+        let candidate_radius = 43;
         let ctx = {
+            // images
+            choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
+            alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
+            // candidates
+            begich: new Candidate(candidate_radius, 90, 'begich'),
+            palin: new Candidate(candidate_radius, 330, 'palin'),
+            peltola: new Candidate(candidate_radius, 210, 'peltola'),
             // camps
             home: new VoterCamp(0, 0),
             begich_bullet: new VoterCamp(voter_radius, 90),
@@ -25,9 +33,6 @@ export function SimContextProvider({children}){
             peltola_bullet: new VoterCamp(voter_radius, 210),
             peltola_then_begich: new VoterCamp(voter_radius, 180),
             begich_then_peltola: new VoterCamp(voter_radius, 120),
-            // images
-            choose_one: new ImageObject(0, 0, 'images/chooseOneBallot.png'),
-            alaska: new ImageObject(0, 0, 'images/alaska.png'),
         };
 
         let objects = [];

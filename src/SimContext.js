@@ -59,18 +59,21 @@ export function SimContextProvider({children}){
     }
 
     const handleKeyPress = useCallback((event) => {
-        if(event.key != 'a') return;
-
-        // this was a hacky way to make sure we're using the correct simIndex
-        setSimIndex((simIndex) => {
-            transitions[simIndex+1].apply(simState)
-            return simIndex+1;
-            //setSimIndex(simIndex+1)
-            //setTimeout(() => {
-            //    setSimIndex(simIndex+1)
-            //}, 1000);
-            //return simIndex;
-        });
+        if(event.key == 'a'){
+            setSimIndex((simIndex) => {
+                if(simIndex == transitions.length-1) return simIndex;
+                transitions[simIndex+1].apply(simState)
+                return simIndex+1;
+            });
+        }
+        if(event.key == 'z'){
+            setSimIndex((simIndex) => {
+                if(simIndex == 0) return simIndex;
+                transitions[simIndex].revert(simState);
+                transitions[simIndex-1].applyState(simState);
+                return simIndex-1;
+            });
+        }
     }, []);
 
     useEffect(() => {

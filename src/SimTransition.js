@@ -9,17 +9,26 @@ export class SimTransition {
         this.sticky = sticky;
     }
 
+    applyState(simState){
+        simState.visible = this.visible;
+        simState.focused = this.focused;
+    }
+
     apply(simState) {
         simState.visible = this.visible;
         simState.focused = this.focused;
         if (this.voterMovement != undefined) {
             this.voterMovement.apply(simState);
         }
+        simState.explainerStart++;
         simState.explainerEnd++;
-        if (!this.sticky) simState.explainerStart = simState.explainerEnd - 1;
     }
 
     revert(simState) {
-        this.voterMovement.revert(simState);
+        simState.explainerStart--;
+        simState.explainerEnd--;
+        if (this.voterMovement != undefined) {
+            this.voterMovement.revert(simState);
+        }
     }
 }

@@ -9,6 +9,7 @@ function App() {
                 <Simulation/>
                 <Explainer/>
             </SimContextProvider>
+            <div class="object Candidate objectVisible palin" style={{borderWidth: '3px 5px', fontSize: '17px', width: '15%', height: '15%'}}></div>
         </div>
     );
 }

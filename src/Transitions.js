@@ -31,7 +31,11 @@ export const transitions = [
     // moving voters
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp],
-        explainer: <h1>Begich Bullet Voters</h1>,
+        explainer: <>
+            <h1>12 voters ranked begich first without ranking other candidates </h1>
+            <img src="/images/begichBullet.png" style={{width: '75%'}}/>
+            <h1>12 voters ranked begich first without ranking other candidates </h1>
+        </>,
         voterMovement: new VoterMovement(12, 'home', 'begich_bullet')
     }),
     new SimTransition({

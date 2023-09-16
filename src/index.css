@@ -52,6 +52,7 @@ body, #root{
 .explainer h1{
   color: white;
 }
+
 .explainerCurrent, .explainerPrev, .explainerNext {
   position: absolute;
   transition-property: transform;

@@ -21,7 +21,6 @@ const Explainer = () => {
             {explainers}
         </div>
     )
-
 }
 
 export default Explainer

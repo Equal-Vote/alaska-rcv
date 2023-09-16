@@ -1,5 +1,8 @@
 * {
   box-sizing: border-box;
+  --peltola: #C1E8F5;
+  --palin: #F11E01;
+  --begich: purple;
 }
 
 body, #root{
@@ -49,8 +52,14 @@ body, #root{
   align-items: center;
 }
 
-.explainer h1{
+
+
+.explainer h1, h2, h3, p{
   color: white;
+}
+
+.explainer p{
+  font-size: 1.5rem;
 }
 
 .explainerCurrent, .explainerPrev, .explainerNext {
@@ -75,6 +84,19 @@ body, #root{
 
 
 /***** OBJECTS ***/
+.Pie{
+  border-radius: 100%;
+  background: #222222;
+  border-color: darkgray;
+  border-block: solid;
+  transition-property: opacity;
+  transition-duration: .5s;
+  
+}
+
+.Pie.objectVisible{
+  opacity: .3;
+}
 
 .object{
   position: absolute;
@@ -141,16 +163,16 @@ body, #root{
 }
 
 .Candidate.begich{
-  border-color: #C21C1E;
+  border-color: var(--begich);
   transition-delay: 0s;
 }
 
 .Candidate.palin{
-  border-color: #F11E01;
+  border-color: var(--palin);
   transition-delay: .5s;
 }
 
 .Candidate.peltola{
-  border-color: #C1E8F5;
+  border-color: var(--peltola);
   transition-delay: 1s;
 }

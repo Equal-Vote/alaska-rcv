@@ -12,7 +12,7 @@ const Simulation = () => {
         let objs = simState.visibleObjects();
 
         // update
-        objs.forEach(o => o.update());
+        objs.forEach(o => o.update(simState));
 
         // move
         objs.forEach(o => o.applyVelocity());

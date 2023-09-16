@@ -1,7 +1,7 @@
 import { Vector } from "./Vector";
 
 export class GameObject {
-    constructor(r, angle, size, phyMass=undefined) {
+    constructor(r, angle, size, phyMass=undefined, customClass='') {
         // undefined means don't do physics, negative means static
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
@@ -9,7 +9,7 @@ export class GameObject {
         this.phyMass = phyMass;
         this.prev_pos = this.pos.clone();
         this.simKey = undefined;
-        this.customClass = ''
+        this.customClass = customClass;
     }
 
     getStyle(containerSize) {
@@ -45,7 +45,7 @@ export class GameObject {
         return this.simKey;
     }
 
-    update(){
+    update(simState){
         this.vel = this.vel.scale(.9); // friction
     }
 

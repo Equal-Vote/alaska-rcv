@@ -4,6 +4,7 @@ import ImageObject from './components/ImageObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 import { transitions } from './Transitions';
 import Candidate from './components/Candidate';
+import Pie from './components/Pie';
 
 export const SimContext = createContext({});
 
@@ -12,27 +13,29 @@ export function SimContextProvider({children}){
     let [simIndex, setSimIndex] = useState(0);
 
     function initSimContext(){
-        let voter_radius = 30;
-        let candidate_radius = 43;
+        let voterRadius = 30;
+        let candidateRadius = 43;
         let ctx = {
             // images
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
+            // voter ring
+            ring: new Pie(candidateRadius*2),
             // candidates
-            begich: new Candidate(candidate_radius, 90, 'begich'),
-            palin: new Candidate(candidate_radius, 330, 'palin'),
-            peltola: new Candidate(candidate_radius, 210, 'peltola'),
+            begich: new Candidate(candidateRadius, 90, 'begich'),
+            palin: new Candidate(candidateRadius, 330, 'palin'),
+            peltola: new Candidate(candidateRadius, 210, 'peltola'),
             // camps
             home: new VoterCamp(0, 0),
-            begich_bullet: new VoterCamp(voter_radius, 90),
-            begich_then_palin: new VoterCamp(voter_radius, 60),
-            palin_then_begich: new VoterCamp(voter_radius, 0),
-            palin_bullet: new VoterCamp(voter_radius, 330),
-            palin_then_peltola: new VoterCamp(voter_radius, 300),
-            peltola_then_palin: new VoterCamp(voter_radius, 240),
-            peltola_bullet: new VoterCamp(voter_radius, 210),
-            peltola_then_begich: new VoterCamp(voter_radius, 180),
-            begich_then_peltola: new VoterCamp(voter_radius, 120),
+            begich_bullet: new VoterCamp(voterRadius, 90),
+            begich_then_palin: new VoterCamp(voterRadius, 60),
+            palin_then_begich: new VoterCamp(voterRadius, 0),
+            palin_bullet: new VoterCamp(voterRadius, 330),
+            palin_then_peltola: new VoterCamp(voterRadius, 300),
+            peltola_then_palin: new VoterCamp(voterRadius, 240),
+            peltola_bullet: new VoterCamp(voterRadius, 210),
+            peltola_then_begich: new VoterCamp(voterRadius, 180),
+            begich_then_peltola: new VoterCamp(voterRadius, 120),
         };
 
         let objects = [];
@@ -41,7 +44,7 @@ export function SimContextProvider({children}){
             objects.push(o);
         });
         for(var i = 0; i < 200; i++){
-            objects.push(new Voter(80+Math.random()*10, (i/200)*360, ctx.home));
+            objects.push(new Voter(80+Math.random()*10, (i/200)*360+.3, ctx.home));
         }
         ctx.objects = objects;
 

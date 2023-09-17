@@ -9,7 +9,7 @@ const piePoints = {
 }
 
 const pieColors = {
-    'default': ['var(--pieGray)', 'var(--pieGray)', 'var(--pieGray)'],
+    'default': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
     'firstRound': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
     'begichVsPalin': ['var(--begich)', 'var(--palin)', 'var(--pieGray)'],
     'begichVsPeltola': ['var(--begich)', 'var(--pieGray)', 'var(--peltola)'],
@@ -21,12 +21,12 @@ class Pie extends GameObject{
         super(0, 0, size);
         this.conicPairs = [];
         this.points = [...piePoints['default']];
+        this.colors = [...pieColors['default']];
         //conicColors = Array(3).fill('var(--pieGray)');
     }
 
     update(simState){
         let t = .1;
-        //this.points = 
         this.points = this.points.map((p, i) => {
             let diff = piePoints[simState.runoffStage][i]-p
             let minDelta = 1;
@@ -40,15 +40,15 @@ class Pie extends GameObject{
             }
         });
 
-        let colors = pieColors[simState.runoffStage];
+        this.colors = pieColors[simState.runoffStage];
 
         this.conicPairs = [];
         for(let i = 0; i < 3; i++){
-            this.conicPairs.push([colors[i], this.points[i*2]]);
+            this.conicPairs.push([this.colors[i], this.points[i*2]]);
             this.conicPairs.push(['var(--pieGray)', this.points[i*2+1]]);
         }
 
-        this.conicPairs.push([colors[0], 100])
+        this.conicPairs.push([this.colors[0], 100])
     }
 
     getStyle(containerSize){

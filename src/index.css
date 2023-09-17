@@ -133,8 +133,8 @@ body, #root{
 
 .Voter{
   border-radius: 50%;
+  border-color: black;
   border-block: solid;
-  background: var(--voterGray);
 }
 
 .stable{

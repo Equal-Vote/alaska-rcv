@@ -17,6 +17,12 @@ class Voter extends GameObject{
         this.vel = this.vel.add(toCamp.scaleTo(grav));
     }
 
+    getStyle(containerSize){
+        return {
+            ...super.getStyle(containerSize),
+            background: this.camp == undefined ? 'var(--voterGray)' : this.camp.voterColor,
+        }
+    }
     isMember(){
         return this.camp.members.includes(this);
     }

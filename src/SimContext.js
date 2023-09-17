@@ -20,7 +20,7 @@ export function SimContextProvider({children}){
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
             // voter ring
-            ring: new Pie(candidateRadius*2),
+            pie: new Pie(candidateRadius*2),
             // candidates
             begich: new Candidate(candidateRadius, 90, 'begich'),
             palin: new Candidate(candidateRadius, 330, 'palin'),

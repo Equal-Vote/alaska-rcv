@@ -24,9 +24,12 @@ class Voter extends GameObject{
             border: `${Math.round(0.002 * containerSize)}px solid black`,
         }
     }
+
     isMember(){
         return this.camp != undefined && this.camp.members.includes(this);
     }
+
+    isFocused(simState){ return this.isMember() && this.camp.isFocused(simState); }
 
     onCollide(other){
         if(other==this.camp){

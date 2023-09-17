@@ -129,8 +129,22 @@ body, #root{
   transition-duration: .2s;
 }
 
-.objectVisible{
-  opacity: 1;
+.objectVisible.objectFocused{
+  z-index: 2;
+}
+
+.DarkenLayer{
+  z-index: 1;
+  background: black;
+  transition: opacity .5s ease;
+}
+
+.DarkenLayer.objectVisible{
+  opacity: .9;
+}
+
+.objectVisible.objectUnfocused{
+  z-index: 0;
 }
 
 .objectInvisible{

@@ -6,6 +6,7 @@ import { transitions } from './Transitions';
 import Candidate from './components/Candidate';
 import Pie from './components/Pie';
 import VoterCount from './components/VoterCount';
+import DarkenLayer from './components/DarkenLayer';
 
 export const SimContext = createContext({});
 
@@ -22,6 +23,8 @@ export function SimContextProvider({children}){
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
             condorcet: new ImageObject(0, 0, 100, 'images/condorcet.png'),
+            // darken layer
+            darken: new DarkenLayer(),
             // voter ring
             pie: new Pie(candidateRadius*2),
             // candidates

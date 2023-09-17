@@ -1,3 +1,4 @@
+import { toHaveDisplayValue } from "@testing-library/jest-dom/matchers";
 import { Vector } from "./Vector";
 
 export class GameObject {
@@ -10,6 +11,7 @@ export class GameObject {
         this.prev_pos = this.pos.clone();
         this.simKey = undefined;
         this.customClass = customClass;
+        this.prevFocused = false;
     }
 
     getStyle(containerSize) {
@@ -27,7 +29,14 @@ export class GameObject {
     }
 
     getClassNames(simState){
-        return `object ${this.constructor.name} ${this.isVisible(simState)? 'objectVisible': 'objectInvisible'} ${this.customClass}`;
+        let classes = [
+            'object',
+            this.constructor.name,
+            this.customClass,
+        ];
+        if(this.isVisible(simState) != undefined) classes.push(this.isVisible(simState)? 'objectVisible': 'objectInvisible')
+        if(this.isFocused(simState) != undefined) classes.push(this.isFocused(simState)? 'objectFocused': 'objectUnfocused')
+        return classes.join(' ');
     }
 
     asComponent(simState, containerSize) {
@@ -50,6 +59,20 @@ export class GameObject {
     }
 
     canCollidWith(other){ return true; }
+
+    isFocused(simState){
+        let _isFocused = () => {
+            if(simState.focused.includes(this.constructor)) return true;
+            let key = this.getSimKey(simState);
+            if(key == '') return false;
+            return simState.focused.includes(key);
+        }
+
+        if(simState.focused.length > 0) this.prevFocused = _isFocused();
+
+        // prevFocused is a hack to ensure the z-index does't immediately change when transitioning
+        return this.prevFocused;
+    }
 
     isVisible(simState){
         if(simState.visible.includes(this.constructor)) return true;

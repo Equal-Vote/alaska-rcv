@@ -101,7 +101,7 @@ export const transitions = [
     }),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
-        focused: ['begich_bullet'],
+        focused: ['begich_bullet', 'begich'],
         explainer: <>
             <h2>This was only possible by hiding the 12 begich bullet votes</h2>
             <h2>The majority is an illusion! In reality it's impossible for a voting method to guarantee a majority</h2>

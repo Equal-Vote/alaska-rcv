@@ -120,7 +120,8 @@ export const transitions = [
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
-            <h1>Claim #2: RCV virtually guarantees a condorcet winner</h1>
+            <h1>Claim #2</h1>
+            <h1>RCV virtually guarantees a condorcet winner</h1>
             <h2>Wrong again, Peltola wasn't the condorcet winner in this election!</h2>
         </>,
         runoffStage: 'palinVsPeltola',
@@ -163,5 +164,6 @@ export const transitions = [
         </>,
         runoffStage: 'begichVsPalin',
     }),
+    // spoiler effect
 ];
 

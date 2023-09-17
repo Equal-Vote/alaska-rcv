@@ -74,6 +74,7 @@ export const transitions = [
             new VoterMovement(50, 'home', 'peltola_then_begich'),
         ],
     }),
+    // counting votes
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <h1>For the first round of RCV, we count the first choice votes for each candidate</h1>,
@@ -86,7 +87,7 @@ export const transitions = [
     }),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
-        explainer: <h1>Then the begich voters were transferred to their second choice, and the vote was recounted</h1>,
+        explainer: <h1>Then the begich voters were transferred to their second choice, the vote was recounted, and Peltola won!</h1>,
         runoffStage: 'palinVsPeltola',
     }),
 ];

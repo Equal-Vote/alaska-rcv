@@ -5,6 +5,8 @@
   --begich: purple;
   --pieGray: #222222;
   --voterGray: darkgray;
+  font-family: 'Montserrat';
+  font-weight: bold;
 }
 
 body, #root{
@@ -96,6 +98,17 @@ body, #root{
 
 .Pie.objectVisible{
   opacity: .3;
+}
+
+.VoterCount{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.VoterCount h1{
+  color: black;
 }
 
 .object{

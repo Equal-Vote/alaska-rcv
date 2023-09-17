@@ -5,6 +5,7 @@ import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 import { transitions } from './Transitions';
 import Candidate from './components/Candidate';
 import Pie from './components/Pie';
+import VoterCount from './components/VoterCount';
 
 export const SimContext = createContext({});
 
@@ -13,7 +14,8 @@ export function SimContextProvider({children}){
     let [simIndex, setSimIndex] = useState(0);
 
     function initSimContext(){
-        let voterRadius = 30;
+        let countRadius = 14;
+        let voterRadius = 28;
         let candidateRadius = 43;
         let ctx = {
             // images
@@ -25,6 +27,10 @@ export function SimContextProvider({children}){
             begich: new Candidate(candidateRadius, 90, 'begich'),
             palin: new Candidate(candidateRadius, 330, 'palin'),
             peltola: new Candidate(candidateRadius, 210, 'peltola'),
+            // counts
+            begich_count: new VoterCount(countRadius, 90, 'begich', 0),
+            palin_count: new VoterCount(countRadius, 330, 'palin', 1),
+            peltola_count: new VoterCount(countRadius, 210, 'peltola', 2),
             // camps
             home: new VoterCamp(0, 0),
             begich_bullet: new VoterCamp(voterRadius, 90),

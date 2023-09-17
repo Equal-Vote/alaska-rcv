@@ -8,7 +8,6 @@ export class GameObject {
         this.vel = new Vector(0);
         this.size = new Vector(size);
         this.phyMass = phyMass;
-        this.prev_pos = this.pos.clone();
         this.simKey = undefined;
         this.customClass = customClass;
         this.prevFocused = false;
@@ -84,12 +83,7 @@ export class GameObject {
     onCollide(other){}
 
     applyVelocity(){
-        this.prev_pos = this.pos.clone();
         this.pos = this.pos.add(this.vel);
-    }
-
-    revertPos(){
-        this.pos = this.prev_pos.clone();
     }
 
     radius(){
@@ -103,19 +97,6 @@ export class GameObject {
         
         // normalize
         diff = diff.scale(this.size.add(other.size).scale(.5).invert());
-
-        //if(this.is_rect || other.is_rect){
-            //if(normDiff.magnitude() > .5) return false;
-            //if(normDiff.x > normDiff.y){
-                //diff = new Vector(diff.x, 0);
-                //thresh = (this.size.x + other.size.x) / 2;
-            //}else{
-                //diff = new Vector(0, diff.y);
-                //thresh = (this.size.y + other.size.y) / 2;
-            //}
-        //}else{
-            //thresh = this.radius() + other.radius();
-        //}
 
         let thresh = 1;
 

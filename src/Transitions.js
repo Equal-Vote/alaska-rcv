@@ -29,6 +29,7 @@ export const transitions = [
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp],
         explainer: <h1>We'll simplify the voters and pretend there were only 200 of them</h1>,
+        voterMovements: [new VoterMovement(200, undefined, 'home')]
     }),
     // moving voters
     new SimTransition({

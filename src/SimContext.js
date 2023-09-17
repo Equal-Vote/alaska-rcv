@@ -58,7 +58,7 @@ export function SimContextProvider({children}){
             objects.push(o);
         });
         for(var i = 0; i < 200; i++){
-            objects.push(new Voter(80+Math.random()*10, (i/200)*360+.3, ctx.home));
+            objects.push(new Voter(80+Math.random()*10, (i/200)*360+.3, undefined));
         }
         ctx.objects = objects;
 
@@ -85,7 +85,7 @@ export function SimContextProvider({children}){
                 }else{
                     moveQueue.current.shift()();
                 }
-            }, 2000)
+            }, 1500)
         }else{
             moveQueue.current.push(move);
         }

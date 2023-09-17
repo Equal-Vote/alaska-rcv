@@ -8,9 +8,17 @@ export class VoterMovement {
     }
 
     move(n, from, to, simState) {
+        // adding undefined made this messy :'(
+        if(to == undefined){
+            simState.objects
+                .filter(o => o instanceof Voter)
+                .forEach(o => o.camp = undefined);
+            simState[from].refreshMembers();
+            return;
+        }
         simState.objects
             .filter(o => o instanceof Voter)
-            .filter(o => o.camp == simState[from])
+            .filter(o => from == undefined? o.camp == undefined : o.camp == simState[from])
             .sort((l, r) => {
                 let dist = (o) => o.pos.subtract(simState[to].pos).magnitude();
                 return dist(l) - dist(r);
@@ -21,7 +29,7 @@ export class VoterMovement {
                 o.phyMass = 1;
             });
 
-        simState[from].refreshMembers();
+        if(from != undefined) simState[from].refreshMembers();
     }
 
     apply(simState) {

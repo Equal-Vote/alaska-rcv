@@ -9,7 +9,7 @@ const Simulation = () => {
     const {simState} = useContext(SimContext);
 
     const gameLoop = (timestamp) => {
-        let objs = simState.visibleObjects();
+        let objs = simState.objects;
 
         // update
         objs.forEach(o => o.update(simState));

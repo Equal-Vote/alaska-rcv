@@ -9,7 +9,6 @@ export class SimTransition {
     }
 
     moveVoters(simState){
-        console.log('moveVoters')
         this.voterMovements.forEach(m => m.apply(simState));
     }
 

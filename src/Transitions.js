@@ -115,13 +115,8 @@ export const transitions = [
             <h1>Claim #2</h1>
             <h1>"RCV virtually guarantees a condorcet winner"</h1>
             <h2>Wrong again, Peltola wasn't the condorcet winner in this election!</h2>
-        </>,
-        runoffStage: 'palinVsPeltola',
-    }),
-    new SimTransition({
-        visible: [Candidate, Voter, VoterCamp, Pie],
-        explainer: <>
-            <h1>But what's a condorcet winner?</h1>
+            <br/>
+            <h2>But what's a condorcet winner?</h2>
             <h2>That's candidate who can beat any of the other candidates head-to-head</h2>
             <h2>We know that Peltola beats Palin head-to-head but what about the other matchups?</h2>
         </>,

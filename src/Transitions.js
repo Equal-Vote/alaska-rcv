@@ -92,15 +92,16 @@ export const transitions = [
     }),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
-        explainer: <><h1>But did RCV pick the best winner?</h1><h2> This election exposed many of RCV's false claims. Let's take a look...</h2></>,
+        explainer: <><h1>But did RCV pick the best winner?</h1><h2> This election exposed many of RCV's false claims. Let's take a closer look...</h2></>,
         runoffStage: 'palinVsPeltola',
     }),
     // Majority Winner
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
-            <h1>Claim #1: RCV guarantees a majority winner</h1>
-            <h2>This is clearly wasn't true because neither candidate reached 100 votes</h2>
+            <h1>Claim #1</h1>
+            <h1>RCV guarantees a majority winner</h1>
+            <h2>This clearly wasn't true because neither candidate reached 100 votes</h2>
         </>,
         runoffStage: 'palinVsPeltola',
     }),
@@ -108,7 +109,7 @@ export const transitions = [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <h1>But then why did outlets report a majority for peltola?</h1>
-            <img src="/images/cnnResults.png" style={{width: '40%'}}/>
+            <img src="/images/cnnResults.png" style={{width: '90%'}}/>
             <p><a href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
             <h2>This was only possible by hiding the 12 begich bullet votes</h2>
             <h2>The majority is an illusion! In reality it's impossible for a voting method to guarantee a majority</h2>
@@ -120,7 +121,7 @@ export const transitions = [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <h1>Claim #2: RCV virtually guarantees a condorcet winner</h1>
-            <h2>Wrong again, Peltola wansn't the condorcet winner on this election!</h2>
+            <h2>Wrong again, Peltola wasn't the condorcet winner in this election!</h2>
         </>,
         runoffStage: 'palinVsPeltola',
     }),
@@ -143,22 +144,22 @@ export const transitions = [
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
-            <h1>And Begich beta's Palin head-to-head</h1>
+            <h1>And Begich beat's Palin head-to-head</h1>
         </>,
         runoffStage: 'begichVsPalin',
     }),
     new SimTransition({
-        visible: [Candidate, Voter, VoterCamp, Pie],
+        visible: [Candidate, 'condorcet'],
         explainer: <>
             <h1>So Begich is the actual condorcet winner!</h1>
         </>,
         runoffStage: 'begichVsPalin',
     }),
     new SimTransition({
-        visible: [Candidate, Voter, VoterCamp, Pie],
+        visible: [Candidate, 'condorcet'],
         explainer: <>
             <h1>Additionally, Palin lost all her head-to-head matchups</h1>
-            <h2>So that makes here the condorcet loser for this election</h2>
+            <h2>That makes her the Condorcet Loser for this election</h2>
         </>,
         runoffStage: 'begichVsPalin',
     }),

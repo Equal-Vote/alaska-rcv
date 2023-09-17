@@ -21,6 +21,7 @@ export function SimContextProvider({children}){
             // images
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
+            condorcet: new ImageObject(0, 0, 100, 'images/condorcet.png'),
             // voter ring
             pie: new Pie(candidateRadius*2),
             // candidates

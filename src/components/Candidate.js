@@ -11,7 +11,7 @@ class Candidate extends GameObject{
         return {
             ...super.getStyle(containerSize),
             backgroundImage: `url(\"images/${this.candidateName}.jpg\")`,
-            border: `${Math.round(0.002 * containerSize)}px solid var(--${this.candidateName})`,
+            border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName})`,
         };
     }
 }

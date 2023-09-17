@@ -12,7 +12,9 @@ export const SimContext = createContext({});
 
 export function SimContextProvider({children}){
     let simState = useRef(initSimContext()).current;
-    let [simIndex, setSimIndex] = useState(0);
+    let simIndex = useRef(0);
+    let moveQueue = useRef([]);
+    let moveInterval = useRef(undefined);
 
     function initSimContext(){
         let countRadius = 14;
@@ -62,7 +64,7 @@ export function SimContextProvider({children}){
 
         ctx.allExplainers = transitions.map(t => {return t.explainer; });
 
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', explainerStart: -1, explainerEnd: 0}
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default'}
 
         ctx.visibleObjects = function(){
             return this.objects.filter(o => o.isVisible(this));
@@ -73,33 +75,64 @@ export function SimContextProvider({children}){
         return ctx;
     }
 
+    const queueMove = (move) => {
+        if(moveInterval.current == undefined){
+            move();
+            moveInterval.current = setInterval(() => {
+                if(moveQueue.current.length == 0){
+                    clearInterval(moveInterval.current);
+                    moveInterval.current = undefined;
+                }else{
+                    moveQueue.current.shift()();
+                }
+            }, 2000)
+        }else{
+            moveQueue.current.push(move);
+        }
+    }
+
     const updateSimIndex = (nextIndex) => {
-        setSimIndex((simIndex) => {
-            if(typeof nextIndex !== 'number') nextIndex = nextIndex(simIndex);
-            if(nextIndex < 0) nextIndex = 0;
-            if(nextIndex > transitions.length-1) nextIndex = transitions.length-1;
-            while(simIndex != nextIndex){
-                if(simIndex < nextIndex){
-                    transitions[simIndex+1].apply(simState)
-                    simIndex++;
+        let i = simIndex.current;
+
+        if(typeof nextIndex !== 'number') nextIndex = nextIndex(i);
+        if(nextIndex < 0) nextIndex = 0;
+        if(nextIndex > transitions.length-1) nextIndex = transitions.length-1;
+        while(i != nextIndex){
+            if(i < nextIndex){
+                transitions[i+1].apply(simState)
+                if(transitions[i+1].voterMovements.length > 0){
+                    let copiedIndex = i+1;
+                    queueMove(
+                        () => {
+                            transitions[copiedIndex].moveVoters(simState)
+                        }
+                    );
                 }
-                if(simIndex > nextIndex){
-                    transitions[simIndex].revert(simState);
-                    transitions[simIndex-1].applyState(simState);
-                    simIndex--;
-                }
+                i++;
             }
-            return nextIndex;
-        })
+            if(i > nextIndex){
+                if(transitions[i].voterMovements.length > 0){
+                    let copiedIndex = i;
+                    queueMove(() => {
+                        transitions[copiedIndex].revertMove(simState)
+                    });
+                }
+                transitions[i-1].apply(simState);
+                i--;
+            }
+        }
+
+        simIndex.current = i;
     }
 
     const handleKeyPress = useCallback((event) => {
-        if(event.key == 'a'){
-            updateSimIndex(i => i+1);
-        }
-        if(event.key == 'z'){
-            updateSimIndex(i => i-1);
-        }
+        // I'll worry about keyboard support later
+        //if(event.key == 'a'){
+        //    updateSimIndex(i => i+1);
+        //}
+        //if(event.key == 'z'){
+        //    updateSimIndex(i => i-1);
+        //}
     }, []);
 
     useEffect(() => {
@@ -112,5 +145,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, simIndex, updateSimIndex}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex}}>{children}</SimContext.Provider>;
 }

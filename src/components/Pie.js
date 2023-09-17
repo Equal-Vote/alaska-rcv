@@ -53,7 +53,6 @@ class Pie extends GameObject{
         this.colors = this.colors.map((c, i) =>
             `color-mix(in lch, ${this.allPieColors[this.prevRunoffStage][i]}, ${this.allPieColors[simState.runoffStage][i]} ${Math.round(this.colorMix*100)}%)`
         )
-        console.log(this.colors);
 
         this.conicPairs = [];
         for(let i = 0; i < 3; i++){

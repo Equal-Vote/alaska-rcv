@@ -8,24 +8,18 @@ export class SimTransition {
         this.runoffStage = runoffStage;
     }
 
-    applyState(simState){
-        simState.visible = this.visible;
-        simState.focused = this.focused;
-        simState.runoffStage = this.runoffStage;
+    moveVoters(simState){
+        console.log('moveVoters')
+        this.voterMovements.forEach(m => m.apply(simState));
     }
 
     apply(simState) {
         simState.visible = this.visible;
         simState.focused = this.focused;
         simState.runoffStage = this.runoffStage;
-        this.voterMovements.forEach(m => m.apply(simState));
-        simState.explainerStart++;
-        simState.explainerEnd++;
     }
 
-    revert(simState) {
-        simState.explainerStart--;
-        simState.explainerEnd--;
+    revertMove(simState){
         this.voterMovements.forEach(m => m.revert(simState));
     }
 }

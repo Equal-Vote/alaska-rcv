@@ -26,10 +26,10 @@ class Pie extends GameObject{
     }
 
     update(simState){
-        let t = .1;
+        let t = .2;
         this.points = this.points.map((p, i) => {
             let diff = piePoints[simState.runoffStage][i]-p
-            let minDelta = 1;
+            let minDelta = .5;
             let easeNext = (p*(1-t)) + (piePoints[simState.runoffStage][i]*t);
             if(Math.abs(p-easeNext) > 1){
                 return easeNext;

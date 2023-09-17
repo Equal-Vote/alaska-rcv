@@ -55,7 +55,7 @@ export function SimContextProvider({children}){
         }
         ctx.objects = objects;
 
-        ctx.allExplainers = transitions.map(t => {return {explainer: t.explainer, delay: t.explainerDelaySeconds}});
+        ctx.allExplainers = transitions.map(t => {return t.explainer; });
 
         ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', explainerStart: -1, explainerEnd: 0}
 
@@ -68,21 +68,32 @@ export function SimContextProvider({children}){
         return ctx;
     }
 
+    const updateSimIndex = (nextIndex) => {
+        setSimIndex((simIndex) => {
+            if(typeof nextIndex !== 'number') nextIndex = nextIndex(simIndex);
+            if(nextIndex < 0) nextIndex = 0;
+            if(nextIndex > transitions.length-1) nextIndex = transitions.length-1;
+            while(simIndex != nextIndex){
+                if(simIndex < nextIndex){
+                    transitions[simIndex+1].apply(simState)
+                    simIndex++;
+                }
+                if(simIndex > nextIndex){
+                    transitions[simIndex].revert(simState);
+                    transitions[simIndex-1].applyState(simState);
+                    simIndex--;
+                }
+            }
+            return nextIndex;
+        })
+    }
+
     const handleKeyPress = useCallback((event) => {
         if(event.key == 'a'){
-            setSimIndex((simIndex) => {
-                if(simIndex == transitions.length-1) return simIndex;
-                transitions[simIndex+1].apply(simState)
-                return simIndex+1;
-            });
+            updateSimIndex(i => i+1);
         }
         if(event.key == 'z'){
-            setSimIndex((simIndex) => {
-                if(simIndex == 0) return simIndex;
-                transitions[simIndex].revert(simState);
-                transitions[simIndex-1].applyState(simState);
-                return simIndex-1;
-            });
+            updateSimIndex(i => i-1);
         }
     }, []);
 
@@ -96,5 +107,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, simIndex}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, simIndex, updateSimIndex}}>{children}</SimContext.Provider>;
 }

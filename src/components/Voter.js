@@ -20,12 +20,12 @@ class Voter extends GameObject{
     getStyle(containerSize){
         return {
             ...super.getStyle(containerSize),
-            background: this.camp == undefined ? 'var(--voterGray)' : this.camp.voterColor,
+            background: this.isMember() ? this.camp.voterColor : 'var(--voterGray)',
             border: `${Math.round(0.002 * containerSize)}px solid black`,
         }
     }
     isMember(){
-        return this.camp.members.includes(this);
+        return this.camp != undefined && this.camp.members.includes(this);
     }
 
     onCollide(other){

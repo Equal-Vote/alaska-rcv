@@ -8,24 +8,33 @@ const piePoints = {
     'palinVsPeltola': [4,   4, 50,   50, 96,   96],
 }
 
-const pieColors = {
-    'default': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
-    'firstRound': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
-    'begichVsPalin': ['var(--begich)', 'var(--palin)', 'var(--pieGray)'],
-    'begichVsPeltola': ['var(--begich)', 'var(--pieGray)', 'var(--peltola)'],
-    'palinVsPeltola': ['var(--pieGray)', 'var(--palin)', 'var(--peltola)'],
-}
+
 
 class Pie extends GameObject{
     constructor(size){
         super(0, 0, size);
         this.conicPairs = [];
+        this.allPieColors = {
+            'default': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
+            'firstRound': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
+            'begichVsPalin': ['var(--begich)', 'var(--palin)', 'var(--pieGray)'],
+            'begichVsPeltola': ['var(--begich)', 'var(--pieGray)', 'var(--peltola)'],
+            'palinVsPeltola': ['var(--pieGray)', 'var(--palin)', 'var(--peltola)'],
+        }
         this.points = [...piePoints['default']];
-        this.colors = [...pieColors['default']];
-        //conicColors = Array(3).fill('var(--pieGray)');
+        this.colors = [...this.allPieColors['default']];
+        this.prevRunoffStage = 'default';
+        this.curRunoffStage = 'default';
+        this.colorMix = 1;
     }
 
     update(simState){
+        if(this.curRunoffStage != simState.runoffStage){
+            this.colorMix = 0;
+            this.prevRunoffStage = this.curRunoffStage;
+            this.curRunoffStage = simState.runoffStage;
+        }
+
         let t = .2;
         this.points = this.points.map((p, i) => {
             let diff = piePoints[simState.runoffStage][i]-p
@@ -40,7 +49,11 @@ class Pie extends GameObject{
             }
         });
 
-        this.colors = pieColors[simState.runoffStage];
+        this.colorMix = this.colorMix*(1-t) + 1*t;
+        this.colors = this.colors.map((c, i) =>
+            `color-mix(in lch, ${this.allPieColors[this.prevRunoffStage][i]}, ${this.allPieColors[simState.runoffStage][i]} ${Math.round(this.colorMix*100)}%)`
+        )
+        console.log(this.colors);
 
         this.conicPairs = [];
         for(let i = 0; i < 3; i++){

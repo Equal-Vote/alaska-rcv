@@ -29,7 +29,7 @@ class VoterCount extends GameObject{
     }
 
     isVisible(simState){
-        return simState.pie.isVisible(simState) && simState.runoffStage != 'default' && simState.pie.colors[this.candidateIndex] != 'var(--pieGray)';
+        return simState.pie.isVisible(simState) && simState.runoffStage != 'default' && simState.pie.allPieColors[simState.runoffStage][this.candidateIndex] != 'var(--pieGray)';
     }
 
     update(simState){

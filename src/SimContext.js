@@ -22,7 +22,9 @@ export function SimContextProvider({children}){
             // images
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
-            condorcet: new ImageObject(0, 0, 100, 'images/condorcet.png'),
+            begich_beats_palin: new ImageObject(0, 0, 100, 'images/begichBeatsPalin.png'),
+            begich_beats_peltola: new ImageObject(0, 0, 100, 'images/begichBeatsPeltola.png'),
+            peltola_beats_palin: new ImageObject(0, 0, 100, 'images/peltolaBeatsPalin.png'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring

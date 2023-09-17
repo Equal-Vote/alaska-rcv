@@ -28,7 +28,7 @@ class VoterCamp extends GameObject{
 
         this.voterColor = 'var(--voterGray)';
         if(this.startR > 5){
-            let colors = simState.pie.colors;
+            let colors = simState.pie.allPieColors[simState.runoffStage];
             if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) this.voterColor = colors[0];
             if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) this.voterColor = colors[1];
             if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) this.voterColor = colors[2];

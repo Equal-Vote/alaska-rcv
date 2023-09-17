@@ -93,7 +93,7 @@ export const transitions = [
             <h1>"RCV guarantees a majority winner"</h1>
             <h2>This clearly wasn't true because neither candidate reached 100 votes</h2>
             <br/>
-            <h1>But then why did outlets report a majority for peltola?</h1>
+            <h2>But then why did outlets report a majority for peltola?</h2>
             <img src="/images/cnnResults.png" style={{width: '90%'}}/>
             <p><a href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
         </>,
@@ -137,14 +137,16 @@ export const transitions = [
         runoffStage: 'begichVsPalin',
     }),
     new SimTransition({
-        visible: [Candidate, 'condorcet'],
-        explainer: <>
+        visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
+        focused: ['begich', 'begich_beats_palin', 'begich_beats_peltola'],
+        explainer: <>,
             <h1>So Begich is the actual condorcet winner!</h1>
         </>,
         runoffStage: 'begichVsPalin',
     }),
     new SimTransition({
-        visible: [Candidate, 'condorcet'],
+        visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
+        focused: ['palin', 'begich_beats_palin', 'peltola_beats_palin'],
         explainer: <>
             <h1>Additionally, Palin lost all her head-to-head matchups</h1>
             <h2>That makes her the Condorcet Loser for this election</h2>

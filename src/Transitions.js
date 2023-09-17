@@ -90,4 +90,77 @@ export const transitions = [
         explainer: <h1>Then the begich voters were transferred to their second choice, the vote was recounted, and Peltola won!</h1>,
         runoffStage: 'palinVsPeltola',
     }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <><h1>But did RCV pick the best winner?</h1><h2> This election exposed many of RCV's false claims. Let's take a look...</h2></>,
+        runoffStage: 'palinVsPeltola',
+    }),
+    // Majority Winner
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>Claim #1: RCV guarantees a majority winner</h1>
+            <h2>This is clearly wasn't true because neither candidate reached 100 votes</h2>
+        </>,
+        runoffStage: 'palinVsPeltola',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>But then why did outlets report a majority for peltola?</h1>
+            <img src="/images/cnnResults.png" style={{width: '40%'}}/>
+            <p><a href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
+            <h2>This was only possible by hiding the 12 begich bullet votes</h2>
+            <h2>The majority is an illusion! In reality it's impossible for a voting method to guarantee a majority</h2>
+        </>,
+        runoffStage: 'palinVsPeltola',
+    }),
+    // Condorcet
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>Claim #2: RCV virtually guarantees a condorcet winner</h1>
+            <h2>Wrong again, Peltola wansn't the condorcet winner on this election!</h2>
+        </>,
+        runoffStage: 'palinVsPeltola',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>But what's a condorcet winner?</h1>
+            <h2>That's candidate who can beat any of the other candidates head-to-head</h2>
+            <h2>We know that Peltola beats Palin head-to-head but what about the other matchups?</h2>
+        </>,
+        runoffStage: 'palinVsPeltola',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>Begich beat's Peltola head-to-head</h1>
+        </>,
+        runoffStage: 'begichVsPeltola',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>And Begich beta's Palin head-to-head</h1>
+        </>,
+        runoffStage: 'begichVsPalin',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>So Begich is the actual condorcet winner!</h1>
+        </>,
+        runoffStage: 'begichVsPalin',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h1>Additionally, Palin lost all her head-to-head matchups</h1>
+            <h2>So that makes here the condorcet loser for this election</h2>
+        </>,
+        runoffStage: 'begichVsPalin',
+    }),
 ];
+

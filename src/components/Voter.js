@@ -21,6 +21,7 @@ class Voter extends GameObject{
         return {
             ...super.getStyle(containerSize),
             background: this.camp == undefined ? 'var(--voterGray)' : this.camp.voterColor,
+            border: `${Math.round(0.002 * containerSize)}px solid black`,
         }
     }
     isMember(){

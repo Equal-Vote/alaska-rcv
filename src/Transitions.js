@@ -74,4 +74,19 @@ export const transitions = [
             new VoterMovement(50, 'home', 'peltola_then_begich'),
         ],
     }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <h1>For the first round of RCV, we count the first choice votes for each candidate</h1>,
+        runoffStage: 'firstRound',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <h1>Begich has the least 1st choice votes, so he get's elimiated</h1>,
+        runoffStage: 'firstRound',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <h1>Then the begich voters were transferred to their second choice, and the vote was recounted</h1>,
+        runoffStage: 'palinVsPeltola',
+    }),
 ];

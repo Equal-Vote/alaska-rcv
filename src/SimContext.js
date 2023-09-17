@@ -50,7 +50,7 @@ export function SimContextProvider({children}){
 
         ctx.allExplainers = transitions.map(t => {return {explainer: t.explainer, delay: t.explainerDelaySeconds}});
 
-        ctx = {...ctx, objects, visible: [], focused: [], explainerStart: -1, explainerEnd: 0}
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', explainerStart: -1, explainerEnd: 0}
 
         ctx.visibleObjects = function(){
             return this.objects.filter(o => o.isVisible(this));

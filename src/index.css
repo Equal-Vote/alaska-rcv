@@ -3,6 +3,8 @@
   --peltola: #C1E8F5;
   --palin: #F11E01;
   --begich: purple;
+  --pieGray: #222222;
+  --voterGray: darkgray;
 }
 
 body, #root{
@@ -86,12 +88,10 @@ body, #root{
 /***** OBJECTS ***/
 .Pie{
   border-radius: 100%;
-  background: #222222;
+  background: var(--pieGray);
   border-color: darkgray;
   border-block: solid;
-  transition-property: opacity;
-  transition-duration: .5s;
-  
+  transition: opacity .5s ease;
 }
 
 .Pie.objectVisible{
@@ -133,9 +133,8 @@ body, #root{
 
 .Voter{
   border-radius: 50%;
-  border-color: gray;
   border-block: solid;
-  background: darkgrey;
+  background: var(--voterGray);
 }
 
 .stable{

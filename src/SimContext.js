@@ -77,15 +77,17 @@ export function SimContextProvider({children}){
 
     const queueMove = (move) => {
         if(moveInterval.current == undefined){
-            move();
+            move.func();
             moveInterval.current = setInterval(() => {
                 if(moveQueue.current.length == 0){
                     clearInterval(moveInterval.current);
                     moveInterval.current = undefined;
                 }else{
-                    moveQueue.current.shift()();
+                    moveQueue.current.shift().func();
                 }
             }, 1500)
+        }else if(moveQueue.current.length > 0 && moveQueue.current[moveQueue.current.length-1].op == -move.op){
+            moveQueue.current.pop();
         }else{
             moveQueue.current.push(move);
         }
@@ -102,19 +104,23 @@ export function SimContextProvider({children}){
                 transitions[i+1].apply(simState)
                 if(transitions[i+1].voterMovements.length > 0){
                     let copiedIndex = i+1;
-                    queueMove(
-                        () => {
+                    queueMove({
+                        op: copiedIndex,
+                        func: () => {
                             transitions[copiedIndex].moveVoters(simState)
                         }
-                    );
+                    });
                 }
                 i++;
             }
             if(i > nextIndex){
                 if(transitions[i].voterMovements.length > 0){
                     let copiedIndex = i;
-                    queueMove(() => {
-                        transitions[copiedIndex].revertMove(simState)
+                    queueMove({
+                        op: -copiedIndex,
+                        func: () => {
+                            transitions[copiedIndex].revertMove(simState)
+                        }
                     });
                 }
                 transitions[i-1].apply(simState);

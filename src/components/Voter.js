@@ -29,9 +29,6 @@ class Voter extends GameObject{
             this.vel = new Vector(0);
         }else{
             let toCamp = this.camp.pos.subtract(this.pos);
-            if(this.grav > .1){
-                console.log(this.grav)
-            }
             if(this.grav > .16){
                 toCamp = toCamp.add(new Vector(Math.random(), Math.random()).scale(this.grav * .25))
             }

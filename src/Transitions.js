@@ -36,7 +36,7 @@ export const transitions = [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <h1>12 voters ranked begich first without ranking other candidates</h1>
-            <img src="/images/begichBullet.png" style={{width: '75%'}}/>
+            <img src="/alaska-rcv/images/begichBullet.png" style={{width: '75%'}}/>
             <h2>We'll put them next to Begich</h2>
             <br/>
             <h2>Only ranking a single candidate is called Bullet Voting</h2>
@@ -49,8 +49,8 @@ export const transitions = [
         explainer: <>
             <h1>There were also 16 begich voters that ranked Peltola second, and 29 that ranked Palin second</h1>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                <img src="/images/begichThenPeltola.png" style={{width: '40%'}}/>
-                <img src="/images/begichThenPalin.png" style={{width: '40%'}}/>
+                <img src="/alaska-rcv/images/begichThenPeltola.png" style={{width: '40%'}}/>
+                <img src="/alaska-rcv/images/begichThenPalin.png" style={{width: '40%'}}/>
             </div>
             <h2>We'll put them close to Begich, but also leaning toward their second choice</h2>
         </>,
@@ -94,7 +94,7 @@ export const transitions = [
             <h2>This clearly wasn't true because neither candidate reached 100 votes</h2>
             <br/>
             <h2>But then why did outlets report a majority for peltola?</h2>
-            <img src="/images/cnnResults.png" style={{width: '90%'}}/>
+            <img src="/alaska-rcv/images/cnnResults.png" style={{width: '90%'}}/>
             <p><a href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
         </>,
         runoffStage: 'palinVsPeltola',
@@ -175,7 +175,7 @@ export const transitions = [
             <br/>
             <h1>In this case the spoiler effect happened because of Center Squeeze</h1>
             <h2>With 2 candidates, the concensus candidate closer to the center of popular opinion will always win</h2>
-            <img src="/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
+            <img src="/alaska-rcv/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
         </>,
         runoffStage: 'begichVsPeltola',
     }),
@@ -183,7 +183,7 @@ export const transitions = [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <h2>But if you add more candidates, it could reduce the 1st choice rankings for the center candidate and cause them to be elimiated early</h2>
-            <img src="/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
+            <img src="/alaska-rcv/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
             <h2>So Center Squeeze happens when first choice votes go to more extreme candidates, and cause the concensus candidate to lose</h2>
         </>,
         runoffStage: 'firstRound',
@@ -311,7 +311,7 @@ export const transitions = [
         explainer: <>
             <h2>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again?</h2>
             <h2>On top of that, the failure in Alaska caused a state-wide repeal campaign in North Dakota against both RCV and Approval</h2>
-            <img src="/images/fargoQuote.png" style={{width:'70%'}}/>
+            <img src="/alaska-rcv/images/fargoQuote.png" style={{width:'70%'}}/>
             <p><a href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
             <p>The bill was eventually veto'd but it was VERY close</p>
             <h2>So here we see RCV failures impacting the progress of other voting methods as well</h2>
@@ -328,14 +328,15 @@ export const transitions = [
         burlington: true,
         voterMovements: [
             // reset
-            new VoterMovement(100, 'begich_bullet', 'home'),
-            new VoterMovement(100, 'begich_then_palin', 'home'),
-            new VoterMovement(100, 'palin_then_begich', 'home'),
-            new VoterMovement(100, 'palin_bullet', 'home'),
-            new VoterMovement(100, 'palin_then_peltola', 'home'),
-            new VoterMovement(100, 'peltola_bullet', 'home'),
-            new VoterMovement(100, 'peltola_then_begich', 'home'),
-            new VoterMovement(100, 'begich_then_peltola', 'home'),
+            new VoterMovement(12, 'begich_bullet', 'home'),
+            new VoterMovement(29, 'begich_then_palin', 'home'),
+            new VoterMovement(36, 'palin_then_begich', 'home'),
+            new VoterMovement(23, 'palin_bullet', 'home'),
+            new VoterMovement(4, 'palin_then_peltola', 'home'),
+            new VoterMovement(5, 'peltola_then_palin', 'home'),
+            new VoterMovement(25, 'peltola_bullet', 'home'),
+            new VoterMovement(50, 'peltola_then_begich', 'home'),
+            new VoterMovement(16, 'begich_then_peltola', 'home'),
             // burlington
             new VoterMovement(10, 'home', 'begich_bullet'),
             new VoterMovement(18, 'home', 'begich_then_palin'),

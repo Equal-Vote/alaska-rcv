@@ -3,7 +3,7 @@ import Vector from "./Vector";
 
 class VoterCamp extends GameObject{
     constructor(r, angle) {
-        super(r, angle, 3.5, -1)
+        super('VoterCamp', r, angle, 3.5, -1)
         this.pieThresh = 100*(((360 - angle) + 90)%360) / 360;
         this.startR = r;
         this.members = [];

@@ -31,6 +31,9 @@ body, #root{
   height: 100%;
 }
 
+
+
+
 .simulation{
   position: relative;
   width: min(90vh, 60vw);
@@ -56,6 +59,22 @@ body, #root{
   align-items: left;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+
+@media(max-width: 1000px){
+  .app{
+    flex-direction: column;
+  }
+
+  .simulation{
+    width: min(90vw, 60vh);
+    height: min(90vw, 60vh);
+  }
+
+  .explainer{
+    height: calc(100%-min(90vw, 60vh));
+    width: 100%;
+  }
 }
 
 .explainer h1, h2, h3, p, ol{

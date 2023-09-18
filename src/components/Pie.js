@@ -12,7 +12,7 @@ const piePoints = {
 
 class Pie extends GameObject{
     constructor(size){
-        super(0, 0, size);
+        super('Pie', 0, 0, size);
         this.conicPairs = [];
         this.allPieColors = {
             'default': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],

@@ -2,7 +2,7 @@ import GameObject from "./GameObject";
 
 class ImageObject extends GameObject{
     constructor(r, angle, size, url, backgroundSize='cover'){
-        super(r, angle, size, undefined);
+        super('ImageObject', r, angle, size, undefined);
         this.url = url;
         this.backgroundSize = backgroundSize;
     }

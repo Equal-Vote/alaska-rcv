@@ -2,7 +2,7 @@ import { toHaveDisplayValue } from "@testing-library/jest-dom/matchers";
 import { Vector } from "./Vector";
 
 export class GameObject {
-    constructor(r, angle, size, phyMass=undefined, customClass='') {
+    constructor(className, r, angle, size, phyMass=undefined, customClass='') {
         // undefined means don't do physics, negative means static
         this.pos = new Vector(r, angle, true);
         this.vel = new Vector(0);
@@ -11,6 +11,7 @@ export class GameObject {
         this.simKey = undefined;
         this.customClass = customClass;
         this.prevFocused = true;
+        this.className = className;
     }
 
     getStyle(containerSize) {
@@ -30,7 +31,8 @@ export class GameObject {
     getClassNames(simState){
         let classes = [
             'object',
-            this.constructor.name,
+            this.className,
+            // constructor.name <- I can't use this one since github pages breaks it after deployment
             this.customClass,
         ];
         if(this.isVisible(simState) != undefined) classes.push(this.isVisible(simState)? 'objectVisible': 'objectInvisible')

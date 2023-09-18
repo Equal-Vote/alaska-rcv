@@ -2,7 +2,7 @@ import GameObject from "./GameObject";
 
 class Candidate extends GameObject{
     constructor(r, angle, candidateName, burlingtonName){
-        super(r, angle, 15, -1);
+        super('Candidate', r, angle, 15, -1);
         this.candidateName = candidateName;
         this.burlingtonName = burlingtonName;
         this.imageName = this.candidateName;

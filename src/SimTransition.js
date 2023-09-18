@@ -21,6 +21,6 @@ export class SimTransition {
     }
 
     revertMove(simState){
-        this.voterMovements.forEach(m => m.revert(simState));
+        this.voterMovements.toReversed().forEach(m => m.revert(simState));
     }
 }

@@ -14,7 +14,7 @@ const camps = [
 
 class VoterCount extends GameObject{
     constructor(r, angle, candidate, candidateIndex){
-        super(r, angle, 30, undefined);
+        super('VoterCount', r, angle, 30, undefined);
         this.candidate = candidate;
         this.candidateIndex = candidateIndex;
         this.candidateColor = `var(--${this.candidate})`

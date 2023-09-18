@@ -7,7 +7,7 @@ const startMass = 1;
 class Voter extends GameObject{
 
     constructor(r, angle, camp) {
-        super(r, angle, 1.7, startMass);
+        super('Voter', r, angle, 1.7, startMass);
         this.camp = camp;
         this.startPos = this.pos.clone();
     }

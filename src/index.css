@@ -67,12 +67,12 @@ body, #root{
   }
 
   .simulation{
-    width: min(90vw, 60vh);
-    height: min(90vw, 60vh);
+    width: 50vw;
+    height: 50vw;
   }
 
   .explainer{
-    height: calc(100%-min(90vw, 60vh));
+    height: calc(100% - 50vw);
     width: 100%;
   }
 }

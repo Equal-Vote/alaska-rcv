@@ -245,12 +245,12 @@ a, a:visited{
   }
 
   .simulation{
-    width: 50vw;
-    height: 50vw;
+    width: 60vw;
+    height: 60vw;
   }
 
   .explainer{
-    height: calc(100% - 50vw);
+    height: calc(100% - 60vw);
     width: 100%;
     scrollbar-width: 0;
   }

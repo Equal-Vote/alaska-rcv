@@ -41,7 +41,6 @@ export const transitions = [
             <br/>
             <h2>Only ranking a single candidate is called Bullet Voting</h2>
             <h2>Bullet Voting is a poor strategy under RCV, but it's still fairly common</h2>
-            <p>more on that later...</p>
         </>,
         voterMovements: [new VoterMovement(12, 'home', 'begich_bullet')]
     }),
@@ -154,21 +153,12 @@ export const transitions = [
         </>,
         runoffStage: 'begichVsPalin',
     }),
-    new SimTransition({
-        visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
-        focused: ['palin', 'begich_beats_palin', 'peltola_beats_palin'],
-        explainer: <>
-            <h1>Additionally, Palin lost all her head-to-head matchups</h1>
-            <h2>That makes her the Condorcet Loser for this election</h2>
-        </>,
-        runoffStage: 'begichVsPalin',
-    }),
     // spoiler effect
     new SimTransition({
         visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
         explainer: <>
             <h1>Claim #3</h1>
-            <h1>RCV solves the spoiler effect</h1>
+            <h1>"RCV solves the spoiler effect"</h1>
             <h2>Nope! RCV solves the spoiler effect for some cases, but the spoiler effect can still occur when once you have 3+ competitive candidates</h2>
             <br/>
             <h2>But what is the spoiler effect? This is when removing a losing candidate causes the winner to change</h2>
@@ -186,11 +176,17 @@ export const transitions = [
             <h1>In this case the spoiler effect happened because of Center Squeeze</h1>
             <h2>With 2 candidates, the concensus candidate closer to the center of popular opinion will always win</h2>
             <img src="/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
+        </>,
+        runoffStage: 'begichVsPeltola',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
             <h2>But if you add more candidates, it could reduce the 1st choice rankings for the center candidate and cause them to be elimiated early</h2>
             <img src="/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
             <h2>So Center Squeeze happens when first choice votes go to more extreme candidates, and cause the concensus candidate to lose</h2>
         </>,
-        runoffStage: 'begichVsPeltola',
+        runoffStage: 'firstRound',
     }),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
@@ -256,7 +252,7 @@ export const transitions = [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <h2>Let's reset</h2>
-            <h2>This election has a similar paradox, where Peltola could gain more suppoers and then lose the election as a result</h2>
+            <h2>This election has a similar paradox, where Peltola could gain more supporters and then lose the election as a result</h2>
         </>,
         voterMovements: [new VoterMovement(7, 'home', 'palin_then_begich')],
         runoffStage: 'default',
@@ -291,21 +287,21 @@ export const transitions = [
         explainer: <>
             <h1>Claim #5</h1>
             <h1>"Alaska was very rare an edge case"</h1>
-            <h2>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen these failures 3 times</h2>
-            <h2>However this is a biased sample. RCV operates well when there's only 2 competitive elections and the US is largely still a 2 party system most of our elections don't have a competitive 3rd candidate</h2>
         </>,
+        voterMovements: [new VoterMovement(7, 'peltola_bullet', 'palin_bullet')],
     }),
     new SimTransition({
         visible: ['us_failures'],
         explainer: <>
             <h2>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen these failures 3 times</h2>
-            <h2>However this is a biased sample. RCV operates well when there's only 2 competitive elections and the US is largely still a 2 party system most of our elections don't have a competitive 3rd candidate</h2>
+            <h2>However this is a biased sample. RCV operates well when there's only 2 competitive elections and the US is largely still a 2 party system.</h2>
+            <h2>So most of our elections don't have a competitive 3rd candidate</h2>
         </>,
     }),
     new SimTransition({
         visible: ['us_failures', 'expected_failures'],
         explainer: <>
-            <h2>Research imulating RCV elections finds that competitive elections will have failures 15% of the time</h2>
+            <h2>Research simulating RCV elections finds that competitive elections will have failures 15% of the time</h2>
             <h2>and this is pretty devastating when you consider the damage that each of these failures does</h2>
         </>,
     }),
@@ -314,13 +310,71 @@ export const transitions = [
         visible: [],
         explainer: <>
             <h2>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again?</h2>
-            <h2>On top of that, the failure in Alaska caused a state-wide repeal campaign in North Dakota against</h2>
-            <img src="fargoQuote.png"/>
+            <h2>On top of that, the failure in Alaska caused a state-wide repeal campaign in North Dakota against both RCV and Approval</h2>
+            <img src="/images/fargoQuote.png" style={{width:'70%'}}/>
             <p><a href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
             <p>The bill was eventually veto'd but it was VERY close</p>
-            <h2>That would have banned Approval Voting as well. So here we see RCV failures impacting the progress of other voting methods as well</h2>
+            <h2>So here we see RCV failures impacting the progress of other voting methods as well</h2>
         </>,
         runoffStage: 'default',
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <h2>Another example happened in Burlingon Vermont in 2009</h2>
+            <h2>In this case the failure lead to RCV being repealed a year later</h2>
+        </>,
+        runoffStage: 'firstRound',
+        burlington: true,
+        voterMovements: [
+            // reset
+            new VoterMovement(100, 'begich_bullet', 'home'),
+            new VoterMovement(100, 'begich_then_palin', 'home'),
+            new VoterMovement(100, 'palin_then_begich', 'home'),
+            new VoterMovement(100, 'palin_bullet', 'home'),
+            new VoterMovement(100, 'palin_then_peltola', 'home'),
+            new VoterMovement(100, 'peltola_bullet', 'home'),
+            new VoterMovement(100, 'peltola_then_begich', 'home'),
+            new VoterMovement(100, 'begich_then_peltola', 'home'),
+            // burlington
+            new VoterMovement(10, 'home', 'begich_bullet'),
+            new VoterMovement(18, 'home', 'begich_then_palin'),
+            new VoterMovement(34, 'home', 'palin_then_begich'),
+            new VoterMovement(29, 'home', 'palin_bullet'),
+            new VoterMovement(11, 'home', 'palin_then_peltola'),
+            new VoterMovement(9, 'home', 'peltola_then_palin'),
+            new VoterMovement(13, 'home', 'peltola_bullet'),
+            new VoterMovement(46, 'home', 'peltola_then_begich'),
+            new VoterMovement(30, 'home', 'begich_then_peltola'),
+        ],
+    }),
+    new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        burlington: true,
+        explainer: <>
+            <h1>RCV needs to stop overselling it's claims and we need to consider other voting methods</h1>
+            <h2>Here's a list of all the claims we've discussed. All are either false or misleading</h2>
+            <ol>
+                <li>RCV guarantees a majority winner - FALSE</li>
+                <li>RCV virtually guarantees a condorcet winner - FALSE</li>
+                <li>RCV solves the spoiler effect - FALSE</li>
+                <li>It's safe to rank your first choice - FALSE</li>
+                <li>Alaska is a rare situation - NOT WHEN YOU LOOK AT THE BIG PICTURE</li>
+            </ol>
+            <h2>RCV has the most investement, but when it fails it hurts the movement as a whole</h2>
+            <h2>Instead we should look closer to alternatives such as Approval or STAR Voting</h2> 
+        </>,
+        runoffStage: 'firstRound',
+    }),
+    new SimTransition({
+        visible: ['star_vs_rcv_embed'],
+        explainer: <>
+            <h2>This animation was based on paper by Adam Graham-Squire and David McCune <a href="https://arxiv.org/pdf/2209.04764.pdf">link</a></h2>
+            <p>It's only 5 pages long, definitely worth a read!</p>
+            <h2>Here's another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods <a href="https://arxiv.org/pdf/2303.00108.pdf">link</a></h2>
+            <h2>Click the video to learn more about STAR!</h2>
+        </>,
+        runoffStage: 'firstRound',
     }),
     // end
     new SimTransition({
@@ -328,3 +382,4 @@ export const transitions = [
     }),
 ];
 
+ 

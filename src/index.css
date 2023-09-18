@@ -58,11 +58,15 @@ body, #root{
   overflow-y: scroll;
 }
 
-.explainer h1, h2, h3, p{
+.explainer h1, h2, h3, p, ol{
   color: white;
 }
 
 .explainer p{
+  font-size: 1.5rem;
+}
+
+.explainer ol{
   font-size: 1.5rem;
 }
 
@@ -123,7 +127,7 @@ body, #root{
 
 .ImageObject{
   background-position: center;
-  background-size: cover;
+  background-repeat: no-repeat;
   border-width: 0;
   transition-property: opacity;
   transition-duration: .2s;
@@ -185,8 +189,7 @@ body, #root{
   border-block: solid;
   background-position: center;
   background-size: cover;
-  transition-property: opacity;
-  transition-duration: 1s;
+  transition: opacity 1s linear;
 }
 
 .Candidate.begich{

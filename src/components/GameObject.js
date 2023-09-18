@@ -10,7 +10,7 @@ export class GameObject {
         this.phyMass = phyMass;
         this.simKey = undefined;
         this.customClass = customClass;
-        this.prevFocused = false;
+        this.prevFocused = true;
     }
 
     getStyle(containerSize) {

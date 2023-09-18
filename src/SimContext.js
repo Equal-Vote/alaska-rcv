@@ -7,6 +7,7 @@ import Candidate from './components/Candidate';
 import Pie from './components/Pie';
 import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
+import VideoEmbed from './components/VideoEmbed';
 
 export const SimContext = createContext({});
 
@@ -21,22 +22,24 @@ export function SimContextProvider({children}){
         let voterRadius = 28;
         let candidateRadius = 43;
         let ctx = {
+            // embed (must be on top so that it's interactable)
+            star_vs_rcv_embed: new VideoEmbed(100, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS'),
             // images
             choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
             begich_beats_palin: new ImageObject(0, 0, 100, 'images/begichBeatsPalin.png'),
             begich_beats_peltola: new ImageObject(0, 0, 100, 'images/begichBeatsPeltola.png'),
             peltola_beats_palin: new ImageObject(0, 0, 100, 'images/peltolaBeatsPalin.png'),
-            us_failures: new ImageObject(-25, 0, 40, 'images/usRCVFailures.png'),
-            expected_failures: new ImageObject(25, 0, 40, 'images/expectedRCVFailures.png'),
+            us_failures: new ImageObject(25, 90, 60, 'images/usRCVFailures.png', 'contain'),
+            expected_failures: new ImageObject(25, 270, 60, 'images/expectedRCVFailures.png', 'contain'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring
             pie: new Pie(candidateRadius*2),
             // candidates
-            begich: new Candidate(candidateRadius, 90, 'begich'),
-            palin: new Candidate(candidateRadius, 330, 'palin'),
-            peltola: new Candidate(candidateRadius, 210, 'peltola'),
+            begich: new Candidate(candidateRadius, 90, 'begich', 'montroll'),
+            palin: new Candidate(candidateRadius, 330, 'palin', 'wright'),
+            peltola: new Candidate(candidateRadius, 210, 'peltola', 'kiss'),
             // counts
             begich_count: new VoterCount(countRadius, 90, 'begich', 0),
             palin_count: new VoterCount(countRadius, 330, 'palin', 1),
@@ -66,7 +69,7 @@ export function SimContextProvider({children}){
 
         ctx.allExplainers = transitions.map(t => {return t.explainer; });
 
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default'}
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', burlington: false}
 
         ctx.visibleObjects = function(){
             return this.objects.filter(o => o.isVisible(this));

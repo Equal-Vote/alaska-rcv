@@ -17,6 +17,7 @@ class Voter extends GameObject{
     update(){
         super.update();
         if(this.camp != undefined && !this.isMember()){
+            // slowly inject chaos if we're stuck
             this.phyMass *= 1.01;
             this.grav *= 1.01;
         }else{

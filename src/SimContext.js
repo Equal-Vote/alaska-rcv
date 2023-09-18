@@ -81,21 +81,23 @@ export function SimContextProvider({children}){
     }
 
     const queueMove = (move) => {
-        if(moveInterval.current == undefined){
-            move.func();
-            moveInterval.current = setInterval(() => {
-                if(moveQueue.current.length == 0){
-                    clearInterval(moveInterval.current);
-                    moveInterval.current = undefined;
-                }else{
-                    moveQueue.current.shift().func();
-                }
-            }, 1500)
-        }else if(moveQueue.current.length > 0 && moveQueue.current[moveQueue.current.length-1].op == -move.op){
-            moveQueue.current.pop();
-        }else{
-            moveQueue.current.push(move);
-        }
+        // remove queue system for now, the voter chaos seems to have fixed it
+        move.func();
+        //if(moveInterval.current == undefined){
+        //    move.func();
+        //    moveInterval.current = setInterval(() => {
+        //        if(moveQueue.current.length == 0){
+        //            clearInterval(moveInterval.current);
+        //            moveInterval.current = undefined;
+        //        }else{
+        //            moveQueue.current.shift().func();
+        //        }
+        //    }, 1500)
+        //}else if(moveQueue.current.length > 0 && moveQueue.current[moveQueue.current.length-1].op == -move.op){
+        //    moveQueue.current.pop();
+        //}else{
+        //    moveQueue.current.push(move);
+        //}
     }
 
     const updateSimIndex = (nextIndex) => {

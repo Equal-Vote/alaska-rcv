@@ -27,6 +27,8 @@ export function SimContextProvider({children}){
             begich_beats_palin: new ImageObject(0, 0, 100, 'images/begichBeatsPalin.png'),
             begich_beats_peltola: new ImageObject(0, 0, 100, 'images/begichBeatsPeltola.png'),
             peltola_beats_palin: new ImageObject(0, 0, 100, 'images/peltolaBeatsPalin.png'),
+            us_failures: new ImageObject(-25, 0, 40, 'images/usRCVFailures.png'),
+            expected_failures: new ImageObject(25, 0, 40, 'images/expectedRCVFailures.png'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring

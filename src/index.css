@@ -61,30 +61,6 @@ body, #root{
   overflow-y: scroll;
 }
 
-@media(max-width: 900px){
-  .app{
-    flex-direction: column;
-  }
-
-  .simulation{
-    width: 50vw;
-    height: 50vw;
-  }
-
-  .explainer{
-    height: calc(100% - 50vw);
-    width: 100%;
-  }
-
-  h1 {
-    font-size: 1.3rem;
-  }
-
-  h2, p {
-    font-size: 1rem;
-  }
-}
-
 .explainer h1, h2, h3, p, ol{
   color: white;
 }
@@ -261,4 +237,34 @@ a, a:visited{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   /* nothing */
+}
+
+@media(max-width: 900px){
+  .app{
+    flex-direction: column;
+  }
+
+  .simulation{
+    width: 50vw;
+    height: 50vw;
+  }
+
+  .explainer{
+    height: calc(100% - 50vw);
+    width: 100%;
+    scrollbar-width: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    display: none;
+  }
+
+  .explainer h1 {
+    font-size: 1.3rem;
+  }
+
+  .explainer h2, .explainer p {
+    font-size: 1rem;
+  }
+
 }

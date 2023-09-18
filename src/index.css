@@ -61,7 +61,7 @@ body, #root{
   overflow-y: scroll;
 }
 
-@media(max-width: 1000px){
+@media(max-width: 900px){
   .app{
     flex-direction: column;
   }
@@ -74,6 +74,14 @@ body, #root{
   .explainer{
     height: calc(100% - 50vw);
     width: 100%;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2, p {
+    font-size: 1rem;
   }
 }
 

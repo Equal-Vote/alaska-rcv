@@ -3,6 +3,7 @@ import Vector from "./Vector";
 import VoterCamp from "./VoterCamp";
 
 const startMass = 1;
+const startGrav = .08;
 
 class Voter extends GameObject{
 
@@ -10,17 +11,30 @@ class Voter extends GameObject{
         super('Voter', r, angle, 1.7, startMass);
         this.camp = camp;
         this.startPos = this.pos.clone();
+        this.grav = startGrav;
     }
 
     update(){
         super.update();
-        let grav = .08;
+        if(this.camp != undefined && !this.isMember()){
+            this.phyMass *= 1.01;
+            this.grav *= 1.01;
+        }else{
+            this.grav = startGrav; 
+            if(!this.isDirectMember()) this.phyMass = startMass;
+        }
         if(this.camp == undefined){
             this.pos = this.startPos.clone();
             this.vel = new Vector(0);
         }else{
             let toCamp = this.camp.pos.subtract(this.pos);
-            this.vel = this.vel.add(toCamp.scaleTo(grav));
+            if(this.grav > .1){
+                console.log(this.grav)
+            }
+            if(this.grav > .16){
+                toCamp = toCamp.add(new Vector(Math.random(), Math.random()).scale(this.grav * .25))
+            }
+            this.vel = this.vel.add(toCamp.scaleTo(this.grav));
         }
     }
 
@@ -36,13 +50,16 @@ class Voter extends GameObject{
         return this.camp != undefined && this.camp.members.includes(this);
     }
 
+    isDirectMember(){
+        return this.camp != undefined && this.camp.directMembers.includes(this);
+    }
+
     isFocused(simState){
         return this.isMember() && this.camp.isFocused(simState);
     }
 
     onCollide(other){
         if(other==this.camp){
-            //this.phyMass = -2;
             if(!this.camp.directMembers.includes(this)){
                 other.directMembers.push(this);
             }

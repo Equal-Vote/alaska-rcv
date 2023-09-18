@@ -230,6 +230,10 @@ img{
   margin: auto;
 }
 
+a, a:visited{
+  color: purple;
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {

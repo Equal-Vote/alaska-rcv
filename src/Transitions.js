@@ -95,7 +95,7 @@ export const transitions = [
             <br/>
             <h2>But then why did outlets report a majority for peltola?</h2>
             <img src="/alaska-rcv/images/cnnResults.png" style={{width: '90%'}}/>
-            <p><a href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
+            <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
         </>,
         runoffStage: 'palinVsPeltola',
     }),
@@ -312,7 +312,7 @@ export const transitions = [
             <h2>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again?</h2>
             <h2>On top of that, the failure in Alaska caused a state-wide repeal campaign in North Dakota against both RCV and Approval</h2>
             <img src="/alaska-rcv/images/fargoQuote.png" style={{width:'70%'}}/>
-            <p><a href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
+            <p><a target="_blank" href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
             <p>The bill was eventually veto'd but it was VERY close</p>
             <h2>So here we see RCV failures impacting the progress of other voting methods as well</h2>
         </>,
@@ -370,9 +370,9 @@ export const transitions = [
     new SimTransition({
         visible: ['star_vs_rcv_embed'],
         explainer: <>
-            <h2>This animation was based on paper by Adam Graham-Squire and David McCune <a href="https://arxiv.org/pdf/2209.04764.pdf">link</a></h2>
+            <h2>This animation was based on paper by Adam Graham-Squire and David McCune <a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">link</a></h2>
             <p>It's only 5 pages long, definitely worth a read!</p>
-            <h2>Here's another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods <a href="https://arxiv.org/pdf/2303.00108.pdf">link</a></h2>
+            <h2>Here's another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">link</a></h2>
             <h2>Click the video to learn more about STAR!</h2>
         </>,
         runoffStage: 'firstRound',

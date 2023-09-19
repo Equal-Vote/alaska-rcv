@@ -92,6 +92,10 @@ export class GameObject {
         return this.size.x / 2;
     }
 
+    cell(){
+        return this.pos.add(new Vector(90, 90)).scale(1/2).floor();
+    }
+
     tryCollision(other){
         if(!this.canCollidWith(other) || ! other.canCollidWith(this)) return;
 

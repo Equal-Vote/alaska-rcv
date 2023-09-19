@@ -49,6 +49,10 @@ export class Vector {
         return this.scale(new_mag / m);
     }
 
+    floor(){
+        return new Vector(Math.floor(this.x), Math.floor(this.y));
+    }
+
     clone(){
         return new Vector(this.x, this.y);
     }

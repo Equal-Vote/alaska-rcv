@@ -62,15 +62,15 @@ body, #root{
 }
 
 .explainerPadding{
-  height: 40vh;
-  min-height: 40vh;
+  height: 50vh;
+  min-height: 50vh;
 }
 
-.explainer h1, h2, h3, p, ol{
+.explainer h1, h2, h3, p, ol, i{
   color: white;
 }
 
-.explainer p{
+.explainer p, .explainer i{
   font-size: 1.5rem;
 }
 
@@ -274,7 +274,7 @@ a, a:visited{
     font-size: 1.3rem;
   }
 
-  .explainer h2, .explainer p {
+  .explainer h2, .explainer p, .explainer i {
     font-size: 1rem;
   }
 

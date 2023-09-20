@@ -93,6 +93,11 @@ export class GameObject {
     }
 
     tryCollision(other){
+        // quick rectangle overlap check as an optimization
+        if(Math.abs(this.pos.x-other.pos.x)*2 > this.size.x + other.size.x) return;
+        if(Math.abs(this.pos.y-other.pos.y)*2 > this.size.y + other.size.y) return;
+
+        // filter out non relevant camp collisions
         if(!this.canCollidWith(other) || ! other.canCollidWith(this)) return;
 
         let diff = this.pos.subtract(other.pos);

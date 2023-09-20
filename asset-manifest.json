@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/alaska-rcv/static/css/main.f5e1e5a2.css",
-    "main.js": "/alaska-rcv/static/js/main.1aa61087.js",
+    "main.js": "/alaska-rcv/static/js/main.6fc576c4.js",
     "static/js/787.e8151e8e.chunk.js": "/alaska-rcv/static/js/787.e8151e8e.chunk.js",
     "static/media/index.cjs": "/alaska-rcv/static/media/index.87283f34b94ab8669cb4.cjs",
     "index.html": "/alaska-rcv/index.html",
     "main.f5e1e5a2.css.map": "/alaska-rcv/static/css/main.f5e1e5a2.css.map",
-    "main.1aa61087.js.map": "/alaska-rcv/static/js/main.1aa61087.js.map",
+    "main.6fc576c4.js.map": "/alaska-rcv/static/js/main.6fc576c4.js.map",
     "787.e8151e8e.chunk.js.map": "/alaska-rcv/static/js/787.e8151e8e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f5e1e5a2.css",
-    "static/js/main.1aa61087.js"
+    "static/js/main.6fc576c4.js"
   ]
 }

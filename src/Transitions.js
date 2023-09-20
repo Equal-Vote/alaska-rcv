@@ -8,7 +8,7 @@ import Pie from './components/Pie';
 export const transitions = [
     // start
     new SimTransition({
-        explainer: <div style={{height: '40vh'}}/>
+        explainer: <div className='explainerPadding'/>
     }),
     // intro
     new SimTransition({
@@ -379,7 +379,7 @@ export const transitions = [
     }),
     // end
     new SimTransition({
-        explainer: <div style={{height: '40vh'}}/>
+        explainer: <div className='explainerPadding'/>
     }),
 ];
 

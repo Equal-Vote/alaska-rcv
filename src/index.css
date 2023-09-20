@@ -61,6 +61,11 @@ body, #root{
   overflow-y: scroll;
 }
 
+.explainerPadding{
+  height: 40vh;
+  min-height: 40vh;
+}
+
 .explainer h1, h2, h3, p, ol{
   color: white;
 }
@@ -239,7 +244,13 @@ a, a:visited{
   /* nothing */
 }
 
+
+
 @media(max-width: 900px){
+  .explainerPadding{
+    height: 40vh;
+  }
+
   .app{
     flex-direction: column;
   }
@@ -267,4 +278,8 @@ a, a:visited{
     font-size: 1rem;
   }
 
+  .explainerPadding{
+    height: 120px;
+    min-height: 120px;
+  }
 }

@@ -7,7 +7,11 @@ const Explainer = () => {
     const containerRef = useRef(null);
 
     let explainers = simState.allExplainers.map((explainer, i) => {
-        return <div className="explainerItem" ref={el => explainerRefs.current[i] = el} key={`explainer-${i}`}><div className="explainerInner">{explainer}</div></div>
+        if(i == 0 || i == simState.allExplainers.length-1) return <>{explainer}</>;
+
+        return <div className="explainerItem" ref={el => explainerRefs.current[i] = el} key={`explainer-${i}`}>
+            <div className="explainerInner">{explainer}</div>
+        </div>
     })
 
     let refreshExplainers = (event) => {

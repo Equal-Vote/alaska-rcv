@@ -40,18 +40,18 @@ const Explainer = () => {
     //    refreshExplainers();
     //}
 
-    //useEffect(() => {
-    //    explainerRefs.current.forEach((e, i) => {
-    //        e.classList.remove('explainerFocused');
-    //        e.classList.remove('explainerUnfocused');
-    //        e.classList.add((i == 1)? 'explainerFocused' : 'explainerUnfocused');
-    //    })
-    //    updateSimIndex(1);
+    useEffect(() => {
+        explainerRefs.current.forEach((e, i) => {
+            e.classList.remove('explainerFocused');
+            e.classList.remove('explainerUnfocused');
+            e.classList.add((i == 1)? 'explainerFocused' : 'explainerUnfocused');
+        })
+        updateSimIndex(1);
 
-    //    document.addEventListener('wheel', onGlobalScroll);
-    //    
-    //    return () => document.removeEventListener('wheel', onGlobalScroll);
-    //}, [])
+        //document.addEventListener('wheel', onGlobalScroll);
+        
+        //return () => document.removeEventListener('wheel', onGlobalScroll);
+    }, [])
 
     return (
         <div className="explainer" ref={containerRef} onScroll={refreshExplainers}>

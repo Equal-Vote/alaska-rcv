@@ -22,7 +22,7 @@ class VoterCamp extends GameObject{
         if(this.directMembers.length >= 12 || this.directMembers.length == this.members.length){
             this.directMembers.forEach(o => {
                 o.vel = new Vector(0);
-                o.phyMass = -2
+                o.phyMass = -2;
             });
         }
 

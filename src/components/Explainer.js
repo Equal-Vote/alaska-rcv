@@ -19,7 +19,6 @@ const Explainer = () => {
         let mid = (rect.top + rect.bottom) / 2;
 
         let focusedElem = explainerRefs.current.reduce((prev, e, i) => {
-            if(i == explainerRefs.current.length-1) return prev;
             const getDiff = (el) => mid - el.getBoundingClientRect().top 
             if(getDiff(e) < 0) return prev;
             if(getDiff(e) < getDiff(prev)) return e;

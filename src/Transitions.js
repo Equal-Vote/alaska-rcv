@@ -8,7 +8,7 @@ import Pie from './components/Pie';
 export const transitions = [
     // start
     new SimTransition({
-        explainer: <div className='explainerPadding'/>
+        explainer: <div className='explainerTopPadding'/>
     }),
     // intro
     new SimTransition({
@@ -381,17 +381,23 @@ export const transitions = [
         runoffStage: 'firstRound',
     }),
     new SimTransition({
-        visible: ['star_vs_rcv_embed'],
+        visible: [],
         explainer: <>
             <p>This animation was based on paper by Adam Graham-Squire and David McCune<a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">link</a><br/>It's only 5 pages long, definitely worth a read!</p>
 			<br/>
             <p>Here's another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">link</a></p>
+        </>,
+        runoffStage: 'firstRound',
+    }),
+    new SimTransition({
+        visible: ['star_vs_rcv_embed'],
+        explainer: <>
             <p>Click the video to learn more about STAR!</p>
         </>,
         runoffStage: 'firstRound',
     }),
     // end
     new SimTransition({
-        explainer: <div className='explainerPadding'/>
+        explainer: <div className='explainerBottomPadding'/>
     }),
 ];

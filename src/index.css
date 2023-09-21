@@ -61,9 +61,14 @@ body, #root{
   overflow-y: scroll;
 }
 
-.explainerPadding{
+.explainerTopPadding{
   height: 50vh;
   min-height: 50vh;
+}
+
+.explainerBottomPadding{
+  height: 60vh;
+  min-height: 60vh;
 }
 
 .explainer h1, h2, h3, p, ol, i{
@@ -278,8 +283,13 @@ a, a:visited{
     font-size: 1rem;
   }
 
-  .explainerPadding{
+  .explainerTopPadding{
     height: 120px;
     min-height: 120px;
+  }
+
+  .explainerBottomPadding{
+    height: 150px;
+    min-height: 150px;
   }
 }

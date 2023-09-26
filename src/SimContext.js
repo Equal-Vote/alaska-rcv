@@ -29,13 +29,13 @@ export function SimContextProvider({children}){
             // embed (must be on top so that it's interactable)
             star_vs_rcv_embed: new VideoEmbed(100, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS'),
             // images
-            choose_one: new ImageObject(0, 0, 70, 'images/chooseOneBallot.png'),
-            alaska: new ImageObject(0, 0, 70, 'images/alaska.png'),
-            begich_beats_palin: new ImageObject(0, 0, 100, 'images/begichBeatsPalin.png'),
-            begich_beats_peltola: new ImageObject(0, 0, 100, 'images/begichBeatsPeltola.png'),
-            peltola_beats_palin: new ImageObject(0, 0, 100, 'images/peltolaBeatsPalin.png'),
-            us_failures: new ImageObject(25, 90, 60, 'images/usRCVFailures.png', 'contain'),
-            expected_failures: new ImageObject(25, 270, 60, 'images/expectedRCVFailures.png', 'contain'),
+            choose_one: new ImageObject(0, 0, 70, 'chooseOneBallot.png'),
+            alaska: new ImageObject(0, 0, 70, 'alaska.png'),
+            begich_beats_palin: new ImageObject(0, 0, 100, 'begichBeatsPalin.png'),
+            begich_beats_peltola: new ImageObject(0, 0, 100, 'begichBeatsPeltola.png'),
+            peltola_beats_palin: new ImageObject(0, 0, 100, 'peltolaBeatsPalin.png'),
+            us_failures: new ImageObject(25, 90, 60, 'usRCVFailures.png', 'contain'),
+            expected_failures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring

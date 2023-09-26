@@ -385,6 +385,7 @@ export const transitions = [
     }),
     new SimTransition({
         visible: [],
+        electionName: 'burlington-2009', // keeping burlington for the fade animation
         explainer: <>
             <p>This animation was based on paper by Adam Graham-Squire and David McCune<a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">link</a><br/>It's only 5 pages long, definitely worth a read!</p>
 			<br/>

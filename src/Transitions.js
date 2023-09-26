@@ -330,6 +330,10 @@ export const transitions = [
         </>,
         runoffStage: 'default',
     }),
+    //new ElectionSelector({
+
+    //}),
+    //...(new ElectorSelector()).makeTransitions(),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
@@ -337,7 +341,7 @@ export const transitions = [
             <p>In this case the failure lead to RCV being repealed a year later</p>
         </>,
         runoffStage: 'firstRound',
-        burlington: true,
+        electionName: 'burlington-2009',
         voterMovements: [
             // reset
             new VoterMovement(12, 'begich_bullet', 'home'),
@@ -363,7 +367,7 @@ export const transitions = [
     }),
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
-        burlington: true,
+        electionName: 'burlington-2009',
         explainer: <>
             <p>RCV needs to stop overselling it's claims and we need to start considering other voting methods</p>
             <p>Here's a list of all the claims we've discussed. All are either false or misleading</p>
@@ -375,8 +379,7 @@ export const transitions = [
                 <li>Alaska is a rare situation - NOT WHEN YOU LOOK AT THE BIG PICTURE</li>
             </ol>
             <p>RCV has the most investment, but when it fails it hurts the movement as a whole</p>
-            <p>Instead we should look closer to alternatives such as Approval or STAR Voting
-</p> 
+            <p>Instead we should look closer to alternatives such as Approval or STAR Voting</p> 
         </>,
         runoffStage: 'firstRound',
     }),

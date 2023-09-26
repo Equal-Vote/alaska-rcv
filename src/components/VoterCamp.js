@@ -18,6 +18,12 @@ class VoterCamp extends GameObject{
         this.directMembers = this.directMembers.filter(o => o.camp == this);
     }
 
+    // copied fro Pie.js
+    indexToColor(simState, index){
+        if(index == -1) return 'var(--pieGray)';
+        return `var(--${simState.candidateNames[simState.electionName][index]})`;
+    }
+
     update(simState){
         if(this.directMembers.length >= 12 || this.directMembers.length == this.members.length){
             this.directMembers.forEach(o => {
@@ -29,9 +35,9 @@ class VoterCamp extends GameObject{
         this.voterColor = 'var(--voterGray)';
         if(this.startR > 5){
             let colors = simState.pie.allPieColors[simState.runoffStage];
-            if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) this.voterColor = colors[0];
-            if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) this.voterColor = colors[1];
-            if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) this.voterColor = colors[2];
+            if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) this.voterColor = this.indexToColor(simState, colors[0]);
+            if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) this.voterColor = this.indexToColor(simState, colors[1]);
+            if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) this.voterColor = this.indexToColor(simState, colors[2]);
         }
     }
 

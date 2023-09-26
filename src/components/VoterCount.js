@@ -13,11 +13,10 @@ const camps = [
 ];
 
 class VoterCount extends GameObject{
-    constructor(r, angle, candidate, candidateIndex){
+    constructor(r, angle, candidateIndex){
         super('VoterCount', r, angle, 30, undefined);
-        this.candidate = candidate;
         this.candidateIndex = candidateIndex;
-        this.candidateColor = `var(--${this.candidate})`
+        this.candidateColor = 'var(--pieGray)';
         this.count = 0;
     }
 
@@ -29,10 +28,12 @@ class VoterCount extends GameObject{
     }
 
     isVisible(simState){
-        return simState.pie.isVisible(simState) && simState.runoffStage != 'default' && simState.pie.allPieColors[simState.runoffStage][this.candidateIndex] != 'var(--pieGray)';
+        return simState.pie.isVisible(simState) && simState.runoffStage != 'default' && simState.pie.allPieColors[simState.runoffStage][this.candidateIndex] != -1;
     }
 
     update(simState){
+        this.candidateColor = `var(--${simState.candidateNames[simState.electionName][this.candidateIndex]})`
+
         let targetCount = camps.reduce((prev, camp) => prev + (simState[camp].voterColor == this.candidateColor) * simState[camp].members.length, 0);
         let t = .4;
         if(Math.abs(this.count-targetCount) <= 1){

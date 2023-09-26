@@ -1,8 +1,13 @@
 * {
   box-sizing: border-box;
-  --peltola: #C1E8F5;
-  --palin: #F11E01;
   --begich: purple;
+  --palin: #F11E01;
+  --peltola: #C1E8F5;
+
+  --montroll: blue;
+  --wright: red;
+  --kiss: green;
+
   --pieGray: #222222;
   --voterGray: darkgray;
   font-family: 'Montserrat';
@@ -205,18 +210,15 @@ body, #root{
   transition: opacity 1s linear;
 }
 
-.Candidate.begich{
-  border-color: var(--begich);
+.Candidate.candidate0{
   transition-delay: 0s;
 }
 
-.Candidate.palin{
-  border-color: var(--palin);
+.Candidate.candidate1{
   transition-delay: .5s;
 }
 
-.Candidate.peltola{
-  border-color: var(--peltola);
+.Candidate.candidate2{
   transition-delay: 1s;
 }
 

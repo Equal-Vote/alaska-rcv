@@ -1,12 +1,15 @@
 export class SimTransition {
-    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', burlington=false}) {
+    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-2022'}) {
         this.visible = visible;
         this.focused = focused;
         this.voterMovements = voterMovements;
-        this.burlington=burlington;
 
         this.explainer = explainer;
         this.runoffStage = runoffStage;
+        this.electionName = electionName;
+
+        this.explainerVisible = true;
+        this.isInSelector = false;
     }
 
     moveVoters(simState){
@@ -17,7 +20,7 @@ export class SimTransition {
         simState.visible = this.visible;
         simState.focused = this.focused;
         simState.runoffStage = this.runoffStage;
-        simState.burlington = this.burlington;
+        simState.electionName = this.electionName;
     }
 
     revertMove(simState){

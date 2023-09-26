@@ -8,24 +8,27 @@ const piePoints = {
     'palinVsPeltola': [4,   4, 50,   50, 96,   96],
 }
 
-
-
 class Pie extends GameObject{
     constructor(size){
         super('Pie', 0, 0, size);
         this.conicPairs = [];
         this.allPieColors = {
-            'default': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
-            'firstRound': ['var(--begich)', 'var(--palin)', 'var(--peltola)'],
-            'begichVsPalin': ['var(--begich)', 'var(--palin)', 'var(--pieGray)'],
-            'begichVsPeltola': ['var(--begich)', 'var(--pieGray)', 'var(--peltola)'],
-            'palinVsPeltola': ['var(--pieGray)', 'var(--palin)', 'var(--peltola)'],
+            'default': [0, 1, 2],
+            'firstRound': [0, 1, 2],
+            'begichVsPalin': [0, 1, -1],
+            'begichVsPeltola': [0, -1, 2],
+            'palinVsPeltola': [-1, 1, 2],
         }
         this.points = [...piePoints['default']];
         this.colors = [...this.allPieColors['default']];
         this.prevRunoffStage = 'default';
         this.curRunoffStage = 'default';
         this.colorMix = 1;
+    }
+
+    indexToColor(simState, index){
+        if(index == -1) return 'var(--pieGray)';
+        return `var(--${simState.candidateNames[simState.electionName][index]})`;
     }
 
     update(simState){
@@ -50,9 +53,11 @@ class Pie extends GameObject{
         });
 
         this.colorMix = this.colorMix*(1-t) + 1*t;
-        this.colors = this.colors.map((c, i) =>
-            `color-mix(in lch, ${this.allPieColors[this.prevRunoffStage][i]}, ${this.allPieColors[simState.runoffStage][i]} ${Math.round(this.colorMix*100)}%)`
-        )
+        this.colors = this.colors.map((c, i) =>{
+            let prevColor = this.indexToColor(simState, this.allPieColors[this.prevRunoffStage][i]);
+            let nextColor = this.indexToColor(simState, this.allPieColors[simState.runoffStage][i]);
+            return `color-mix(in lch, ${prevColor}, ${nextColor} ${Math.round(this.colorMix*100)}%)`
+        })
 
         this.conicPairs = [];
         for(let i = 0; i < 3; i++){

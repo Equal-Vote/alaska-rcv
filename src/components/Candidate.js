@@ -1,22 +1,20 @@
 import GameObject from "./GameObject";
 
 class Candidate extends GameObject{
-    constructor(r, angle, candidateName, burlingtonName){
+    constructor(r, angle, candidateIndex){
         super('Candidate', r, angle, 15, -1);
-        this.candidateName = candidateName;
-        this.burlingtonName = burlingtonName;
-        this.imageName = this.candidateName;
-        this.customClass = candidateName;
+        this.candidateIndex = candidateIndex;
+        this.customClass = `candidate${candidateIndex}`;
     }
     
     update(simState){
-        this.imageName = simState.burlington? this.burlingtonName : this.candidateName;
+        this.candidateName = simState.candidateNames[simState.electionName][this.candidateIndex];
     }
 
     getStyle(containerSize) {
         return {
             ...super.getStyle(containerSize),
-            backgroundImage: `url(\"images/${this.imageName}.jpg\")`,
+            backgroundImage: `url(\"images/${this.candidateName}.jpg\")`,
             border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName})`,
         };
     }

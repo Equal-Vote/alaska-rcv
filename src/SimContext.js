@@ -21,6 +21,10 @@ export function SimContextProvider({children}){
         let countRadius = 14;
         let voterRadius = 28;
         let candidateRadius = 43;
+        let candidateNames = {
+            'alaska-2022': ['begich', 'palin', 'peltola'],
+            'burlington-2009': ['montroll', 'wright', 'kiss'],
+        };
         let ctx = {
             // embed (must be on top so that it's interactable)
             star_vs_rcv_embed: new VideoEmbed(100, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS'),
@@ -37,13 +41,13 @@ export function SimContextProvider({children}){
             // voter ring
             pie: new Pie(candidateRadius*2),
             // candidates
-            begich: new Candidate(candidateRadius, 90, 'begich', 'montroll'),
-            palin: new Candidate(candidateRadius, 330, 'palin', 'wright'),
-            peltola: new Candidate(candidateRadius, 210, 'peltola', 'kiss'),
+            begich: new Candidate(candidateRadius, 90, 0),
+            palin: new Candidate(candidateRadius, 330, 1),
+            peltola: new Candidate(candidateRadius, 210, 2),
             // counts
-            begich_count: new VoterCount(countRadius, 90, 'begich', 0),
-            palin_count: new VoterCount(countRadius, 330, 'palin', 1),
-            peltola_count: new VoterCount(countRadius, 210, 'peltola', 2),
+            begich_count: new VoterCount(countRadius, 90, 0),
+            palin_count: new VoterCount(countRadius, 330, 1),
+            peltola_count: new VoterCount(countRadius, 210, 2),
             // camps
             home: new VoterCamp(0, 0),
             begich_bullet: new VoterCamp(voterRadius, 90),
@@ -69,7 +73,7 @@ export function SimContextProvider({children}){
 
         ctx.allExplainers = transitions.map(t => {return t.explainer; });
 
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', burlington: false}
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022', candidateNames}
 
         ctx.visibleObjects = function(){
             return this.objects.filter(o => o.isVisible(this));
@@ -138,6 +142,18 @@ export function SimContextProvider({children}){
         simIndex.current = i;
     }
 
+    const simIndexIsVisible = (index) => {
+
+    }
+
+    const refreshFromIndex = (index) => {
+
+    }
+
+    const getElectionSelectorRange = (index) => {
+
+    }
+
     const handleKeyPress = useCallback((event) => {
         // I'll worry about keyboard support later
         //if(event.key == 'a'){
@@ -158,5 +174,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, updateSimIndex}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, getElectionSelectorRange, refreshFromIndex}}>{children}</SimContext.Provider>;
 }

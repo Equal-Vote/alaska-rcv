@@ -47,15 +47,18 @@ export class VoterMovement {
         }else if(from != undefined){
             simState[from].refreshMembers();
         }
+
     }
 
     apply(simState) {
         if(this.from == 'anywhere'){
-            this.counts = [...campIds, undefined].map(c => 
+            this.counts = campIds.map(c => 
                 simState.objects
                 .filter(o => o instanceof Voter)
                 .filter(o => o.camp == c || o.camp == simState[c]).length
             );
+
+            console.log('save', this.counts);
         }
 
         this.move(this.count, this.from, this.to, simState);
@@ -64,7 +67,7 @@ export class VoterMovement {
     revert(simState) {
         if(this.from == 'anywhere'){
             this.move(200, 'anywhere', 'home', simState);
-            [...campIds, undefined].forEach((c, i) => this.move(this.counts[i], 'home', c, simState));
+            campIds.forEach((c, i) => this.move(this.counts[i], 'home', c, simState));
         }else{
             this.move(this.count, this.to, this.from, simState);
         }

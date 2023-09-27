@@ -12,9 +12,13 @@ class Voter extends GameObject{
         this.camp = camp;
         this.startPos = this.pos.clone();
         this.grav = startGrav;
+        this.prevCamp = undefined;
     }
 
     update(){
+        if(this.prevCamp != this.camp){
+            this.prevCamp = this.camp;
+        }
         super.update();
         if(this.camp != undefined && !this.isMember()){
             // slowly inject chaos if we're stuck

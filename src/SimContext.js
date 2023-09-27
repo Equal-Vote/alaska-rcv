@@ -101,19 +101,13 @@ export function SimContextProvider({children}){
                 i++;
                 if(!simIndexIsVisible(i)) continue;
                 simState.transitions[i].apply(simState)
-                if(simState.transitions[i].voterMovements.length > 0){
-                    let copiedIndex = i;
-                    simState.transitions[copiedIndex].moveVoters(simState)
-                }
+                simState.transitions[i].moveVoters(simState)
                 prevI = i;
             }
             if(i > nextIndex){
                 i--;
                 if(!simIndexIsVisible(i)) continue;
-                if(simState.transitions[prevI].voterMovements.length > 0){
-                    let copiedIndex = prevI;
-                    simState.transitions[copiedIndex].revertMove(simState)
-                }
+                simState.transitions[prevI].revertMove(simState)
                 simState.transitions[i].apply(simState);
                 prevI = i;
             }
@@ -128,10 +122,6 @@ export function SimContextProvider({children}){
             (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
             (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
         );
-    }
-
-    const refreshFromIndex = (index) => {
-
     }
 
     const handleKeyPress = useCallback((event) => {
@@ -154,5 +144,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, refreshFromIndex, refreshBool}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, refreshBool}}>{children}</SimContext.Provider>;
 }

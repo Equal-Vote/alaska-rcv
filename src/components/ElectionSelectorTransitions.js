@@ -117,8 +117,9 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 new VoterMovement(200, undefined, 'home'),
             ],
             explainer:  <>
-                <h1>Browse some other RCV case studies</h1>
-                <div className='selectorPanel'>
+                <h1 style={{marginTop: 0, marginBottom: 0}}>Browse some other RCV case studies</h1>
+                {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
+                <div style={{marginTop: '50px'}}className='selectorPanel'>
                     <div className='electionSelector'>
                         <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
                             simState.electionName=event.target.value;
@@ -133,6 +134,8 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                                 elem.value = simState.selectorFailure;
                             });
 
+                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
+
                             setRefreshBool(b => !b);
                         }}>
                             {Object.keys(elections).map((election ,i) => 
@@ -143,6 +146,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                     <div className='failureSelector'>
                         <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                             simState.selectorFailure=event.target.value;
+                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
                             setRefreshBool(b => !b);
                         }}>
                             {Object.entries(FAILURE).map(([key, failure], i) => {
@@ -151,8 +155,8 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                             })}
                         </select>
                     </div>
+                    <a id="shareLink" href={`${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`}>Share Link</a>
                 </div>
-                <a href="https://arxiv.org/pdf/2301.12075.pdf">source</a>
             </>
         }),
         introTransition('alaska-2022', 'Alaska 2022 Senator Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
@@ -168,6 +172,9 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             rcvWinner: 'Kiss',
             condorcetWinner: 'Montroll',
             loser: 'Wright',
+        }),
+        new SimTransition({
+            explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p>
         })
     ]
 }

@@ -72,9 +72,9 @@ export function SimContextProvider({children}){
             objects.push(new Voter(80+Math.random()*10, (i/200)*360+.3, undefined));
         }
         ctx.objects = objects;
-
+        let params = new URLSearchParams(window.location.search)
         ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022',
-            selectorElection:'burlington-2009', selectorFailure:'condorcet failure', candidateNames}
+            selectorElection:params.get('selectorElection') ?? 'burlington-2009', selectorFailure:params.get('selectorFailure') ?? 'condorcet failure', candidateNames}
 
         // must be after the { ... } since that breaks the reference
         ctx.transitions = transitions(ctx, setRefreshBool);

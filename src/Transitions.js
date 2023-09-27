@@ -57,7 +57,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>Only ranking a single candidate is called Bullet Voting</p>
                 <p>Bullet Voting is a poor strategy under RCV, but it's still fairly common</p>
             </>,
-            voterMovements: [new VoterMovement(12, 'home', 'begich_bullet')]
+            voterMovements: [new VoterMovement(12, 'home', 'centerBullet')]
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -70,20 +70,20 @@ const transitions = (simState, setRefreshBool) =>
                 <p>We'll put them close to Begich, but also leaning toward their second choice</p>
             </>,
             voterMovements: [
-                new VoterMovement(16, 'home', 'begich_then_peltola'),
-                new VoterMovement(29, 'home', 'begich_then_palin'),
+                new VoterMovement(16, 'home', 'centerThenLeft'),
+                new VoterMovement(29, 'home', 'centerThenRight'),
             ],
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <p>And then we'll distribute the rest of the votes accordingly</p>,
             voterMovements: [
-                new VoterMovement(36, 'home', 'palin_then_begich'),
-                new VoterMovement(23, 'home', 'palin_bullet'),
-                new VoterMovement(4, 'home', 'palin_then_peltola'),
-                new VoterMovement(5, 'home', 'peltola_then_palin'),
-                new VoterMovement(25, 'home', 'peltola_bullet'),
-                new VoterMovement(50, 'home', 'peltola_then_begich'),
+                new VoterMovement(36, 'home', 'rightThenCenter'),
+                new VoterMovement(23, 'home', 'rightBullet'),
+                new VoterMovement(4, 'home', 'rightThenLeft'),
+                new VoterMovement(5, 'home', 'leftThenRight'),
+                new VoterMovement(25, 'home', 'leftBullet'),
+                new VoterMovement(50, 'home', 'leftThenCenter'),
             ],
         }),
         // counting votes
@@ -120,7 +120,7 @@ const transitions = (simState, setRefreshBool) =>
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            focused: ['begich_bullet', 'begich'],
+            focused: ['centerBullet', 'centerCandidate'],
             explainer: <>
                 <p>This was only possible by hiding the 12 Begich bullet votes from the denominator</p>
                 <p>So the outlets reported Peltola had 96/188 = 51% , but she actually had 96/200 = 45%</p>
@@ -156,16 +156,16 @@ const transitions = (simState, setRefreshBool) =>
             runoffStage: 'begichVsPalin',
         }),
         new SimTransition({
-            visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
-            focused: ['begich', 'begich_beats_palin', 'begich_beats_peltola'],
+            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
+            focused: ['centerCandidate', 'centerBeatsRight', 'centerBeatsLeft'],
             explainer: <>,
                 <p>So Begich is the actual Condorcet winner!</p>
             </>,
             runoffStage: 'begichVsPalin',
         }),
         new SimTransition({
-            visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
-            focused: ['palin', 'begich_beats_palin', 'peltola_beats_palin'],
+            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
+            focused: ['rightCandidate', 'centerBeatsRight', 'leftBeatsRight'],
             explainer: <>
                 <p>Additionally, Palin lost all her head-to-head matchups</p>
                 <p>That makes her the Condorcet Loser for this election</p>
@@ -174,7 +174,7 @@ const transitions = (simState, setRefreshBool) =>
         }),
         // spoiler effect
         new SimTransition({
-            visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
+            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
             explainer: <>
                 <h1>Claim #3: "RCV solves the spoiler effect"</h1>
                 <p>Nope! Once you have more than two competitive candidates, RCV often allows the spoiler effect.</p>
@@ -210,7 +210,7 @@ const transitions = (simState, setRefreshBool) =>
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            focused: ['peltola_then_palin', 'palin_then_peltola'],
+            focused: ['leftThenRight', 'rightThenLeft'],
             explainer: <>
                 <p>We know this because very few Palin voters gave Peltola their second rank, and vice versa</p>
             </>,
@@ -218,7 +218,7 @@ const transitions = (simState, setRefreshBool) =>
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            focused: ['peltola_then_begich', 'palin_then_begich'],
+            focused: ['leftThenCenter', 'rightThenCenter'],
             explainer: <>
                 <p>And we can tell Begich was the consensus candidate because the majority of Peltola and Palin voters gave Begich their second rank</p>
             </>,
@@ -226,7 +226,7 @@ const transitions = (simState, setRefreshBool) =>
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            focused: ['palin_then_begich'],
+            focused: ['rightThenCenter'],
             explainer: <>
                 <p>This election was particularly rough for the "Palin then Begich" voters because supporting Palin gave them their worst choice, and their vote never transferred to Begich</p>
                 <p>They may as well have been using choose-one voting because RCV never counted their down ballot rankings</p>
@@ -248,7 +248,7 @@ const transitions = (simState, setRefreshBool) =>
             explainer: <>
                 <p>Let's take 7 of the "Palin then Begich" voters and pretend they stayed home</p>
             </>,
-            voterMovements: [new VoterMovement(7, 'palin_then_begich', 'home')],
+            voterMovements: [new VoterMovement(7, 'rightThenCenter', 'home')],
             runoffStage: 'default',
         }),
         new SimTransition({
@@ -272,7 +272,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>Let's reset</p>
                 <p>This election has a similar paradox, where Peltola could gain more supporters and then lose the election as a result</p>
             </>,
-            voterMovements: [new VoterMovement(7, 'home', 'palin_then_begich')],
+            voterMovements: [new VoterMovement(7, 'home', 'rightThenCenter')],
             runoffStage: 'default',
         }),
         new SimTransition({
@@ -280,7 +280,7 @@ const transitions = (simState, setRefreshBool) =>
             explainer: <>
                 <p>We'll pretend that 7 of the Palin bullet voters chose to support Peltola instead</p>
             </>,
-            voterMovements: [new VoterMovement(7, 'palin_bullet', 'peltola_bullet')],
+            voterMovements: [new VoterMovement(7, 'rightBullet', 'leftBullet')],
             runoffStage: 'default',
         }),
         new SimTransition({
@@ -311,7 +311,7 @@ const transitions = (simState, setRefreshBool) =>
             runoffStage: 'default',
         }),
         new SimTransition({
-            visible: ['us_failures'],
+            visible: ['usFailures'],
             explainer: <>
                 <p>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen these failures 4 times</p>
                 <p>However this is a biased sample. RCV operates well when there's only 2 competitive elections and the US is largely still a 2 party system.</p>
@@ -319,7 +319,7 @@ const transitions = (simState, setRefreshBool) =>
             </>,
         }),
         new SimTransition({
-            visible: ['us_failures', 'expected_failures'],
+            visible: ['usFailures', 'expectedFailures'],
             explainer: <>
                 <p>Research simulating RCV elections finds that competitive elections will have failures at least 15% of the time (or possibly as high as 50%) <a href="https://www.researchgate.net/publication/258164743_Frequency_of_monotonicity_failure_under_Instant_Runoff_Voting_Estimates_based_on_a_spatial_model_of_elections">link</a></p>
                 <p>and this is pretty devastating when you consider the damage that each of these failures does</p>

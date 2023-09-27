@@ -14,8 +14,6 @@ const FAILURE= {
     'compromise': 'compromise failure',
 }
 
-
-
 const electionSelectorTransitions = (simState, setRefreshBool) => {
     const elections = {
         'alaska-2022': {
@@ -35,15 +33,15 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             runoffStage: 'firstRound',
             voterMovements: [
-                new VoterMovement(camps[0], 'home', 'begich_bullet'),
-                new VoterMovement(camps[1], 'home', 'begich_then_palin'),
-                new VoterMovement(camps[2], 'home', 'palin_then_begich'),
-                new VoterMovement(camps[3], 'home', 'palin_bullet'),
-                new VoterMovement(camps[4], 'home', 'palin_then_peltola'),
-                new VoterMovement(camps[5], 'home', 'peltola_then_palin'),
-                new VoterMovement(camps[6], 'home', 'peltola_bullet'),
-                new VoterMovement(camps[7], 'home', 'peltola_then_begich'),
-                new VoterMovement(camps[8], 'home', 'begich_then_peltola'),
+                new VoterMovement(camps[0], 'home', 'centerBullet'),
+                new VoterMovement(camps[1], 'home', 'centerThenRight'),
+                new VoterMovement(camps[2], 'home', 'rightThenCenter'),
+                new VoterMovement(camps[3], 'home', 'rightBullet'),
+                new VoterMovement(camps[4], 'home', 'rightThenLeft'),
+                new VoterMovement(camps[5], 'home', 'leftThenRight'),
+                new VoterMovement(camps[6], 'home', 'leftBullet'),
+                new VoterMovement(camps[7], 'home', 'leftThenCenter'),
+                new VoterMovement(camps[8], 'home', 'centerThenLeft'),
             ],
         })
     }
@@ -90,8 +88,8 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             }),
             new SimTransition({
                 ...def,
-                visible: [Candidate, 'begich_beats_palin', 'begich_beats_peltola', 'peltola_beats_palin'],
-                focused: ['begich', 'begich_beats_palin', 'begich_beats_peltola'],
+                visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
+                focused: ['centerCandidate', 'centerBeatsRight', 'centerBeatsLeft'],
                 explainer: <>,
                     <p>So {condorcetWinner} is the actual Condorcet winner! and RCV failed to elect them</p>
                 </>,

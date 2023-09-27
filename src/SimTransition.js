@@ -1,3 +1,5 @@
+import Candidate from "./components/Candidate";
+
 export class SimTransition {
     constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-2022', electionTag=undefined, failureTag=undefined, resetVoters=false}) {
         this.visible = visible;
@@ -7,6 +9,7 @@ export class SimTransition {
         this.explainer = explainer;
         this.runoffStage = runoffStage;
         this.electionName = electionName;
+        if(!visible.includes(Candidate)) this.electionName = undefined;
 
         this.electionTag = electionTag;
         this.failureTag = failureTag;
@@ -21,7 +24,7 @@ export class SimTransition {
         simState.visible = this.visible;
         simState.focused = this.focused;
         simState.runoffStage = this.runoffStage;
-        simState.electionName = this.electionName;
+        if(this.electionName != undefined) simState.electionName = this.electionName;
     }
 
     revertMove(simState){

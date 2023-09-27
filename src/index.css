@@ -215,11 +215,11 @@ body, #root{
 }
 
 .Candidate.candidate1{
-  transition-delay: .5s;
+  transition-delay: .25s;
 }
 
 .Candidate.candidate2{
-  transition-delay: 1s;
+  transition-delay: .5s;
 }
 
 img{

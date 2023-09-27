@@ -5,7 +5,7 @@ class Candidate extends GameObject{
         super('Candidate', r, angle, 15, -1);
         this.candidateIndex = candidateIndex;
         this.customClass = `candidate${candidateIndex}`;
-        this.candidateName = 'begich';
+        this.candidateName = 'placeholder';
     }
     
     update(simState){

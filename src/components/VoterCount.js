@@ -1,15 +1,15 @@
 import GameObject from "./GameObject";
 
 const camps = [
-    'begich_bullet',
-    'begich_then_palin',
-    'palin_then_begich',
-    'palin_bullet',
-    'palin_then_peltola',
-    'peltola_then_palin',
-    'peltola_bullet',
-    'peltola_then_begich',
-    'begich_then_peltola',
+    'centerBullet',
+    'centerThenRight',
+    'rightThenCenter',
+    'rightBullet',
+    'rightThenLeft',
+    'leftThenRight',
+    'leftBullet',
+    'leftThenCenter',
+    'centerThenLeft',
 ];
 
 class VoterCount extends GameObject{

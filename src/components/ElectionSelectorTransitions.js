@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { SimTransition } from "../SimTransition";
 import Candidate from "./Candidate";
 import Voter from "./Voter";
@@ -7,6 +7,7 @@ import Pie from "./Pie";
 import { VoterMovement } from "../VoterMovement";
 
 const FAILURE= {
+    'unselected': '<pick a failure type>',
     'condorcet': 'condorcet failure',
     'mono': 'monotonicity failure',
     'noshow': 'no show failure',
@@ -18,10 +19,10 @@ const FAILURE= {
 const electionSelectorTransitions = (simState, setRefreshBool) => {
     const elections = {
         'alaska-2022': {
-            'failures': [FAILURE.condorcet, FAILURE.mono, FAILURE.noshow, FAILURE.compromise],
+            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.mono, FAILURE.noshow, FAILURE.compromise],
         },
         'burlington-2009': {
-            'failures': [FAILURE.condorcet],
+            'failures': [FAILURE.unselected, FAILURE.condorcet],
         },
     };
 
@@ -59,7 +60,8 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>Condorcet Winner: The candidate who wins head-to-head against all other candidates'</p>
+                    <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+                    <p>Condorcet Failure<br/><i>A scenario where the election method doesn't select a condorcet winner</i></p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound',
@@ -103,17 +105,21 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     return [
         new SimTransition({
             explainer:  <>
-                <p>Browse some other RCV case studies</p>
+                <h1>Browse some other RCV case studies</h1>
                 <div className='selectorPanel'>
                     <div className='electionSelector'>
-                        <select name="election" onChange={(event) => {
+                        <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
                             simState.selectorElection=event.target.value;
-                            simState.selectorFailure=undefined;
-                            document.querySelectorAll('.failureSelector').forEach((elem) =>{
-                                let v = elections[event.target.value].failures.includes(elem.children[1].textContent)
-                                elem.style.visibility = v? 'visible': 'hidden';
-
+                            simState.selectorFailure=FAILURE.unselected;
+                            document.querySelectorAll('.failureOption').forEach((elem) =>{
+                                let electionFailures = elections[simState.selectorElection].failures;
+                                elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
                             });
+
+                            document.querySelectorAll('.failureSelect').forEach((elem) =>{
+                                elem.value = simState.selectorFailure;
+                            });
+
                             setRefreshBool(b => !b);
                         }}>
                             {Object.keys(elections).map((election ,i) => 
@@ -122,36 +128,21 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                         </select>
                     </div>
                     <div className='failureSelector'>
-                        {Object.entries(FAILURE).map(([failure, title], i) => 
-                            <div className="failureSelector" key={i}>
-                                <input
-                                    id={`failureSelector-${failure}`}
-                                    type="radio"
-                                    name="failure" 
-                                    onChange={() => {
-                                        simState.selectorFailure=failure;
-                                        setRefreshBool(b => !b);
-                                    }}
-                                />
-                                <label htmlFor={`failureSelector-${failure}`}>
-                                    {title}
-                                </label>
-                            </div>
-                        )}
+                        <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
+                            simState.selectorFailure=event.target.value;
+                            setRefreshBool(b => !b);
+                        }}>
+                            {Object.entries(FAILURE).map(([key, failure], i) => {
+                                let electionFailures = elections[simState.selectorElection].failures;
+                                return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
+                            })}
+                        </select>
                     </div>
                 </div>
                 <a href="https://arxiv.org/pdf/2301.12075.pdf">source</a>
             </>
         }),
-        new SimTransition({
-            explainer: <p></p>,
-            electionName: 'alaska-2022',
-            electionTag: 'alaska-2022',
-            failureTag: undefined,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'firstRound',
-        }),
-        introTransition('alaska-2022', 'Alaska 2022 Senator Special Election', [12, 16, 29, 36, 23, 4, 5, 25, 50]),
+        introTransition('alaska-2022', 'Alaska 2022 Senator Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
         ...condorcetTransitions({
             electionTag: 'alaska-2022',
             rcvWinner: 'Peltola',

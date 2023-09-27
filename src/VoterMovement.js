@@ -1,5 +1,11 @@
 import Voter from './components/Voter';
 
+const campIds = [
+    'home', 'begich_bullet', 'begich_then_palin', 'palin_then_begich',
+    'palin_bullet', 'palin_then_peltola', 'peltola_then_palin',
+    'peltola_bullet', 'peltola_then_begich', 'begich_then_peltola'
+];
+
 export class VoterMovement {
     constructor(count, from, to) {
         // to undefined means starting position
@@ -7,6 +13,7 @@ export class VoterMovement {
         this.count = count;
         this.from = from;
         this.to = to;
+        this.prevCounts = {};
     }
 
     move(n, from, to, simState) {
@@ -18,6 +25,7 @@ export class VoterMovement {
             simState[from].refreshMembers();
             return;
         }
+
         simState.objects
             .filter(o => o instanceof Voter)
             .filter(o => {
@@ -35,28 +43,30 @@ export class VoterMovement {
             });
 
         if(from == 'anywhere'){
-            simState.home.refreshMembers();
-            simState.begich_bullet.refreshMembers();
-            simState.begich_then_palin.refreshMembers();
-            simState.palin_then_begich.refreshMembers();
-            simState.palin_bullet.refreshMembers();
-            simState.palin_then_peltola.refreshMembers();
-            simState.peltola_then_palin.refreshMembers();
-            simState.peltola_bullet.refreshMembers();
-            simState.peltola_then_begich.refreshMembers();
-            simState.begich_then_peltola.refreshMembers();
+            campIds.forEach(c => simState[c].refreshMembers());
         }else if(from != undefined){
             simState[from].refreshMembers();
         }
     }
 
     apply(simState) {
+        if(this.from == 'anywhere'){
+            this.counts = [...campIds, undefined].map(c => {
+                simState.objects
+                .filter(o => o instanceof Voter)
+                .filter(o => o.camp == c || o.camp == simState[c])
+            });
+        }
+
         this.move(this.count, this.from, this.to, simState);
     }
 
     revert(simState) {
-        this.move(this.count, this.to, this.from, simState);
+        if(this.from == 'anywhere'){
+            this.move(200, 'anywhere', 'home', simState);
+            [...campIds, undefined].forEach((c, i) => this.move(this.counts[i], 'home', c, simState));
+        }else{
+            this.move(this.count, this.to, this.from, simState);
+        }
     }
-
-
 }

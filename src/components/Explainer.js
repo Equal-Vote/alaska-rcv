@@ -16,12 +16,12 @@ const Explainer = () => {
     }).filter(explainer => explainer != undefined);
 
     let selectorRange = simState.transitions.reduce((range, t, i) => {
-        if(t.electionTag != undefined && !simIndexIsVisible(i)) range.size--;
         if(t.electionTag != undefined && range.start == undefined) range.start = i;
-        if(t.electionTag != undefined && range.start != undefined) range.size++;
+        if(t.electionTag != undefined && range.start != undefined && simIndexIsVisible(i)) range.size++;
         return range;
     }, {start: undefined, size: 0})
     selectorRange.end = selectorRange.start+selectorRange.size;
+    selectorRange.start--;
 
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();

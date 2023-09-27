@@ -71,7 +71,7 @@ export function SimContextProvider({children}){
         ctx.objects = objects;
 
         ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022',
-            selectorElection:'burlington-2009', selectorFailure:'condorcet', candidateNames}
+            selectorElection:'burlington-2009', selectorFailure:'condorcet failure', candidateNames}
 
         // must be after the { ... } since that breaks the reference
         ctx.transitions = transitions(ctx, setRefreshBool);
@@ -126,7 +126,7 @@ export function SimContextProvider({children}){
         let t = simState.transitions[index];
         return ( 
             (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
-            (t.electionFailure == undefined || simState.electionFailure == t.electionFailure)
+            (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
         );
     }
 

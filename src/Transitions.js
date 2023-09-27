@@ -305,7 +305,8 @@ const transitions = (simState, setRefreshBool) =>
             explainer: <>
                 <h1>Claim #5: "Alaska was a very rare edge case"</h1>
             </>,
-            voterMovements: [new VoterMovement(7, 'peltola_bullet', 'palin_bullet')],
+            voterMovements: [],
+            runoffStage: 'default',
         }),
         new SimTransition({
             visible: ['us_failures'],
@@ -323,7 +324,6 @@ const transitions = (simState, setRefreshBool) =>
             </>,
         }),
         new SimTransition({
-            visible: [Candidate, Voter, VoterCamp, Pie],
             visible: [],
             explainer: <>
                 <p>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again?</p>
@@ -333,34 +333,9 @@ const transitions = (simState, setRefreshBool) =>
                 <p>The bill was eventually vetoed but it was VERY close</p>
                 <p>So here we see RCV failures impacting the progress of other voting methods as well</p>
             </>,
-            runoffStage: 'default',
-        }),
-        ...electionSelectorTransitions(simState, setRefreshBool),
-        new SimTransition({
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-                <p>Another example happened in Burlington Vermont in 2009</p>
-                <p>In this case the failure lead to RCV being repealed a year later</p>
-            </>,
-            runoffStage: 'firstRound',
-            electionName: 'burlington-2009',
-            voterMovements: [
-                // burlington
-                new VoterMovement(200, 'anywhere', 'home'),
-                new VoterMovement(10, 'home', 'begich_bullet'),
-                new VoterMovement(18, 'home', 'begich_then_palin'),
-                new VoterMovement(34, 'home', 'palin_then_begich'),
-                new VoterMovement(29, 'home', 'palin_bullet'),
-                new VoterMovement(11, 'home', 'palin_then_peltola'),
-                new VoterMovement(9, 'home', 'peltola_then_palin'),
-                new VoterMovement(13, 'home', 'peltola_bullet'),
-                new VoterMovement(46, 'home', 'peltola_then_begich'),
-                new VoterMovement(30, 'home', 'begich_then_peltola'),
-            ],
         }),
         new SimTransition({
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            electionName: 'burlington-2009',
+            visible: [],
             explainer: <>
                 <p>RCV needs to stop overselling it's claims and we need to start considering other voting methods</p>
                 <p>Here's a list of all the claims we've discussed. All are either false or misleading</p>
@@ -374,8 +349,8 @@ const transitions = (simState, setRefreshBool) =>
                 <p>RCV has the most investment, but when it fails it hurts the movement as a whole</p>
                 <p>Instead we should look closer to alternatives such as Approval or STAR Voting</p> 
             </>,
-            runoffStage: 'firstRound',
         }),
+        ...electionSelectorTransitions(simState, setRefreshBool),
         new SimTransition({
             visible: [],
             electionName: 'burlington-2009', // keeping burlington for the fade animation

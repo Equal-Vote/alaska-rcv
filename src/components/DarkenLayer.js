@@ -2,7 +2,7 @@ import GameObject from "./GameObject";
 
 class DarkenLayer extends GameObject{
     constructor(){
-        super('DarkenLayer', 0, 0, 110, undefined);
+        super('DarkenLayer', 0, 0, 105, undefined);
     }
 
     isFocused(){ return undefined; }

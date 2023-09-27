@@ -1,12 +1,12 @@
 * {
   box-sizing: border-box;
-  --begich: purple;
+  --begich: #FFB612;
   --palin: #F11E01;
   --peltola: #C1E8F5;
 
-  --montroll: blue;
-  --wright: red;
-  --kiss: green;
+  --montroll: #3333FF;
+  --wright: #E81B23;
+  --kiss: #C64C4B;
 
   --pieGray: #222222;
   --voterGray: darkgray;

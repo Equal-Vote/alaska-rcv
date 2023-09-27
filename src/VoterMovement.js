@@ -57,8 +57,6 @@ export class VoterMovement {
                 .filter(o => o instanceof Voter)
                 .filter(o => o.camp == c || o.camp == simState[c]).length
             );
-
-            console.log('save', this.counts);
         }
 
         this.move(this.count, this.from, this.to, simState);

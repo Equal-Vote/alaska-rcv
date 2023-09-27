@@ -6,8 +6,6 @@ const Explainer = () => {
     const explainerRefs = useRef([]);
     const containerRef = useRef(null);
 
-    console.log("REFRESH");
-
     let explainers = simState.allExplainers.map((explainer, i) => {
         if(!simIndexIsVisible(i)) return undefined;
         if(i == 0 || i == simState.allExplainers.length-1) return <>{explainer}</>;
@@ -22,13 +20,15 @@ const Explainer = () => {
         let mid = (rect.top + rect.bottom) / 2;
 
         let focusedElem = explainerRefs.current.reduce((prev, e, i) => {
+            if(!simIndexIsVisible(i)) return prev;
             const getDiff = (el) => mid - el.getBoundingClientRect().top 
             if(getDiff(e) < 0) return prev;
             if(getDiff(e) < getDiff(prev)) return e;
             return prev;
         });
 
-        explainerRefs.current.forEach(e => {
+        explainerRefs.current.forEach((e,i) => {
+            if(!simIndexIsVisible(i)) return;
             e.classList.remove('explainerFocused');
             e.classList.remove('explainerUnfocused');
             e.classList.add((e == focusedElem)? 'explainerFocused' : 'explainerUnfocused');

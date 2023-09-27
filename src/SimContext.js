@@ -30,12 +30,12 @@ export function SimContextProvider({children}){
             // images
             choose_one: new ImageObject(0, 0, 70, 'chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'alaska.png'),
-            centerBeatsRight: new ImageObject(0, 0, 100, 'centerBeatsRight.png'),
-            rightBeatsCenter: new ImageObject(0, 0, 100, 'rightBeatsCenter.png'),
-            centerBeatsLeft: new ImageObject(0, 0, 100, 'centerBeatsLeft.png'),
-            leftBeatsCenter: new ImageObject(0, 0, 100, 'leftBeatsCenter.png'),
-            leftBeatsRight: new ImageObject(0, 0, 100, 'leftBeatsRight.png'),
-            rightBeatsLeft: new ImageObject(0, 0, 100, 'rightBeatsLeft.png'),
+            center_beats_right: new ImageObject(0, 0, 100, 'centerBeatsRight.png'),
+            right_beats_center: new ImageObject(0, 0, 100, 'rightBeatsCenter.png'),
+            center_beats_left: new ImageObject(0, 0, 100, 'centerBeatsLeft.png'),
+            left_beats_center: new ImageObject(0, 0, 100, 'leftBeatsCenter.png'),
+            left_beats_right: new ImageObject(0, 0, 100, 'leftBeatsRight.png'),
+            right_beats_left: new ImageObject(0, 0, 100, 'rightBeatsLeft.png'),
             usFailures: new ImageObject(25, 90, 60, 'usRCVFailures.png', 'contain'),
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
             // darken layer

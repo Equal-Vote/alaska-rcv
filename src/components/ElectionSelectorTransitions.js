@@ -12,9 +12,16 @@ const FAILURE= {
     'mono': 'monotonicity failure',
     'noshow': 'no show failure',
     'compromise': 'compromise failure',
-}
+};
+
+const lanes = [
+    'center',
+    'right',
+    'left'
+];
 
 const electionSelectorTransitions = (simState, setRefreshBool) => {
+    const candidateAsLane = (simState, electionTag, candidate) => lanes[simState.candidateNames[electionTag].indexOf(candidate.toLowerCase())];
     const elections = {
         'alaska-2022': {
             'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.mono, FAILURE.noshow, FAILURE.compromise],
@@ -52,6 +59,9 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             electionTag: electionTag,
             failureTag: FAILURE.condorcet,
         }
+        const rcvWinnerLane = candidateAsLane(simState, electionTag, rcvWinner);
+        const condorcetWinnerLane = candidateAsLane(simState, electionTag, condorcetWinner);
+        const loserLane = candidateAsLane(simState, electionTag, loser);
         return [
             new SimTransition({
                 ...def,
@@ -68,7 +78,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 explainer: <>
                     <p>{rcvWinner} won in the runoff</p>
                 </>,
-                runoffStage: 'palinVsPeltola',
+                runoffStage: `${loserLane}_vs_${rcvWinnerLane}`,
             }),
             new SimTransition({
                 ...def,
@@ -76,7 +86,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 explainer: <>
                     <p>but {condorcetWinner} would have beaten {rcvWinner} head-to-head</p>
                 </>,
-                runoffStage: 'begichVsPeltola',
+                runoffStage: `${condorcetWinnerLane}_vs_${rcvWinnerLane}`,
             }),
             new SimTransition({
                 ...def,
@@ -84,16 +94,16 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 explainer: <>
                     <p>and {condorcetWinner} also beats {loser} head-to-head</p>
                 </>,
-                runoffStage: 'begichVsPalin',
+                runoffStage: `${condorcetWinnerLane}_vs_${loserLane}`,
             }),
             new SimTransition({
                 ...def,
-                visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
-                focused: ['centerCandidate', 'centerBeatsRight', 'centerBeatsLeft'],
+                visible: [Candidate, `${rcvWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${rcvWinnerLane}`],
+                focused: ['centerCandidate', `${condorcetWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${rcvWinnerLane}`],
                 explainer: <>,
                     <p>So {condorcetWinner} is the actual Condorcet winner! and RCV failed to elect them</p>
                 </>,
-                runoffStage: 'begichVsPalin',
+                runoffStage: `${condorcetWinnerLane}_vs_${loserLane}`,
             }),
         ]
     }

@@ -3,9 +3,9 @@ import GameObject from "./GameObject";
 const piePoints = {
     'default': [0, 33, 33, 66, 66, 100],
     'firstRound': [16, 16, 50, 50, 83, 83],
-    'begichVsPalin': [16,   16, 62,   62, 70,   70],
-    'begichVsPeltola': [29,   29, 37,   37, 83,   83],
-    'palinVsPeltola': [4,   4, 50,   50, 96,   96],
+    'center_vs_right': [16,   16, 62,   62, 70,   70],
+    'center_vs_left': [29,   29, 37,   37, 83,   83],
+    'right_vs_left': [4,   4, 50,   50, 96,   96],
 }
 
 class Pie extends GameObject{
@@ -15,9 +15,9 @@ class Pie extends GameObject{
         this.allPieColors = {
             'default': [0, 1, 2],
             'firstRound': [0, 1, 2],
-            'begichVsPalin': [0, 1, -1],
-            'begichVsPeltola': [0, -1, 2],
-            'palinVsPeltola': [-1, 1, 2],
+            'center_vs_right': [0, 1, -1],
+            'center_vs_left': [0, -1, 2],
+            'right_vs_left': [-1, 1, 2],
         }
         this.points = [...piePoints['default']];
         this.colors = [...this.allPieColors['default']];

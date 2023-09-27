@@ -104,7 +104,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>But did RCV pick the best winner?</p>
                 <p>This election exposed many of RCV's false claims. Let's take a closer look...</p>
             </>,
-            runoffStage: 'palinVsPeltola',
+            runoffStage: 'right_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -116,7 +116,7 @@ const transitions = (simState, setRefreshBool) =>
                 <img src="/alaska-rcv/images/cnnResults.png" style={{width: '90%'}}/>
                 <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
             </>,
-            runoffStage: 'palinVsPeltola',
+            runoffStage: 'right_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -126,7 +126,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>So the outlets reported Peltola had 96/188 = 51% , but she actually had 96/200 = 45%</p>
                 <p>The majority is an illusion! In reality it's impossible for any voting method to guarantee a majority for all scenario</p>
             </>,
-            runoffStage: 'palinVsPeltola',
+            runoffStage: 'right_vs_left',
         }),
         // Condorcet
         new SimTransition({
@@ -139,42 +139,42 @@ const transitions = (simState, setRefreshBool) =>
                 <p>That's candidate who can beat any of the other candidates head-to-head</p>
                 <p>We know that Peltola beats Palin head-to-head but what about the other matchups?</p>
             </>,
-            runoffStage: 'palinVsPeltola',
+            runoffStage: 'right_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>Begich beat's Peltola head-to-head</p>
             </>,
-            runoffStage: 'begichVsPeltola',
+            runoffStage: 'center_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>And Begich beat's Palin head-to-head</p>
             </>,
-            runoffStage: 'begichVsPalin',
+            runoffStage: 'center_vs_right',
         }),
         new SimTransition({
-            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
-            focused: ['centerCandidate', 'centerBeatsRight', 'centerBeatsLeft'],
+            visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
+            focused: ['centerCandidate', 'center_beats_right', 'center_beats_left'],
             explainer: <>,
                 <p>So Begich is the actual Condorcet winner!</p>
             </>,
-            runoffStage: 'begichVsPalin',
+            runoffStage: 'center_vs_right',
         }),
         new SimTransition({
-            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
-            focused: ['rightCandidate', 'centerBeatsRight', 'leftBeatsRight'],
+            visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
+            focused: ['rightCandidate', 'center_beats_right', 'left_beats_right'],
             explainer: <>
                 <p>Additionally, Palin lost all her head-to-head matchups</p>
                 <p>That makes her the Condorcet Loser for this election</p>
             </>,
-            runoffStage: 'begichVsPalin',
+            runoffStage: 'center_vs_right',
         }),
         // spoiler effect
         new SimTransition({
-            visible: [Candidate, 'centerBeatsRight', 'centerBeatsLeft', 'leftBeatsRight'],
+            visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
             explainer: <>
                 <h1>Claim #3: "RCV solves the spoiler effect"</h1>
                 <p>Nope! Once you have more than two competitive candidates, RCV often allows the spoiler effect.</p>
@@ -183,7 +183,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>This is when removing a losing candidate causes the winner to change</p>
                 <p>Most famously under choose-one voting, removing Nader from 2000 presidential election might have changed the winner to change from Bush to Gore (however it's impossible to know for sure)</p>
             </>,
-            runoffStage: 'begichVsPalin',
+            runoffStage: 'center_vs_right',
         }),
         // center squeeze
         new SimTransition({
@@ -196,7 +196,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>With 2 candidates, the concensus candidate closer to the center of popular opinion will always win</p>
                 <img src="/alaska-rcv/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
             </>,
-            runoffStage: 'begichVsPeltola',
+            runoffStage: 'center_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -264,7 +264,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>Then after that Begich wins in the runoff</p>
                 <p>Thus these voters could have created a better result from themselves by not showing up, that's called the No Show Paradox</p>
             </>,
-            runoffStage: 'begichVsPeltola',
+            runoffStage: 'center_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -298,7 +298,7 @@ const transitions = (simState, setRefreshBool) =>
                 <p>This is known as a Monotonicity Paradox</p>
                 <p>Monotonicity Paradoxes are when gaining support for a winning candidate can cause them to lose, and RCV is the only modern voting method that can have these problems</p>
             </>,
-            runoffStage: 'begichVsPeltola',
+            runoffStage: 'center_vs_left',
         }),
         new SimTransition({
             visible: [],

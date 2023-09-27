@@ -345,17 +345,8 @@ const transitions = (simState, setRefreshBool) =>
             runoffStage: 'firstRound',
             electionName: 'burlington-2009',
             voterMovements: [
-                // reset
-                new VoterMovement(12, 'begich_bullet', 'home'),
-                new VoterMovement(29, 'begich_then_palin', 'home'),
-                new VoterMovement(36, 'palin_then_begich', 'home'),
-                new VoterMovement(23, 'palin_bullet', 'home'),
-                new VoterMovement(4, 'palin_then_peltola', 'home'),
-                new VoterMovement(5, 'peltola_then_palin', 'home'),
-                new VoterMovement(25, 'peltola_bullet', 'home'),
-                new VoterMovement(50, 'peltola_then_begich', 'home'),
-                new VoterMovement(16, 'begich_then_peltola', 'home'),
                 // burlington
+                new VoterMovement(200, 'anywhere', 'home'),
                 new VoterMovement(10, 'home', 'begich_bullet'),
                 new VoterMovement(18, 'home', 'begich_then_palin'),
                 new VoterMovement(34, 'home', 'palin_then_begich'),

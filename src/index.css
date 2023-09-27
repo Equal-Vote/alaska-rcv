@@ -252,6 +252,29 @@ a, a:visited{
 }
 
 
+/* SELECTOR */
+.selectorPanel{
+  display: flex;
+  flex-direction: row;
+  justify-content: top;
+  gap: 20px;
+}
+
+.electionSelector, .failureSelctor{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.selectorContainer{
+  background: #111111;
+  border-radius: 20px;
+  width: 110%;
+  padding: 10%;
+  transform: translate(-10%,0);
+}
+
+
 
 @media(max-width: 900px){
   .explainerPadding{

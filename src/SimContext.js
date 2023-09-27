@@ -87,28 +87,35 @@ export function SimContextProvider({children}){
         return ctx;
     }
 
-    const updateSimIndex = (nextIndex) => {
-        let i = simIndex.current;
+    const updateSimIndex = (nextIndex, startIndex=undefined) => {
+        let i = startIndex ?? simIndex.current;
 
         if(typeof nextIndex !== 'number') nextIndex = nextIndex(i);
         if(nextIndex < 0) nextIndex = 0;
         if(nextIndex > simState.transitions.length-1) nextIndex = simState.transitions.length-1;
+        
+
+        let prevI = i;
         while(i != nextIndex){
             if(i < nextIndex){
-                simState.transitions[i+1].apply(simState)
-                if(simState.transitions[i+1].voterMovements.length > 0){
-                    let copiedIndex = i+1;
-                    simState.transitions[copiedIndex].moveVoters(simState)
-                }
                 i++;
-            }
-            if(i > nextIndex){
+                if(!simIndexIsVisible(i)) continue;
+                simState.transitions[i].apply(simState)
                 if(simState.transitions[i].voterMovements.length > 0){
                     let copiedIndex = i;
+                    simState.transitions[copiedIndex].moveVoters(simState)
+                }
+                prevI = i;
+            }
+            if(i > nextIndex){
+                i--;
+                if(!simIndexIsVisible(i)) continue;
+                if(simState.transitions[prevI].voterMovements.length > 0){
+                    let copiedIndex = prevI;
                     simState.transitions[copiedIndex].revertMove(simState)
                 }
-                simState.transitions[i-1].apply(simState);
-                i--;
+                simState.transitions[i].apply(simState);
+                prevI = i;
             }
         }
 
@@ -118,16 +125,12 @@ export function SimContextProvider({children}){
     const simIndexIsVisible = (index) => {
         let t = simState.transitions[index];
         return ( 
-            (t.electionTag == undefined || simState.selectorElection == t.electionTag)// &&
-            //(t.electionFailure == undefined || simState.electionFailure == t.electionFailure)
+            (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
+            (t.electionFailure == undefined || simState.electionFailure == t.electionFailure)
         );
     }
 
     const refreshFromIndex = (index) => {
-
-    }
-
-    const getElectionSelectorRange = (index) => {
 
     }
 
@@ -151,5 +154,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, getElectionSelectorRange, refreshFromIndex, refreshBool}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, refreshFromIndex, refreshBool}}>{children}</SimContext.Provider>;
 }

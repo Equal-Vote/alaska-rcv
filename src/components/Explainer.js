@@ -15,6 +15,14 @@ const Explainer = () => {
         </div>
     }).filter(explainer => explainer != undefined);
 
+    let selectorRange = simState.transitions.reduce((range, t, i) => {
+        if(t.electionTag != undefined && !simIndexIsVisible(i)) range.size--;
+        if(t.electionTag != undefined && range.start == undefined) range.start = i;
+        if(t.electionTag != undefined && range.start != undefined) range.size++;
+        return range;
+    }, {start: undefined, size: 0})
+    selectorRange.end = selectorRange.start+selectorRange.size;
+
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();
         let mid = (rect.top + rect.bottom) / 2;
@@ -61,7 +69,11 @@ const Explainer = () => {
 
     return (
         <div className="explainer" ref={containerRef} onScroll={refreshExplainers}>
-            {explainers}
+            {explainers.slice(0, selectorRange.start)}
+            <div className='selectorContainer'>
+                {explainers.slice(selectorRange.start, selectorRange.end)}
+            </div>
+            {explainers.slice(selectorRange.end)}
         </div>
     )
 }

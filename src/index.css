@@ -162,7 +162,7 @@ body, #root{
 }
 
 .DarkenLayer.objectVisible{
-  opacity: .9;
+  opacity: .7;
 }
 
 .objectVisible.objectUnfocused{

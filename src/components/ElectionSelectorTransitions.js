@@ -110,11 +110,18 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
 
     return [
         new SimTransition({
+            electionName: simState.selectorElection,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'default',
+            voterMovements: [
+                new VoterMovement(200, undefined, 'home'),
+            ],
             explainer:  <>
                 <h1>Browse some other RCV case studies</h1>
                 <div className='selectorPanel'>
                     <div className='electionSelector'>
                         <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
+                            simState.electionName=event.target.value;
                             simState.selectorElection=event.target.value;
                             simState.selectorFailure=FAILURE.unselected;
                             document.querySelectorAll('.failureOption').forEach((elem) =>{

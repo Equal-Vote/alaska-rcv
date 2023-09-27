@@ -6,8 +6,18 @@ import VoterCamp from './components/VoterCamp';
 import Pie from './components/Pie';
 import electionSelectorTransitions from './components/ElectionSelectorTransitions';
 
-const transitions = (simState, setRefreshBool) => 
-    [
+const transitions = (simState, setRefreshBool) => {
+    if(new URLSearchParams(window.location.search).get('onlySelector')) return [
+        new SimTransition({
+            explainer: <div className='explainerTopPadding'/>,
+        }),
+        ...electionSelectorTransitions(simState, setRefreshBool),
+        new SimTransition({
+            explainer: <div className='explainerBottomPadding'/>
+        }),
+    ];
+
+    return [
         // start
         new SimTransition({
             explainer: <div className='explainerTopPadding'/>
@@ -375,5 +385,6 @@ const transitions = (simState, setRefreshBool) =>
             explainer: <div className='explainerBottomPadding'/>
         }),
     ];
+}
 
 export default transitions;

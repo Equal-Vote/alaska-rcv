@@ -2,17 +2,20 @@ import { useContext, useEffect, useRef} from "react";
 import { SimContext } from "../SimContext";
 
 const Explainer = () => {
-    const {simState, updateSimIndex} = useContext(SimContext);
+    const {simState, updateSimIndex, simIndexIsVisible, refreshBool} = useContext(SimContext);
     const explainerRefs = useRef([]);
     const containerRef = useRef(null);
 
+    console.log("REFRESH");
+
     let explainers = simState.allExplainers.map((explainer, i) => {
+        if(!simIndexIsVisible(i)) return undefined;
         if(i == 0 || i == simState.allExplainers.length-1) return <>{explainer}</>;
 
         return <div className="explainerItem" ref={el => explainerRefs.current[i] = el} key={`explainer-${i}`}>
             <div className="explainerInner">{explainer}</div>
         </div>
-    })
+    }).filter(explainer => explainer != undefined);
 
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();

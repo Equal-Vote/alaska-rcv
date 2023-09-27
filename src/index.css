@@ -76,7 +76,7 @@ body, #root{
   min-height: 60vh;
 }
 
-.explainer h1, h2, h3, p, ol, i{
+.explainer h1, h2, h3, p, ol, i, label{
   color: white;
 }
 

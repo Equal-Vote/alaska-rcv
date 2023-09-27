@@ -2,7 +2,7 @@ import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
 import ImageObject from './components/ImageObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
-import { transitions } from './Transitions';
+import transitions from './Transitions';
 import Candidate from './components/Candidate';
 import Pie from './components/Pie';
 import VoterCount from './components/VoterCount';
@@ -12,10 +12,9 @@ import VideoEmbed from './components/VideoEmbed';
 export const SimContext = createContext({});
 
 export function SimContextProvider({children}){
+    let [refreshBool, setRefreshBool] = useState(false);
     let simState = useRef(initSimContext()).current;
     let simIndex = useRef(0);
-    let moveQueue = useRef([]);
-    let moveInterval = useRef(undefined);
 
     function initSimContext(){
         let countRadius = 14;
@@ -71,37 +70,23 @@ export function SimContextProvider({children}){
         }
         ctx.objects = objects;
 
-        ctx.allExplainers = transitions.map(t => {return t.explainer; });
 
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022', candidateNames}
+
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022',
+        selectorElection:'burlington-2009', selectorFailure:'condorcet', candidateNames}
+
+        // must be after the { ... } since that breaks the reference
+        ctx.transitions = transitions(ctx, setRefreshBool);
+
+        ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });
 
         ctx.visibleObjects = function(){
             return this.objects.filter(o => o.isVisible(this));
         }
 
-        transitions[0].apply(ctx);
+        ctx.transitions[0].apply(ctx);
 
         return ctx;
-    }
-
-    const queueMove = (move) => {
-        // remove queue system for now, the voter chaos seems to have fixed it
-        move.func();
-        //if(moveInterval.current == undefined){
-        //    move.func();
-        //    moveInterval.current = setInterval(() => {
-        //        if(moveQueue.current.length == 0){
-        //            clearInterval(moveInterval.current);
-        //            moveInterval.current = undefined;
-        //        }else{
-        //            moveQueue.current.shift().func();
-        //        }
-        //    }, 1500)
-        //}else if(moveQueue.current.length > 0 && moveQueue.current[moveQueue.current.length-1].op == -move.op){
-        //    moveQueue.current.pop();
-        //}else{
-        //    moveQueue.current.push(move);
-        //}
     }
 
     const updateSimIndex = (nextIndex) => {
@@ -109,32 +94,22 @@ export function SimContextProvider({children}){
 
         if(typeof nextIndex !== 'number') nextIndex = nextIndex(i);
         if(nextIndex < 0) nextIndex = 0;
-        if(nextIndex > transitions.length-1) nextIndex = transitions.length-1;
+        if(nextIndex > simState.transitions.length-1) nextIndex = simState.transitions.length-1;
         while(i != nextIndex){
             if(i < nextIndex){
-                transitions[i+1].apply(simState)
-                if(transitions[i+1].voterMovements.length > 0){
+                simState.transitions[i+1].apply(simState)
+                if(simState.transitions[i+1].voterMovements.length > 0){
                     let copiedIndex = i+1;
-                    queueMove({
-                        op: copiedIndex,
-                        func: () => {
-                            transitions[copiedIndex].moveVoters(simState)
-                        }
-                    });
+                    simState.transitions[copiedIndex].moveVoters(simState)
                 }
                 i++;
             }
             if(i > nextIndex){
-                if(transitions[i].voterMovements.length > 0){
+                if(simState.transitions[i].voterMovements.length > 0){
                     let copiedIndex = i;
-                    queueMove({
-                        op: -copiedIndex,
-                        func: () => {
-                            transitions[copiedIndex].revertMove(simState)
-                        }
-                    });
+                    simState.transitions[copiedIndex].revertMove(simState)
                 }
-                transitions[i-1].apply(simState);
+                simState.transitions[i-1].apply(simState);
                 i--;
             }
         }
@@ -143,7 +118,11 @@ export function SimContextProvider({children}){
     }
 
     const simIndexIsVisible = (index) => {
-
+        let t = simState.transitions[index];
+        return ( 
+            (t.electionTag == undefined || simState.selectorElection == t.electionTag)// &&
+            //(t.electionFailure == undefined || simState.electionFailure == t.electionFailure)
+        );
     }
 
     const refreshFromIndex = (index) => {
@@ -174,5 +153,5 @@ export function SimContextProvider({children}){
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, getElectionSelectorRange, refreshFromIndex}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, getElectionSelectorRange, refreshFromIndex, refreshBool}}>{children}</SimContext.Provider>;
 }

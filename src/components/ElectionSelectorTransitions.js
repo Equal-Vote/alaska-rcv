@@ -35,8 +35,6 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             runoffStage: 'firstRound',
             voterMovements: [
-                // burlington
-                new VoterMovement(200, 'anywhere', 'home'),
                 new VoterMovement(camps[0], 'home', 'begich_bullet'),
                 new VoterMovement(camps[1], 'home', 'begich_then_palin'),
                 new VoterMovement(camps[2], 'home', 'palin_then_begich'),

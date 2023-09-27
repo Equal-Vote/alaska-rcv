@@ -51,11 +51,11 @@ export class VoterMovement {
 
     apply(simState) {
         if(this.from == 'anywhere'){
-            this.counts = [...campIds, undefined].map(c => {
+            this.counts = [...campIds, undefined].map(c => 
                 simState.objects
                 .filter(o => o instanceof Voter)
-                .filter(o => o.camp == c || o.camp == simState[c])
-            });
+                .filter(o => o.camp == c || o.camp == simState[c]).length
+            );
         }
 
         this.move(this.count, this.from, this.to, simState);

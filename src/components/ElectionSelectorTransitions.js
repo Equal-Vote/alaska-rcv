@@ -12,6 +12,7 @@ const FAILURE= {
     'mono': 'monotonicity failure',
     'noshow': 'no show failure',
     'compromise': 'compromise failure',
+    'spoiler': 'spoiler effect',
 };
 
 const lanes = [
@@ -22,17 +23,59 @@ const lanes = [
 
 const electionSelectorTransitions = (simState, setRefreshBool) => {
     const candidateAsLane = (simState, electionTag, candidate) => lanes[simState.candidateNames[electionTag].indexOf(candidate.toLowerCase())];
-    const elections = {
-        'alaska-special-2022': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.mono, FAILURE.noshow, FAILURE.compromise],
-        },
-        'alaska-general-2022': {
-            'failures': [FAILURE.unselected],
-        },
-        'burlington-2009': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet],
-        },
-    };
+    
+    const selectorTransition = () => {
+        return new SimTransition({
+            electionName: simState.selectorElection,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'default',
+            voterMovements: [
+                new VoterMovement(200, undefined, 'home'),
+            ],
+            explainer:  <>
+                <h1 style={{marginTop: 0, marginBottom: 0}}>Browse some other RCV case studies</h1>
+                {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
+                <div style={{marginTop: '50px'}}className='selectorPanel'>
+                    <div className='electionSelector'>
+                        <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
+                            simState.electionName=event.target.value;
+                            simState.selectorElection=event.target.value;
+                            simState.selectorFailure=FAILURE.unselected;
+                            document.querySelectorAll('.failureOption').forEach((elem) =>{
+                                let electionFailures = elections[simState.selectorElection].failures;
+                                elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
+                            });
+
+                            document.querySelectorAll('.failureSelect').forEach((elem) =>{
+                                elem.value = simState.selectorFailure;
+                            });
+
+                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
+
+                            setRefreshBool(b => !b);
+                        }}>
+                            {Object.keys(elections).map((election ,i) => 
+                                <option key={i}>{election}</option>
+                            )}
+                        </select>
+                    </div>
+                    <div className='failureSelector'>
+                        <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
+                            simState.selectorFailure=event.target.value;
+                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
+                            setRefreshBool(b => !b);
+                        }}>
+                            {Object.entries(FAILURE).map(([key, failure], i) => {
+                                let electionFailures = elections[simState.selectorElection].failures;
+                                return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
+                            })}
+                        </select>
+                    </div>
+                    <a id="shareLink" href={`${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`}>Share Link</a>
+                </div>
+            </>
+        });
+    }
 
     const introTransition = (electionName, description, camps) => {
         return new SimTransition({
@@ -54,6 +97,44 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 new VoterMovement(camps[8], 'home', 'centerThenLeft'),
             ],
         })
+    }
+
+    const spoilerTransitions = ({electionTag, spoilerCandidate, oldWinner, newWinner}) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.spoiler,
+        }
+        const spoilerLane = candidateAsLane(simState, electionTag, spoilerCandidate);
+        const oldWinnerLane = candidateAsLane(simState, electionTag, oldWinner);
+        const newWinnerLane = candidateAsLane(simState, electionTag, newWinner);
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Spoiler Effect<br/><i>When removing 1 or more losing candidates could cause the winner to change</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>{oldWinner} won the election, and {spoilerCandidate} lost</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: `${spoilerLane}_vs_${oldWinnerLane}`,
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>but if {spoilerCandidate} was removed, the winner would change to {newWinner}</p>
+                    <p>therefore {spoilerCandidate} was a spoiler for this election</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: `${newWinnerLane}_vs_${oldWinnerLane}`,
+            }),
+        ];
     }
 
     const condorcetTransitions = ({electionTag, rcvWinner, condorcetWinner, loser}) => {
@@ -111,58 +192,17 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         ]
     }
 
+    const elections = {
+        'alaska-special-2022': {
+            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler],
+        },
+        'burlington-2009': {
+            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler],
+        },
+    };
+
     return [
-        new SimTransition({
-            electionName: simState.selectorElection,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'default',
-            voterMovements: [
-                new VoterMovement(200, undefined, 'home'),
-            ],
-            explainer:  <>
-                <h1 style={{marginTop: 0, marginBottom: 0}}>Browse some other RCV case studies</h1>
-                {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
-                <div style={{marginTop: '50px'}}className='selectorPanel'>
-                    <div className='electionSelector'>
-                        <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
-                            simState.electionName=event.target.value;
-                            simState.selectorElection=event.target.value;
-                            simState.selectorFailure=FAILURE.unselected;
-                            document.querySelectorAll('.failureOption').forEach((elem) =>{
-                                let electionFailures = elections[simState.selectorElection].failures;
-                                elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
-                            });
-
-                            document.querySelectorAll('.failureSelect').forEach((elem) =>{
-                                elem.value = simState.selectorFailure;
-                            });
-
-                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
-
-                            setRefreshBool(b => !b);
-                        }}>
-                            {Object.keys(elections).map((election ,i) => 
-                                <option key={i}>{election}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className='failureSelector'>
-                        <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
-                            simState.selectorFailure=event.target.value;
-                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
-                            setRefreshBool(b => !b);
-                        }}>
-                            {Object.entries(FAILURE).map(([key, failure], i) => {
-                                let electionFailures = elections[simState.selectorElection].failures;
-                                return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
-                            })}
-                        </select>
-                    </div>
-                    <a id="shareLink" href={`${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`}>Share Link</a>
-                </div>
-            </>
-        }),
-        introTransition('alaska-general-2022', 'Alaska 2022 US Representative General Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        selectorTransition(),
         introTransition('alaska-special-2022', 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
         ...condorcetTransitions({
             electionTag: 'alaska-special-2022',
@@ -170,12 +210,24 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             condorcetWinner: 'Begich',
             loser: 'Palin',
         }),
+        ...spoilerTransitions({
+            electionTag: 'alaska-special-2022',
+            spoilerCandidate: 'Palin',
+            oldWinner: 'Peltola',
+            newWinner: 'Begich',
+        }),
         introTransition('burlington-2009', 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...condorcetTransitions({
             electionTag: 'burlington-2009',
             rcvWinner: 'Kiss',
             condorcetWinner: 'Montroll',
             loser: 'Wright',
+        }),
+        ...spoilerTransitions({
+            electionTag: 'burlington-2009',
+            spoilerCandidate: 'Wright',
+            oldWinner: 'Kiss',
+            newWinner: 'Montroll',
         }),
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 

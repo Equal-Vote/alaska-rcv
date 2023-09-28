@@ -9,6 +9,7 @@ import { VoterMovement } from "../VoterMovement";
 const FAILURE= {
     'unselected': '<pick a failure type>',
     'condorcet': 'condorcet failure',
+    'cycle': 'condorcet cycle',
     'majority': 'majoritarian failure',
     'mono': 'monotonicity failure',
     'noshow': 'no show failure',
@@ -16,14 +17,18 @@ const FAILURE= {
     'spoiler': 'spoiler effect',
 };
 
-const lanes = [
-    'center',
-    'right',
-    'left'
-];
-
+const elections = {
+    'alaska-special-2022': {
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+    },
+    'burlington-2009': {
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+    },
+    'minneapolis-2021': {
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+    },
+};
 const electionSelectorTransitions = (simState, setRefreshBool) => {
-    const candidateAsLane = (simState, electionTag, candidate) => lanes[simState.candidateNames[electionTag].indexOf(candidate.toLowerCase())];
     
     const selectorTransition = () => {
         return new SimTransition({
@@ -79,7 +84,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     }
 
     const introTransition = (electionName, description, camps) => {
-        return new SimTransition({
+        let intro = [new SimTransition({
             explainer: <p>{description}</p>,
             electionName: electionName,
             electionTag: electionName,
@@ -96,20 +101,33 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 new VoterMovement(camps[6], 'home', 'leftBullet'),
                 new VoterMovement(camps[7], 'home', 'leftThenCenter'),
                 new VoterMovement(camps[8], 'home', 'centerThenLeft'),
-            ],
-        })
+            ] 
+        })];
+
+        if(elections[electionName].failures.length > 1){
+            intro.push(new SimTransition({
+                explainer: <p>This election had the following issues : 
+                    <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected).map((f,i) => <li>{f}</li>)}</ul>
+                    pick from the drop down above for more details</p>,
+                electionName: electionName,
+                electionTag: electionName,
+                failureTag: FAILURE.unselected,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }));
+        }
+
+        return intro;
     }
 
 
-    const majorityFailure = ({electionTag, first, second, third, winnerVoteCount, bulletVoteCount}) => {
+    const majorityFailureTransitions = ({electionTag, winnerVoteCount, bulletVoteCount}) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
             failureTag: FAILURE.majority,
         }
-        const firstLane = candidateAsLane(simState, electionTag, first);
-        const secondLane = candidateAsLane(simState, electionTag, second);
-        const thirdLane = candidateAsLane(simState, electionTag, third);
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
             new SimTransition({
                 ...def,
@@ -122,20 +140,20 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{first} won in the final round, but then only had {winnerVoteCount}/200 of the vote (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
+                    <p>{leftCandidate} won in the final round, but then only had {winnerVoteCount}/200 of the vote (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: `${secondLane}_vs_${firstLane}`,
+                runoffStage: 'right_vs_left',
             }),
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>The outlets reported this as a majority because the {bulletVoteCount} bullet voters who voted for {third} weren't counted in the total</p>
+                    <p>The outlets reported this as a majority because the {bulletVoteCount} bullet voters who voted for {centerCandidate} weren't counted in the total</p>
                     <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount}={Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                focused: [`${thirdLane}Candidate`, `${thirdLane}Bullet`],
-                runoffStage: `${secondLane}_vs_${firstLane}`,
+                focused: ['centerCandidate', 'centerBullet'],
+                runoffStage: 'right_vs_left',
             }),
             new SimTransition({
                 ...def,
@@ -145,20 +163,19 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                     had a majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
                 </p>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: `${secondLane}_vs_${firstLane}`,
+                runoffStage: 'right_vs_left',
             }),
         ];
     }
 
-    const spoilerTransitions = ({electionTag, spoilerCandidate, oldWinner, newWinner}) => {
+    const spoilerTransitions = (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
             failureTag: FAILURE.spoiler,
         }
-        const spoilerLane = candidateAsLane(simState, electionTag, spoilerCandidate);
-        const oldWinnerLane = candidateAsLane(simState, electionTag, oldWinner);
-        const newWinnerLane = candidateAsLane(simState, electionTag, newWinner);
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        console.log(electionTag, simState.candidateNames[electionTag]);
         return [
             new SimTransition({
                 ...def,
@@ -171,32 +188,30 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{oldWinner} won the election, and {spoilerCandidate} lost</p>
+                    <p>{leftCandidate} won the election, and {rightCandidate} lost</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: `${spoilerLane}_vs_${oldWinnerLane}`,
+                runoffStage: 'right_vs_left'
             }),
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>but if {spoilerCandidate} was removed, the winner would change to {newWinner}</p>
-                    <p>therefore {spoilerCandidate} was a spoiler for this election</p>
+                    <p>but if {rightCandidate} was removed, the winner would change to {centerCandidate}</p>
+                    <p>therefore {rightCandidate} was a spoiler for this election</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: `${newWinnerLane}_vs_${oldWinnerLane}`,
+                runoffStage: 'center_vs_left'
             }),
         ];
     }
 
-    const condorcetTransitions = ({electionTag, rcvWinner, condorcetWinner, loser}) => {
+    const condorcetTransitions = (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
             failureTag: FAILURE.condorcet,
         }
-        const rcvWinnerLane = candidateAsLane(simState, electionTag, rcvWinner);
-        const condorcetWinnerLane = candidateAsLane(simState, electionTag, condorcetWinner);
-        const loserLane = candidateAsLane(simState, electionTag, loser);
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
             new SimTransition({
                 ...def,
@@ -211,90 +226,68 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{rcvWinner} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff</p>
                 </>,
-                runoffStage: `${loserLane}_vs_${rcvWinnerLane}`,
+                runoffStage: 'right_vs_left'
             }),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but {condorcetWinner} would have beaten {rcvWinner} head-to-head</p>
+                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head</p>
                 </>,
-                runoffStage: `${condorcetWinnerLane}_vs_${rcvWinnerLane}`,
+                runoffStage: 'center_vs_left'
             }),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and {condorcetWinner} also beats {loser} head-to-head</p>
+                    <p>and {centerCandidate} also beats {rightCandidate} head-to-head</p>
                 </>,
-                runoffStage: `${condorcetWinnerLane}_vs_${loserLane}`,
+                runoffStage: 'center_vs_right'
             }),
             new SimTransition({
                 ...def,
-                visible: [Candidate, `${rcvWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${rcvWinnerLane}`],
-                focused: ['centerCandidate', `${condorcetWinnerLane}_beats_${loserLane}`, `${condorcetWinnerLane}_beats_${rcvWinnerLane}`],
+                visible: [Candidate, 'left_beats_right', 'center_beats_right', 'center_beats_left'],
+                focused: ['centerCandidate', 'center_beats_right', 'center_beats_left'],
                 explainer: <>,
-                    <p>So {condorcetWinner} is the actual Condorcet winner! and RCV failed to elect them</p>
+                    <p>So {centerCandidate} is the actual Condorcet winner! and RCV failed to elect them</p>
                 </>,
-                runoffStage: `${condorcetWinnerLane}_vs_${loserLane}`,
+                runoffStage: 'center_vs_right'
             }),
         ]
     }
 
-    const elections = {
-        'alaska-special-2022': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
-        },
-        'burlington-2009': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
-        },
-    };
-
     return [
         selectorTransition(),
-        introTransition('alaska-special-2022', 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
-        ...condorcetTransitions({
+        // Alaska Special Election
+        ...introTransition('alaska-special-2022', 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        ...condorcetTransitions('alaska-special-2022'),
+        ...spoilerTransitions('alaska-special-2022'),
+        ...majorityFailureTransitions({
             electionTag: 'alaska-special-2022',
-            rcvWinner: 'Peltola',
-            condorcetWinner: 'Begich',
-            loser: 'Palin',
-        }),
-        ...spoilerTransitions({
-            electionTag: 'alaska-special-2022',
-            spoilerCandidate: 'Palin',
-            oldWinner: 'Peltola',
-            newWinner: 'Begich',
-        }),
-        ...majorityFailure({
-            electionTag: 'alaska-special-2022',
-            first: 'Peltola',
-            second: 'Palin',
-            third: 'Begich',
             winnerVoteCount: 96,
             bulletVoteCount: 12
         }),
-        introTransition('burlington-2009', 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
-        ...condorcetTransitions({
+
+        // Burlington
+        ...introTransition('burlington-2009', 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...condorcetTransitions('burlington-2009'),
+        ...spoilerTransitions('burlington-2009'),
+        ...majorityFailureTransitions({
             electionTag: 'burlington-2009',
-            rcvWinner: 'Kiss',
-            condorcetWinner: 'Montroll',
-            loser: 'Wright',
-        }),
-        ...spoilerTransitions({
-            electionTag: 'burlington-2009',
-            spoilerCandidate: 'Wright',
-            oldWinner: 'Kiss',
-            newWinner: 'Montroll',
-        }),
-        ...majorityFailure({
-            electionTag: 'burlington-2009',
-            first: 'Kiss',
-            second: 'Wright',
-            third: 'Montroll',
             winnerVoteCount: 98,
             bulletVoteCount: 10
+        }),
+
+        // Minneapolis
+        ...introTransition('minneapolis-2021', 'Minneapolis 2021 Ward 2 City Council Election', [19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...condorcetTransitions('minneapolis-2021'),
+        ...spoilerTransitions('minneapolis-2021'),
+        ...majorityFailureTransitions({
+            electionTag: 'minneapolis-2021',
+            winnerVoteCount: 91,
+            bulletVoteCount: 19
         }),
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 

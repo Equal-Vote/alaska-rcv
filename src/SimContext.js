@@ -21,10 +21,12 @@ export function SimContextProvider({children}){
         let voterRadius = 28;
         let candidateRadius = 43;
         let candidateNames = {
-            'alaska-special-2022': ['begich', 'palin', 'peltola'],
-            'alaska-general-2022': ['begich', 'palin', 'peltola'],
-            'burlington-2009': ['montroll', 'wright', 'kiss'],
+            'alaska-special-2022': ['Begich', 'Palin', 'Peltola'],
+            'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
+            'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
+            'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
         };
+
         let ctx = {
             // embed (must be on top so that it's interactable)
             star_vs_rcv_embed: new VideoEmbed(100, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS'),
@@ -74,8 +76,10 @@ export function SimContextProvider({children}){
         }
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-special-2022',
-            selectorElection:params.get('selectorElection') ?? 'burlington-2009', selectorFailure:params.get('selectorFailure') ?? 'condorcet failure', candidateNames}
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default',
+            electionName: params.get('onlySelector') ? 'burlington-2009' : 'alaska-special-2022',
+            selectorElection: params.get('selectorElection') ?? 'burlington-2009',
+            selectorFailure: params.get('selectorFailure') ?? '<pick a failure type>', candidateNames}
 
         // must be after the { ... } since that breaks the reference
         ctx.transitions = transitions(ctx, setRefreshBool);

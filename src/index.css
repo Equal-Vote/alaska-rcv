@@ -1,12 +1,16 @@
 * {
   box-sizing: border-box;
-  --begich: #FFB612;
-  --palin: #F11E01;
-  --peltola: #C1E8F5;
+  --Begich: #FFB612;
+  --Palin: #F11E01;
+  --Peltola: #C1E8F5;
 
-  --montroll: #3333FF;
-  --wright: #E81B23;
-  --kiss: #C64C4B;
+  --Montroll: #3333FF;
+  --Wright: #E81B23;
+  --Kiss: #C64C4B;
+
+  --Gordon: #17AA5C;
+  --Arab: #5C068B;
+  --Worlobah: #ED8C3B;
 
   --pieGray: #222222;
   --voterGray: darkgray;
@@ -35,9 +39,6 @@ body, #root{
   width: 100%;
   height: 100%;
 }
-
-
-
 
 .simulation{
   position: relative;

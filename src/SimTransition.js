@@ -9,7 +9,8 @@ export class SimTransition {
         this.explainer = explainer;
         this.runoffStage = runoffStage;
         this.electionName = electionName;
-        if(!visible.includes(Candidate)) this.electionName = undefined;
+        // I can't pass electionName undefined without the default kicking in, so I pass it as a string
+        if(!visible.includes(Candidate) || electionName == 'undefined') this.electionName = undefined;
 
         this.electionTag = electionTag;
         this.failureTag = failureTag;
@@ -23,7 +24,9 @@ export class SimTransition {
         simState.visible = this.visible;
         simState.focused = this.focused;
         simState.runoffStage = this.runoffStage;
-        if(this.electionName != undefined) simState.electionName = this.electionName;
+        if(this.electionName != undefined){
+            simState.electionName = this.electionName;
+        }
     }
 
     revertMove(simState){

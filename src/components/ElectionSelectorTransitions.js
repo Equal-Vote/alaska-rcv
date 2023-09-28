@@ -9,6 +9,7 @@ import { VoterMovement } from "../VoterMovement";
 const FAILURE= {
     'unselected': '<pick a failure type>',
     'condorcet': 'condorcet failure',
+    'majority': 'majoritarian failure',
     'mono': 'monotonicity failure',
     'noshow': 'no show failure',
     'compromise': 'compromise failure',
@@ -26,9 +27,9 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     
     const selectorTransition = () => {
         return new SimTransition({
-            electionName: simState.selectorElection,
             visible: [Candidate, Voter, VoterCamp, Pie],
             runoffStage: 'default',
+            electionName: 'undefined',
             voterMovements: [
                 new VoterMovement(200, undefined, 'home'),
             ],
@@ -97,6 +98,56 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 new VoterMovement(camps[8], 'home', 'centerThenLeft'),
             ],
         })
+    }
+
+
+    const majorityFailure = ({electionTag, first, second, third, winnerVoteCount, bulletVoteCount}) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.majority,
+        }
+        const firstLane = candidateAsLane(simState, electionTag, first);
+        const secondLane = candidateAsLane(simState, electionTag, second);
+        const thirdLane = candidateAsLane(simState, electionTag, third);
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>{first} won in the final round, but then only had {winnerVoteCount}/200 of the vote (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: `${secondLane}_vs_${firstLane}`,
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>The outlets reported this as a majority because the {bulletVoteCount} bullet voters who voted for {third} weren't counted in the total</p>
+                    <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount}={Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: [`${thirdLane}Candidate`, `${thirdLane}Bullet`],
+                runoffStage: `${secondLane}_vs_${firstLane}`,
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                    Majoritarian failures differ from the other failures in that they're so prolific. Research was conduncted on all US RCV elections
+                    that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that RCV
+                    had a majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: `${secondLane}_vs_${firstLane}`,
+            }),
+        ];
     }
 
     const spoilerTransitions = ({electionTag, spoilerCandidate, oldWinner, newWinner}) => {
@@ -194,10 +245,10 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
 
     const elections = {
         'alaska-special-2022': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler],
+            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
         },
         'burlington-2009': {
-            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler],
+            'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
         },
     };
 
@@ -216,6 +267,14 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             oldWinner: 'Peltola',
             newWinner: 'Begich',
         }),
+        ...majorityFailure({
+            electionTag: 'alaska-special-2022',
+            first: 'Peltola',
+            second: 'Palin',
+            third: 'Begich',
+            winnerVoteCount: 96,
+            bulletVoteCount: 12
+        }),
         introTransition('burlington-2009', 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...condorcetTransitions({
             electionTag: 'burlington-2009',
@@ -228,6 +287,14 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             spoilerCandidate: 'Wright',
             oldWinner: 'Kiss',
             newWinner: 'Montroll',
+        }),
+        ...majorityFailure({
+            electionTag: 'burlington-2009',
+            first: 'Kiss',
+            second: 'Wright',
+            third: 'Montroll',
+            winnerVoteCount: 98,
+            bulletVoteCount: 10
         }),
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 

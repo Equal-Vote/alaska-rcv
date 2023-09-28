@@ -11,15 +11,23 @@ const FAILURE= {
     'condorcet': 'condorcet failure',
     'cycle': 'condorcet cycle',
     'majority': 'majoritarian failure',
-    'mono': 'monotonicity failure',
+    'upward_mono': 'upward monotonicity failure',
+    'downward_mono': 'downward monotonicity failure',
     'noshow': 'no show failure',
     'compromise': 'compromise failure',
     'spoiler': 'spoiler effect',
 };
 
+const ELECTIONS = {
+    alaska_special_2022: 'alaska-special-2022',
+    alaska_general_2022: 'alaska-general-2022',
+    burlington_2009: 'burlington-2009',
+    minneapolis_2021: 'minneapolis-2021',
+}
+
 const elections = {
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono],
     },
     'burlington-2009': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
@@ -205,6 +213,49 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         ];
     }
 
+    const upwardMonotonicityTransitions = (electionTag, monoMovement) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.upward_mono,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Upward Monotonicity Failure<br/><i>A scenario where the winning candidate could have gained more support and lost</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>but if {leftCandidate} gained {monoMovement.count} from {rightCandidate}</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: [monoMovement]
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then {leftCandidate} would have lost to {centerCandidate}</p>
+                </>,
+                runoffStage: 'center_vs_left'
+            })
+        ]
+    }
     const condorcetTransitions = (electionTag) => {
         let def = {
             electionName: electionTag,
@@ -261,31 +312,32 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     return [
         selectorTransition(),
         // Alaska Special Election
-        ...introTransition('alaska-special-2022', 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
-        ...condorcetTransitions('alaska-special-2022'),
-        ...spoilerTransitions('alaska-special-2022'),
+        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        ...condorcetTransitions(ELECTIONS.alaska_special_2022),
+        ...spoilerTransitions(ELECTIONS.alaska_special_2022),
         ...majorityFailureTransitions({
-            electionTag: 'alaska-special-2022',
+            electionTag: ELECTIONS.alaska_special_2022,
             winnerVoteCount: 96,
             bulletVoteCount: 12
         }),
+        ...upwardMonotonicityTransitions(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightBullet', 'leftBullet')),
 
         // Burlington
-        ...introTransition('burlington-2009', 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
-        ...condorcetTransitions('burlington-2009'),
-        ...spoilerTransitions('burlington-2009'),
+        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...condorcetTransitions(ELECTIONS.burlington_2009),
+        ...spoilerTransitions(ELECTIONS.burlington_2009),
         ...majorityFailureTransitions({
-            electionTag: 'burlington-2009',
+            electionTag: ELECTIONS.burlington_2009,
             winnerVoteCount: 98,
             bulletVoteCount: 10
         }),
 
         // Minneapolis
-        ...introTransition('minneapolis-2021', 'Minneapolis 2021 Ward 2 City Council Election', [19, 18, 20, 35, 17, 25, 11, 29, 26]),
-        ...condorcetTransitions('minneapolis-2021'),
-        ...spoilerTransitions('minneapolis-2021'),
+        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', [19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...condorcetTransitions(ELECTIONS.minneapolis_2021),
+        ...spoilerTransitions(ELECTIONS.minneapolis_2021),
         ...majorityFailureTransitions({
-            electionTag: 'minneapolis-2021',
+            electionTag: ELECTIONS.minneapolis_2021,
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),

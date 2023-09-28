@@ -23,8 +23,11 @@ const lanes = [
 const electionSelectorTransitions = (simState, setRefreshBool) => {
     const candidateAsLane = (simState, electionTag, candidate) => lanes[simState.candidateNames[electionTag].indexOf(candidate.toLowerCase())];
     const elections = {
-        'alaska-2022': {
+        'alaska-special-2022': {
             'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.mono, FAILURE.noshow, FAILURE.compromise],
+        },
+        'alaska-general-2022': {
+            'failures': [FAILURE.unselected],
         },
         'burlington-2009': {
             'failures': [FAILURE.unselected, FAILURE.condorcet],
@@ -159,9 +162,10 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 </div>
             </>
         }),
-        introTransition('alaska-2022', 'Alaska 2022 Senator Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        introTransition('alaska-general-2022', 'Alaska 2022 US Representative General Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        introTransition('alaska-special-2022', 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
         ...condorcetTransitions({
-            electionTag: 'alaska-2022',
+            electionTag: 'alaska-special-2022',
             rcvWinner: 'Peltola',
             condorcetWinner: 'Begich',
             loser: 'Palin',
@@ -174,7 +178,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             loser: 'Wright',
         }),
         new SimTransition({
-            explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p>
+            explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 
         })
     ]
 }

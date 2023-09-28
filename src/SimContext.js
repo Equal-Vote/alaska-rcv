@@ -21,7 +21,8 @@ export function SimContextProvider({children}){
         let voterRadius = 28;
         let candidateRadius = 43;
         let candidateNames = {
-            'alaska-2022': ['begich', 'palin', 'peltola'],
+            'alaska-special-2022': ['begich', 'palin', 'peltola'],
+            'alaska-general-2022': ['begich', 'palin', 'peltola'],
             'burlington-2009': ['montroll', 'wright', 'kiss'],
         };
         let ctx = {
@@ -73,7 +74,7 @@ export function SimContextProvider({children}){
         }
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)
-        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-2022',
+        ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default', electionName: 'alaska-special-2022',
             selectorElection:params.get('selectorElection') ?? 'burlington-2009', selectorFailure:params.get('selectorFailure') ?? 'condorcet failure', candidateNames}
 
         // must be after the { ... } since that breaks the reference

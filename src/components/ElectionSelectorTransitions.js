@@ -31,11 +31,14 @@ const elections = {
     'alaska-special-2022': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
     },
+    'alaska-general-2022': {
+        'failures': [FAILURE.unselected],
+    },
     'burlington-2009': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
     },
     'pierce-2008': {
         'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority],
@@ -320,7 +323,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {leftCandidate} would be eliminated in the first round and {rightCandidate} would win (by a fraction of a vote)</p>
+                    <p>Then {leftCandidate} would be eliminated in the first round and {rightCandidate} would win</p>
                 </>,
                 runoffStage: 'center_vs_right'
             })
@@ -372,7 +375,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {leftCandidate} would have lost to {centerCandidate}</p>
+                    <p>Then {leftCandidate} would have lost to {centerCandidate} in the runoff</p>
                 </>,
                 runoffStage: 'center_vs_left'
             })
@@ -502,6 +505,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
         ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
 
+        // Alaska General
+        ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative Special Election',
+            1318.4, [11, 33, 32, 17, 3, 6, 50, 42, 6]),
+
         // Burlington
         ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [
@@ -527,6 +534,18 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             bulletVoteCount: 19
         }),
         ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
+        ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
+        ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
+        new SimTransition({
+            electionName: ELECTIONS.san_francisco_2020,
+            electionTag: ELECTIONS.san_francisco_2020,
+            failureTag: FAILURE.downward_mono,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
+            </>,
+            runoffStage: 'center_vs_right'
+        }),
 
         // Pierce
         ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [14, 9, 19, 44, 19, 9, 14, 41, 31]),
@@ -541,8 +560,16 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
             178.1, [9, 12, 18, 31, 29, 22, 10, 31, 38]),
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
-
-
+        new SimTransition({
+            electionName: ELECTIONS.san_francisco_2020,
+            electionTag: ELECTIONS.san_francisco_2020,
+            failureTag: FAILURE.downward_mono,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>(It shows as a tie here because they only won by a fraction of a vote)</p>
+            </>,
+            runoffStage: 'center_vs_right'
+        }),
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 
         })

@@ -22,7 +22,11 @@ export class VoterMovement {
             simState.objects
                 .filter(o => o instanceof Voter)
                 .forEach(o => o.camp = undefined);
-            simState[from].refreshMembers();
+            if(from == 'anywhere'){
+                campIds.forEach(c => simState[c].refreshMembers());
+            }else if(from != undefined){
+                simState[from].refreshMembers();
+            }
             return;
         }
 

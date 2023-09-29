@@ -8,6 +8,7 @@ import Pie from './components/Pie';
 import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
+import { VoterMovement } from './VoterMovement';
 
 export const SimContext = createContext({});
 
@@ -17,6 +18,7 @@ export function SimContextProvider({children}){
     let simIndex = useRef(0);
 
     function initSimContext(){
+
         let countRadius = 14;
         let voterRadius = 28;
         let candidateRadius = 43;
@@ -25,6 +27,8 @@ export function SimContextProvider({children}){
             'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
             'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
             'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
+            'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
+            'san-francisco-2020': ['Engardio', 'Melgar', 'Nguyen']
         };
 
         let ctx = {
@@ -82,7 +86,10 @@ export function SimContextProvider({children}){
             selectorFailure: params.get('selectorFailure') ?? '<pick a failure type>', candidateNames}
 
         // must be after the { ... } since that breaks the reference
-        ctx.transitions = transitions(ctx, setRefreshBool);
+
+        ctx.transitions = transitions(ctx, setRefreshBool, () => {
+            updateSimIndex(i => i, true);
+        });
 
         ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });
 
@@ -95,13 +102,18 @@ export function SimContextProvider({children}){
         return ctx;
     }
 
-    const updateSimIndex = (nextIndex, startIndex=undefined) => {
-        let i = startIndex ?? simIndex.current;
+    const updateSimIndex = (nextIndex, fullReset=false) => {
+        let i = simIndex.current;
 
         if(typeof nextIndex !== 'number') nextIndex = nextIndex(i);
         if(nextIndex < 0) nextIndex = 0;
         if(nextIndex > simState.transitions.length-1) nextIndex = simState.transitions.length-1;
-        
+
+        // To be safe I starting from the beginning everytime
+        if(fullReset){
+            new VoterMovement(200, 'anywhere', undefined).apply(simState);
+            i = 0; 
+        }
 
         let prevI = i;
         while(i != nextIndex){
@@ -124,6 +136,7 @@ export function SimContextProvider({children}){
         simIndex.current = i;
     }
 
+
     const simIndexIsVisible = (index) => {
         let t = simState.transitions[index];
         return ( 
@@ -131,6 +144,7 @@ export function SimContextProvider({children}){
             (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
         );
     }
+
 
     const handleKeyPress = useCallback((event) => {
         // I'll worry about keyboard support later

@@ -23,6 +23,7 @@ const ELECTIONS = {
     alaska_general_2022: 'alaska-general-2022',
     burlington_2009: 'burlington-2009',
     minneapolis_2021: 'minneapolis-2021',
+    pierce_2008: 'pierce-2008',
 }
 
 const elections = {
@@ -35,8 +36,11 @@ const elections = {
     'minneapolis-2021': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
     },
+    'pierce-2008': {
+        'failures': [FAILURE.unselected, FAILURE.compromise],
+    }
 };
-const electionSelectorTransitions = (simState, setRefreshBool) => {
+const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
     
     const selectorTransition = () => {
         return new SimTransition({
@@ -55,6 +59,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                             simState.electionName=event.target.value;
                             simState.selectorElection=event.target.value;
                             simState.selectorFailure=FAILURE.unselected;
+                            refreshVoters();
                             document.querySelectorAll('.failureOption').forEach((elem) =>{
                                 let electionFailures = elections[simState.selectorElection].failures;
                                 elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
@@ -77,6 +82,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                         <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                             simState.selectorFailure=event.target.value;
                             document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
+                            refreshVoters();
                             setRefreshBool(b => !b);
                         }}>
                             {Object.entries(FAILURE).map(([key, failure], i) => {
@@ -183,7 +189,6 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             failureTag: FAILURE.spoiler,
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
-        console.log(electionTag, simState.candidateNames[electionTag]);
         return [
             new SimTransition({
                 ...def,
@@ -241,7 +246,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but if {leftCandidate} gained {movement.count} from {rightCandidate}</p>
+                    <p>but if {leftCandidate} gained {movement.count} voters from {rightCandidate}</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: [movement]
@@ -257,7 +262,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         ]
     }
 
-    const compromise = (electionTag, movement) => {
+    const compromise = (electionTag, movement, alternateRound='center_vs_left') => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -307,7 +312,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                     <p>Then {centerCandidate} would have won instead of {leftCandidate}</p>
                     <p>Therefore it was not safe for the "{rightCandidate} > {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario</p>
                 </>,
-                runoffStage: 'center_vs_left'
+                runoffStage: alternateRound
             })
         ]
     }
@@ -400,6 +405,10 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             bulletVoteCount: 19
         }),
         ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
+
+        // Pierce
+        ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [14, 9, 19, 44, 19, 9, 14, 41, 31]),
+        ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
 
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 

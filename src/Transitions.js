@@ -6,12 +6,12 @@ import VoterCamp from './components/VoterCamp';
 import Pie from './components/Pie';
 import electionSelectorTransitions from './components/ElectionSelectorTransitions';
 
-const transitions = (simState, setRefreshBool) => {
+const transitions = (simState, setRefreshBool, refreshVoters) => {
     if(new URLSearchParams(window.location.search).get('onlySelector')) return [
         new SimTransition({
             explainer: <div className='explainerTopPadding'/>,
         }),
-        ...electionSelectorTransitions(simState, setRefreshBool),
+        ...electionSelectorTransitions(simState, setRefreshBool, refreshVoters),
         new SimTransition({
             explainer: <div className='explainerBottomPadding'/>
         }),
@@ -362,7 +362,7 @@ const transitions = (simState, setRefreshBool) => {
                 <p>Instead we should look closer to alternatives such as Approval or STAR Voting</p> 
             </>,
         }),
-        ...electionSelectorTransitions(simState, setRefreshBool),
+        ...electionSelectorTransitions(simState, setRefreshBool, refreshVoters),
         new SimTransition({
             visible: [],
             electionName: 'burlington-2009', // keeping burlington for the fade animation

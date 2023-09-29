@@ -27,13 +27,13 @@ const ELECTIONS = {
 
 const elections = {
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
     },
     'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
     },
 };
 const electionSelectorTransitions = (simState, setRefreshBool) => {
@@ -91,9 +91,9 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         });
     }
 
-    const introTransition = (electionName, description, camps) => {
+    const introTransition = (electionName, description, ratio, camps) => {
         let intro = [new SimTransition({
-            explainer: <p>{description}</p>,
+            explainer: <p>{description}<pre>       * 1 voter = {ratio} real voters</pre></p>,
             electionName: electionName,
             electionTag: electionName,
             failureTag: undefined,
@@ -129,7 +129,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     }
 
 
-    const majorityFailureTransitions = ({electionTag, winnerVoteCount, bulletVoteCount}) => {
+    const majorityFailure= ({electionTag, winnerVoteCount, bulletVoteCount}) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -176,7 +176,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         ];
     }
 
-    const spoilerTransitions = (electionTag) => {
+    const spoiler= (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -213,7 +213,7 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
         ];
     }
 
-    const upwardMonotonicityTransitions = (electionTag, monoMovement) => {
+    const upwardMonotonicity= (electionTag, movement) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -241,10 +241,10 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but if {leftCandidate} gained {monoMovement.count} from {rightCandidate}</p>
+                    <p>but if {leftCandidate} gained {movement.count} from {rightCandidate}</p>
                 </>,
                 runoffStage: 'firstRound',
-                voterMovements: [monoMovement]
+                voterMovements: [movement]
             }),
             new SimTransition({
                 ...def,
@@ -256,7 +256,63 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
             })
         ]
     }
-    const condorcetTransitions = (electionTag) => {
+
+    const compromise = (electionTag, movement) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.compromise,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Compromise Voting Failure<br/><i>A scenario where a group of voters can elevate the rank of a 'compromise' candidate over their actual favorite to get a better result</i></p>
+
+                    <p>This is very familiar in choose one voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>(back to first round)</p>
+                </>,
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>but if {movement.count} "{rightCandidate} > {centerCandidate}" voters were to compromise and rank {centerCandidate} above {rightCandidate}...</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: [movement]
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then {centerCandidate} would have won instead of {leftCandidate}</p>
+                    <p>Therefore it was not safe for the "{rightCandidate} > {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario</p>
+                </>,
+                runoffStage: 'center_vs_left'
+            })
+        ]
+    }
+
+    const condorcet= (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -312,35 +368,39 @@ const electionSelectorTransitions = (simState, setRefreshBool) => {
     return [
         selectorTransition(),
         // Alaska Special Election
-        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', [12, 29, 36, 23, 4, 5, 25, 50, 16]),
-        ...condorcetTransitions(ELECTIONS.alaska_special_2022),
-        ...spoilerTransitions(ELECTIONS.alaska_special_2022),
-        ...majorityFailureTransitions({
+        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        ...condorcet(ELECTIONS.alaska_special_2022),
+        ...spoiler(ELECTIONS.alaska_special_2022),
+        ...majorityFailure({
             electionTag: ELECTIONS.alaska_special_2022,
             winnerVoteCount: 96,
             bulletVoteCount: 12
         }),
-        ...upwardMonotonicityTransitions(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightBullet', 'leftBullet')),
+        ...upwardMonotonicity(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightBullet', 'leftBullet')),
+        ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
 
         // Burlington
-        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', [10, 18, 34, 29, 11, 9, 13, 46, 30]),
-        ...condorcetTransitions(ELECTIONS.burlington_2009),
-        ...spoilerTransitions(ELECTIONS.burlington_2009),
-        ...majorityFailureTransitions({
+        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...condorcet(ELECTIONS.burlington_2009),
+        ...spoiler(ELECTIONS.burlington_2009),
+        ...majorityFailure({
             electionTag: ELECTIONS.burlington_2009,
             winnerVoteCount: 98,
             bulletVoteCount: 10
         }),
+        ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
 
         // Minneapolis
-        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', [19, 18, 20, 35, 17, 25, 11, 29, 26]),
-        ...condorcetTransitions(ELECTIONS.minneapolis_2021),
-        ...spoilerTransitions(ELECTIONS.minneapolis_2021),
-        ...majorityFailureTransitions({
+        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...condorcet(ELECTIONS.minneapolis_2021),
+        ...spoiler(ELECTIONS.minneapolis_2021),
+        ...majorityFailure({
             electionTag: ELECTIONS.minneapolis_2021,
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),
+        ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
+
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 
         })

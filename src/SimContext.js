@@ -77,7 +77,7 @@ export function SimContextProvider({children}){
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)
         ctx = {...ctx, objects, visible: [], focused: [], runoffStage: 'default',
-            electionName: params.get('onlySelector') ? 'burlington-2009' : 'alaska-special-2022',
+            electionName: params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
             selectorElection: params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? '<pick a failure type>', candidateNames}
 

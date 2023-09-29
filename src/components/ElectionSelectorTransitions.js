@@ -24,6 +24,7 @@ const ELECTIONS = {
     burlington_2009: 'burlington-2009',
     minneapolis_2021: 'minneapolis-2021',
     pierce_2008: 'pierce-2008',
+    san_francisco_2020: 'san-francisco-2020',
 }
 
 const elections = {
@@ -31,13 +32,16 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
     },
     'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise],
     },
     'pierce-2008': {
-        'failures': [FAILURE.unselected, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority],
+    },
+    'san-francisco-2020': {
+        'failures': [FAILURE.unselected, FAILURE.downward_mono],
     }
 };
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
@@ -134,7 +138,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         return intro;
     }
 
-
     const majorityFailure= ({electionTag, winnerVoteCount, bulletVoteCount}) => {
         let def = {
             electionName: electionTag,
@@ -218,7 +221,59 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ];
     }
 
-    const upwardMonotonicity= (electionTag, movement) => {
+    const downwardMonotonicity = (electionTag, movement) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.downward_mono,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>But if we restart the election</p>
+                </>,
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>And pretend {rightCandidate} lost {movement.count} voters to {centerCandidate}</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: [movement]
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then {leftCandidate} would be eliminated in the first round and {rightCandidate} would win (by a fraction of a vote)</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            })
+        ]
+    }
+
+    const upwardMonotonicity = (electionTag, movements) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -246,10 +301,18 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but if {leftCandidate} gained {movement.count} voters from {rightCandidate}</p>
+                    <p>But if we restart the election</p>
                 </>,
                 runoffStage: 'firstRound',
-                voterMovements: [movement]
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>And pretend {leftCandidate} gained {movements.reduce((p, m) => p + m.count, 0)} voters from {rightCandidate}</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: movements
             }),
             new SimTransition({
                 ...def,
@@ -292,7 +355,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>(back to first round)</p>
+                    <p>But if we restart the election</p>
                 </>,
                 runoffStage: 'firstRound',
             }),
@@ -300,7 +363,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but if {movement.count} "{rightCandidate} > {centerCandidate}" voters were to compromise and rank {centerCandidate} above {rightCandidate}...</p>
+                    <p>And pretend {movement.count} "{rightCandidate} > {centerCandidate}" voters were to compromise and rank {centerCandidate} above {rightCandidate}...</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: [movement]
@@ -381,11 +444,15 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 96,
             bulletVoteCount: 12
         }),
-        ...upwardMonotonicity(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightBullet', 'leftBullet')),
+        ...upwardMonotonicity(ELECTIONS.alaska_special_2022, [new VoterMovement(7, 'rightBullet', 'leftBullet')]),
         ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
 
         // Burlington
         ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...upwardMonotonicity(ELECTIONS.burlington_2009, [
+            new VoterMovement(11, 'rightBullet', 'leftBullet'),
+            new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
+        ]),
         ...condorcet(ELECTIONS.burlington_2009),
         ...spoiler(ELECTIONS.burlington_2009),
         ...majorityFailure({
@@ -409,6 +476,17 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         // Pierce
         ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
+        ...majorityFailure({
+            electionTag: ELECTIONS.pierce_2008,
+            winnerVoteCount: 95,
+            bulletVoteCount: 14
+        }),
+
+        // San Francisco
+        ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
+            178.1, [9, 12, 18, 31, 29, 22, 10, 31, 38]),
+        ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
+
 
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 

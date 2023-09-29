@@ -13,7 +13,7 @@ const FAILURE= {
     'majority': 'majoritarian failure',
     'upward_mono': 'upward monotonicity failure',
     'downward_mono': 'downward monotonicity failure',
-    'noshow': 'no show failure',
+    'no_show': 'no show failure',
     'compromise': 'compromise failure',
     'spoiler': 'spoiler effect',
 };
@@ -29,7 +29,7 @@ const ELECTIONS = {
 
 const elections = {
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
     },
     'burlington-2009': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
@@ -57,7 +57,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             explainer:  <>
                 <h1 style={{marginTop: 0, marginBottom: 0}}>Browse some other RCV case studies</h1>
                 {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
-                <div style={{marginTop: '50px'}}className='selectorPanel'>
+                <div className='selectorPanel'>
                     <div className='electionSelector'>
                         <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
                             simState.electionName=event.target.value;
@@ -73,8 +73,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                                 elem.value = simState.selectorFailure;
                             });
 
-                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
-
                             setRefreshBool(b => !b);
                         }}>
                             {Object.keys(elections).map((election ,i) => 
@@ -85,7 +83,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <div className='failureSelector'>
                         <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                             simState.selectorFailure=event.target.value;
-                            document.getElementById('shareLink').href = `${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`;
                             refreshVoters();
                             setRefreshBool(b => !b);
                         }}>
@@ -95,7 +92,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                             })}
                         </select>
                     </div>
-                    <a id="shareLink" href={`${window.location}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`}>Share Link</a>
+                    <button onClick={(event) => {
+                        let link = `${window.location.href.split('?')[0]}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`
+                        navigator.clipboard.writeText(link);
+                        event.target.textContent = 'Link Copied!'
+                        setTimeout(() => event.target.textContent = 'Copy Link', 800);
+                    }}>Copy Link</button>
                 </div>
             </>
         });
@@ -177,7 +179,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: <p>
                     Majoritarian failures differ from the other failures in that they're so prolific. Research was conduncted on all US RCV elections
                     that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that RCV
-                    had a majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
+                    had majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
                 </p>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left',
@@ -221,6 +223,58 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ];
     }
 
+    const noShow = (electionTag, movement) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.no_show,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Truncation Failure<br/><i>Scenario where a set of voters can get a better result by supporting fewer candidates (or "truncating" their ballot)</i></p>
+                    <p>No Show Failure<br/><i>The most extreme truncation failure where where a set of voters can get a better result by not voting at all (or fully "truncating" their ballot)</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>But if we restart the election</p>
+                </>,
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>And pretend that {movement.count} {rightCandidate} voters stayed home</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: [movement]
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then {leftCandidate} would be eliminated in the first round and {centerCandidate} would win</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            })
+        ]
+    }
     const downwardMonotonicity = (electionTag, movement) => {
         let def = {
             electionName: electionTag,
@@ -446,6 +500,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...upwardMonotonicity(ELECTIONS.alaska_special_2022, [new VoterMovement(7, 'rightBullet', 'leftBullet')]),
         ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
+        ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
 
         // Burlington
         ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [10, 18, 34, 29, 11, 9, 13, 46, 30]),

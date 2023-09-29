@@ -267,6 +267,12 @@ a, a:visited{
   flex-direction: row;
   justify-content: top;
   gap: 20px;
+  margin-top: 50px;
+  flex-wrap: wrap;
+}
+
+.selectorPanel button{
+  width: 120px;
 }
 
 .electionSelector, .failureSelctor{

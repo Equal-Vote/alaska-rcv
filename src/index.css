@@ -1,24 +1,24 @@
 * {
   box-sizing: border-box;
-  --Begich: #FFB612;
-  --Palin: #F11E01;
-  --Peltola: #C1E8F5;
+  --begich: #FFB612;
+  --palin: #F11E01;
+  --peltola: #C1E8F5;
 
-  --Montroll: #3333FF;
-  --Wright: #E81B23;
-  --Kiss: #C64C4B;
+  --montroll: #3333FF;
+  --wright: #E81B23;
+  --kiss: #C64C4B;
 
-  --Gordon: #17AA5C;
-  --Arab: #5C068B;
-  --Worlobah: #ED8C3B;
+  --gordon: #17AA5C;
+  --arab: #5C068B;
+  --worlobah: #ED8C3B;
 
-  --Bunney: purple;
-  --Goings: orange;
-  --McCarthy: cyan;
+  --bunney: purple;
+  --goings: orange;
+  --mccarthy: cyan;
 
-  --Engardio: #F8641A;
-  --Melgar: #B51E83;
-  --Nguyen: #00AAA4;
+  --engardio: #F8641A;
+  --melgar: #B51E83;
+  --nguyen: #00AAA4;
 
   --pieGray: #222222;
   --voterGray: darkgray;

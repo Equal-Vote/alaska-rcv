@@ -3,7 +3,7 @@ import GameObject from "./GameObject";
 class ImageObject extends GameObject{
     constructor(r, angle, size, url, backgroundSize='cover'){
         super('ImageObject', r, angle, size, undefined);
-        this.url = `alaska-rcv/images/${url}`;
+        this.url = `images/${url}`;
         this.backgroundSize = backgroundSize;
     }
 

@@ -58,7 +58,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 new VoterMovement(200, undefined, 'home'),
             ],
             explainer:  <>
-                <h1 style={{marginTop: 0, marginBottom: 0}}>RCV case studies</h1>
+                <h1 style={{marginTop: 0, marginBottom: 0}}>RCV Case Studies</h1>
                 {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
                 <div className='selectorPanel'>
                     <div className='electionSelector'>

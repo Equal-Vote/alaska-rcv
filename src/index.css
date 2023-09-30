@@ -319,7 +319,7 @@ a, a:visited{
     font-size: 1.3rem;
   }
 
-  .explainer h2, .explainer p, .explainer i {
+  .explainer h2, .explainer p, .explainer i, .explainer li {
     font-size: 1rem;
   }
 
@@ -331,5 +331,25 @@ a, a:visited{
   .explainerBottomPadding{
     height: 150px;
     min-height: 150px;
+  }
+
+  .app{
+    overflow: visible;
+    padding: 1vh;
+  }
+
+  * {
+    overflow-x: visible;
+  }
+
+  .selectorContainer{
+    border-radius: 20px;
+    width: 100%;
+    transform: revert;
+    padding: 0;
+  }
+
+  .explainerInner{
+    padding-left: 30px;
   }
 }

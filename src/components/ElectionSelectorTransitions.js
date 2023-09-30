@@ -272,7 +272,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {leftCandidate} would be eliminated in the first round and {centerCandidate} would win</p>
+                    <p>Then {rightCandidate} would be eliminated in the first round and {centerCandidate} would win</p>
                 </>,
                 runoffStage: 'center_vs_right'
             })
@@ -537,8 +537,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
         ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
         new SimTransition({
-            electionName: ELECTIONS.san_francisco_2020,
-            electionTag: ELECTIONS.san_francisco_2020,
+            electionName: ELECTIONS.minneapolis_2021,
+            electionTag: ELECTIONS.minneapolis_2021,
             failureTag: FAILURE.downward_mono,
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>

@@ -424,6 +424,115 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
+    const condorcetCycle = (electionTag) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.unselected,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>This election was particularly interesting because it had a condorcet cycle (it's super rare, this the only known election where this occurred)</p>
+                    <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+                    <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head</p>
+                </>,
+                runoffStage: 'center_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>and {rightCandidate} would have beaten {centerCandidate} head-to-head</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, 'left_beats_right', 'center_beats_left', 'right_beats_center'],
+                focused: ['centerCandidate', 'left_beats_right', 'center_beats_left', 'right_beats_center'],
+                explainer: <>,
+                    <p>So the head-to-head match ups form a cycle, and it's not clear who the ideal winner should be</p>
+                    <p>One could argue that cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking, but 
+                    this election isn't necessarily a failure of RCV. It's a super rare edge case that would be difficult for any voting method to handle</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            }),
+        ]
+    }
+
+    const condorcetSuccess = (electionTag) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.unselected,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>For this election RCV did successfully elect the condorcet winner  </p>
+                    <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>and {leftCandidate} would have also beaten {centerCandidate} head-to-head</p>
+                </>,
+                runoffStage: 'center_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>and looks like {centerCandidate} also beats {rightCandidate} head-to-head (but it's not relevant for this case)</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, 'left_beats_right', 'center_beats_right', 'left_beats_center'],
+                focused: ['centerCandidate', 'left_beats_center', 'left_beats_right'],
+                explainer: <>,
+                    <p>So {leftCandidate} is the Condorcet winner! and RCV was successful in this case</p>
+                </>,
+                runoffStage: 'center_vs_right'
+            }),
+        ]
+    }
+
     const condorcet= (electionTag) => {
         let def = {
             electionName: electionTag,
@@ -477,8 +586,21 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
+    const electionNote = (electionTag, failureTag, explainer) => {
+        // this doesn't need to be an array, but I figured this will keep the functions more consistent
+        return [new SimTransition({
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: failureTag,
+            explainer: explainer,
+            runoffStage: 'undefined',
+            visible: 'undefined',
+        })]
+    }
+
     return [
         selectorTransition(),
+
         // Alaska Special Election
         ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
         ...condorcet(ELECTIONS.alaska_special_2022),
@@ -493,8 +615,21 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
 
         // Alaska General
-        ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative Special Election',
+        ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
             1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6]),
+        ...condorcetSuccess(ELECTIONS.alaska_general_2022),
+        ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
+            <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed</p>
+            <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case</p>
+            <p>Instead voters shifted left across the board and Peltola was the true condorcet winner this time</p>
+            <p>There are 2 primary explanations for this <ul>
+                <li>The general election had much more voters, and voters in general elections tend to be more left leaning</li>
+                <li>Sarah Palin had the most name recognition going into the special election, and this likely created an electability bias in her favor.
+                    Going into the general Peltola was the incumbant, so this shifted the electability bias to her. This implies that one unrepresentative
+                    outcome can create a domino effect and give the that candidate an edge in future elections
+                </li>
+            </ul></p>
+        </>),
 
         // Burlington
         ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
@@ -513,8 +648,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // Minneapolis
         ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
-        ...condorcet(ELECTIONS.minneapolis_2021),
         ...spoiler(ELECTIONS.minneapolis_2021),
+        ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
+            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
+        ),
         ...majorityFailure({
             electionTag: ELECTIONS.minneapolis_2021,
             winnerVoteCount: 91,
@@ -523,16 +660,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
         ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
         ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
-        new SimTransition({
-            electionName: ELECTIONS.minneapolis_2021,
-            electionTag: ELECTIONS.minneapolis_2021,
-            failureTag: FAILURE.downward_mono,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-                <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
-            </>,
-            runoffStage: 'center_vs_right'
-        }),
+        ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.downward_mono,
+            <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
+        ),
+        ...condorcetCycle(ELECTIONS.minneapolis_2021),
 
         // Pierce
         ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
@@ -542,21 +673,26 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 95,
             bulletVoteCount: 14
         }),
+        ...condorcetSuccess(ELECTIONS.pierce_2008),
+        ...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
+            <p>Despite picking this correct winner, the compromise failure is still concerning because it shows that the result isn't stable,
+                and could potentially be vulnerable to strategic voting</p>
+        ),
 
         // San Francisco
         ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
             178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
-        new SimTransition({
-            electionName: ELECTIONS.san_francisco_2020,
-            electionTag: ELECTIONS.san_francisco_2020,
-            failureTag: FAILURE.downward_mono,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-                <p>(It shows as a tie here because they only won by a fraction of a vote)</p>
-            </>,
-            runoffStage: 'center_vs_right'
-        }),
+        ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
+            <p>(It shows as a tie here because they only won by a fraction of a vote)</p>
+        ),
+        ...condorcetSuccess(ELECTIONS.san_francisco_2020),
+        ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
+            <p>Despite picking this correct winner, the downward monotonicity failure is still concerning because it shows that the result isn't stable,
+                and could potentially be vulnerable to strategic voting</p>
+        ),
+
+        // foot note
         new SimTransition({
             explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 
         })

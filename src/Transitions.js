@@ -312,9 +312,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <h1>Claim #5: "Alaska was a very rare edge case"</h1>
             </>,
-            voterMovements: [
-                new VoterMovement(200, 'anywhere', 'home'),
-            ],
+            voterMovements: [],
             runoffStage: 'default',
         }),
         new SimTransition({

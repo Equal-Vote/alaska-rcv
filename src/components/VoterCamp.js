@@ -24,8 +24,12 @@ class VoterCamp extends GameObject{
         return `var(--${simState.candidateNames[simState.electionName][index].toLowerCase()})`;
     }
 
+    directMembersLocked(){
+        return this.directMembers.length >= 13 || this.directMembers.length == this.members.length
+    }
+
     update(simState){
-        if(this.directMembers.length >= 10 || this.directMembers.length == this.members.length){
+        if(this.directMembersLocked()){
             this.directMembers.forEach(o => {
                 o.vel = new Vector(0);
                 o.phyMass = -2;

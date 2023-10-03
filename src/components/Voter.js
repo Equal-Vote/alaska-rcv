@@ -20,7 +20,7 @@ class Voter extends GameObject{
             this.prevCamp = this.camp;
         }
         super.update();
-        if(this.camp != undefined && !this.isMember()){
+        if(this.camp != undefined && (!this.isMember() || (!this.isDirectMember() && !this.camp.directMembersLocked()))){
             // slowly inject chaos if we're stuck
             this.phyMass *= 1.01;
             this.grav *= 1.01;

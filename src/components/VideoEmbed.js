@@ -1,8 +1,8 @@
 import GameObject from "./GameObject";
 
 class VideoEmbed extends GameObject{
-    constructor(size, url){
-        super('VideoEmbed', 0, 0, size, undefined);
+    constructor(size, url, r=0, angle=0){
+        super('VideoEmbed', r, angle, size, undefined);
         this.size.y = this.size.x/1.77;
         this.url = url;
     }

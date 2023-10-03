@@ -5,6 +5,7 @@ import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
 import Pie from './components/Pie';
 import electionSelectorTransitions from './components/ElectionSelectorTransitions';
+import VideoEmbed from './components/VideoEmbed';
 
 const transitions = (simState, setRefreshBool, refreshVoters) => {
     if(new URLSearchParams(window.location.search).get('onlySelector')) return [
@@ -371,9 +372,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             runoffStage: 'firstRound',
         }),
         new SimTransition({
-            visible: ['star_vs_rcv_embed'],
+            visible: [VideoEmbed],
             explainer: <>
-                <p>Click the video to learn more about STAR!</p>
+                <p>Click the videos to learn more about STAR and Approval Voting!</p>
             </>,
             runoffStage: 'firstRound',
         }),

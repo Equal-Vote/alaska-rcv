@@ -117,7 +117,8 @@ export function SimContextProvider({children}){
 
         // To be safe I starting from the beginning everytime
         if(fullReset){
-            new VoterMovement(200, 'anywhere', undefined).apply(simState);
+            // we're not resetting to undefined because we trust that this is called in a scenario where we don't need it
+            //new VoterMovement(200, 'anywhere', undefined).apply(simState);
             i = 0; 
         }
 

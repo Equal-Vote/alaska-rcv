@@ -7,7 +7,7 @@ const campIds = [
 ];
 
 export class VoterMovement {
-    constructor(count, from, to) {
+    constructor(count, from=undefined, to=undefined) {
         // to undefined means starting position
         // from undefined means anywhere
         this.count = count;
@@ -17,6 +17,49 @@ export class VoterMovement {
     }
 
     move(n, from, to, simState) {
+        if(Array.isArray(n)){
+            n = [...n];
+
+            // first first release the camps that have excess
+            campIds.forEach((c, i) => {
+                let votersInCamp = simState.objects
+                    .filter(o => o instanceof Voter)
+                    .filter(o => o.camp == simState[c])
+                    .sort((l, r) => {
+                        let dist = (o) => o.pos.subtract(simState.home.pos).magnitude();
+                        return dist(l) - dist(r); // furthest first
+                    });
+
+                let diff = votersInCamp.length - n[i];
+                
+                if(diff > 0){
+                    votersInCamp
+                        .filter((o, i) => i < diff)
+                        .forEach(o => {
+                            o.camp = simState.home;
+                            o.phyMass = 1;
+                        });
+                }
+                if(diff >= 0){
+                    n[i] = 0;
+                }else{
+                    n[i] = -diff;
+                }
+            })
+
+            // move all undefineds to home
+            new VoterMovement(200, undefined, 'home').apply(simState);
+
+            // then have everything else grab from home
+            campIds.forEach((c, i) => {
+                if(n[i] == 0) return;
+                new VoterMovement(n[i], 'home', c).apply(simState);
+            })
+
+            campIds.forEach(c => simState[c].refreshMembers());
+            return;
+        }
+
         // adding undefined made this messy :'(
         if(to == undefined){
             simState.objects
@@ -29,7 +72,7 @@ export class VoterMovement {
             }
             return;
         }
-
+        
         simState.objects
             .filter(o => o instanceof Voter)
             .filter(o => {

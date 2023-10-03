@@ -25,7 +25,7 @@ class VoterCamp extends GameObject{
     }
 
     update(simState){
-        if(this.directMembers.length >= 12 || this.directMembers.length == this.members.length){
+        if(this.directMembers.length >= 11 || this.directMembers.length == this.members.length){
             this.directMembers.forEach(o => {
                 o.vel = new Vector(0);
                 o.phyMass = -2;

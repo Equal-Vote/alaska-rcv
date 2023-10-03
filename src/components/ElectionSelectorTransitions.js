@@ -51,12 +51,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
     
     const selectorTransition = () => {
         return new SimTransition({
-            visible: [Candidate, Voter, VoterCamp, Pie],
+            visible: [Candidate, Pie],
             runoffStage: 'default',
             electionName: 'undefined',
-            voterMovements: [
-                new VoterMovement(200, undefined, 'home'),
-            ],
             explainer:  <>
                 <h1 style={{marginTop: 0, marginBottom: 0}}>RCV Case Studies</h1>
                 {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
@@ -114,17 +111,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             failureTag: undefined,
             visible: [Candidate, Voter, VoterCamp, Pie],
             runoffStage: 'firstRound',
-            voterMovements: [
-                new VoterMovement(camps[0], 'home', 'centerBullet'),
-                new VoterMovement(camps[1], 'home', 'centerThenRight'),
-                new VoterMovement(camps[2], 'home', 'rightThenCenter'),
-                new VoterMovement(camps[3], 'home', 'rightBullet'),
-                new VoterMovement(camps[4], 'home', 'rightThenLeft'),
-                new VoterMovement(camps[5], 'home', 'leftThenRight'),
-                new VoterMovement(camps[6], 'home', 'leftBullet'),
-                new VoterMovement(camps[7], 'home', 'leftThenCenter'),
-                new VoterMovement(camps[8], 'home', 'centerThenLeft'),
-            ] 
+            voterMovements: [ new VoterMovement(camps) ] 
         })];
 
         if(elections[electionName].failures.length > 1){
@@ -493,7 +480,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
     return [
         selectorTransition(),
         // Alaska Special Election
-        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
         ...condorcet(ELECTIONS.alaska_special_2022),
         ...spoiler(ELECTIONS.alaska_special_2022),
         ...majorityFailure({
@@ -507,10 +494,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // Alaska General
         ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative Special Election',
-            1318.4, [11, 33, 32, 17, 3, 6, 50, 42, 6]),
+            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6]),
 
         // Burlington
-        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [
             new VoterMovement(11, 'rightBullet', 'leftBullet'),
             new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
@@ -525,7 +512,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
 
         // Minneapolis
-        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
         ...condorcet(ELECTIONS.minneapolis_2021),
         ...spoiler(ELECTIONS.minneapolis_2021),
         ...majorityFailure({
@@ -548,7 +535,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
 
         // Pierce
-        ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [14, 9, 19, 44, 19, 9, 14, 41, 31]),
+        ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
         ...majorityFailure({
             electionTag: ELECTIONS.pierce_2008,
@@ -558,7 +545,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // San Francisco
         ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
-            178.1, [9, 12, 18, 31, 29, 22, 10, 31, 38]),
+            178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
         new SimTransition({
             electionName: ELECTIONS.san_francisco_2020,

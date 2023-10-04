@@ -25,6 +25,33 @@ const ELECTIONS = {
     minneapolis_2021: 'minneapolis-2021',
     pierce_2008: 'pierce-2008',
     san_francisco_2020: 'san-francisco-2020',
+
+    // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
+    // https://youtu.be/2aNdceVMyrM?t=162
+
+    // Other Compromise failures, https://arxiv.org/pdf/2301.12075.pdf
+    // Oakland 2010
+    // Berkley 2016
+    // Minneapolis 2017
+
+    // Other monotonicity failures, https://starvoting.slack.com/archives/C9U6425CM/p1695006449951199?thread_ts=1695005666.307199&cid=C9U6425CM
+    // Aspen, Colorado
+    // Moab, Utah
+
+    // Repeals mentioned here, https://alaskapolicyforum.org/wp-content/uploads/2020-10-APF-Ranked-Choice-Voting-Report.pdf
+    // Burlington, Vermont
+        // reason: because incumbant won with only 29% of the first place votes?
+    // Aspen, Colorado
+        // reason: results are same as plurality, but lack of precint summabilility caused delays in the results
+    // Pierce County, WA
+        // reason: voters opinion shifted massively, presumably because it was complicated to vote in?
+    // Ann Arbor Michigan
+        // reason: RCV created unity between democrats and 3rd party, so republicans repealed it
+    // State of North Carolina
+        // reason: repealed via a bill because voters found it difficult?
+
+    // Google slides case studies; https://docs.google.com/presentation/d/1G40n79tcUPdVkZWr-tNXSz7q9ddbwOUw4Ev0G_jKq6I/edit#slide=id.g1e29c24f2cf_0_7
+    // There's a bunch more examples there, I'll need to research them
 }
 
 const elections = {
@@ -469,10 +496,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 visible: [Candidate, 'left_beats_right', 'center_beats_left', 'right_beats_center'],
-                focused: ['centerCandidate', 'left_beats_right', 'center_beats_left', 'right_beats_center'],
                 explainer: <>,
                     <p>So the head-to-head match ups form a cycle, and it's not clear who the ideal winner should be</p>
-                    <p>One could argue that cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking, but 
+                    <p>One could argue that a cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking, but 
                     this election isn't necessarily a failure of RCV. It's a super rare edge case that would be difficult for any voting method to handle</p>
                 </>,
                 runoffStage: 'center_vs_right'

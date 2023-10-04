@@ -320,7 +320,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['usFailures'],
             explainer: <>
                 <p>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen these failures 4 times</p>
-                <p>However this is a biased sample. RCV operates well when there's only 2 competitive elections and the US is largely still a 2 party system.</p>
+                <p>However this is a biased sample. RCV operates well when there's only 2 competitive candidates and the US is largely still a 2 party system.</p>
                 <p>So most of our elections don't have a competitive 3rd candidate</p>
             </>,
         }),

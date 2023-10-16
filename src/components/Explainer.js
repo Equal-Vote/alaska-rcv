@@ -22,7 +22,6 @@ const Explainer = () => {
     }, {start: undefined, size: 0})
     selectorRange.end = selectorRange.start+selectorRange.size;
     selectorRange.start--; // include the selector panel
-    selectorRange.end++; // include the research link
 
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();

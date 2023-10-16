@@ -8,15 +8,15 @@ import { VoterMovement } from "../VoterMovement";
 
 const FAILURE= {
     'unselected': '<pick a failure type>',
-    'condorcet': 'condorcet failure',
-    'cycle': 'condorcet cycle',
-    'majority': 'majoritarian failure',
-    'upward_mono': 'upward monotonicity failure',
-    'downward_mono': 'downward monotonicity failure',
-    'no_show': 'no show failure',
-    'compromise': 'compromise failure',
-    'spoiler': 'spoiler effect',
-    'tally': 'tally error',
+    'condorcet': 'Condorcet Failure',
+    'cycle': 'Condorcet Cycle',
+    'majority': 'Majoritarian Failure',
+    'upward_mono': 'Upward Monotonicity Failure',
+    'downward_mono': 'Downward Monotonicity Failure',
+    'no_show': 'No Show Failure',
+    'compromise': 'Compromise Failure',
+    'spoiler': 'Spoiler Effect',
+    'tally': 'Tally Error',
 };
 
 const ELECTIONS = {
@@ -28,6 +28,7 @@ const ELECTIONS = {
     san_francisco_2020: 'san-francisco-2020',
     alameda_2022: 'alameda-2022',
     moab_2021: 'moab-2021',
+    nyc_2021: 'nyc-2021',
 
     // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
     // https://youtu.be/2aNdceVMyrM?t=162
@@ -59,29 +60,32 @@ const ELECTIONS = {
 }
 
 const elections = {
+    'pierce-2008': {
+        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority],
+    },
+    'burlington-2009': {
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
+    },
+    'san-francisco-2020': {
+        'failures': [FAILURE.unselected, FAILURE.downward_mono],
+    },
+    'minneapolis-2021': {
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
+    },
+    'moab-2021': {
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show],
+    },
+    'nyc-2021': {
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority],
+    },
+    'alameda-2022': {
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
+    },
     'alaska-special-2022': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
     },
     'alaska-general-2022': {
         'failures': [FAILURE.unselected],
-    },
-    'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
-    },
-    'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
-    },
-    'pierce-2008': {
-        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority],
-    },
-    'san-francisco-2020': {
-        'failures': [FAILURE.unselected, FAILURE.downward_mono],
-    },
-    'alameda-2022': {
-        'failures': [FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
-    },
-    'moab-2021': {
-        'failures': [FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show],
     },
 };
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
@@ -516,6 +520,40 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
+    const nycTallyError = () => {
+        let def = {
+            electionName: ELECTIONS.nyc_2021,
+            electionTag: ELECTIONS.nyc_2021,
+            failureTag: FAILURE.tally,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[ELECTIONS.nyc_2021];
+
+
+        return [
+            new SimTransition({
+                ...def,
+                explainer: 
+                <>
+                    <p>
+                        This election had an issue where 135,000 test ballots were accidentally included in the final tally (the equivalent of 31 simulated voters ) when they originally reported the results.
+                        NYC had to issue an apology and do a recount <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>Full Story</a>
+                    </p>,
+                    <p>(unfortunately we don't have the data to show the effect in the simulation)</p>
+                    <p>To be clear this was just human error and there was no evidence of election interference here.</p>
+                    <p>However this still highlights a problem with RCV in that it's hard to audit.
+                        Unlike other methods RCV needs to be tallied centrally. Under Choose-one, Approval, and STAR each juristiction can count the results decentrally, so
+                        it's easier to check your work as you go and catch errors like this.
+                    </p>
+                    <p>
+                        The test ballots being included is only half the problem, the other half is that the election board was unable to discover the issue themselves before releasing the results
+                    </p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+        ]
+    }
+
     const alamedaTallyError = () => {
         let def = {
             electionName: ELECTIONS.alameda_2022,
@@ -772,6 +810,20 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 </li>
             </ul></p>
         </>),
+
+        // NYC
+        ...introTransition(ELECTIONS.nyc_2021, 'New York City 2021 Democratic Mayor Election',
+            4355.9, [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
+            'Harvard Data Verse',
+            'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
+        ),
+        ...majorityFailure({
+            electionTag: ELECTIONS.nyc_2021,
+            winnerVoteCount: 92,
+            bulletVoteCount: 17
+        }),
+        ...condorcetSuccess(ELECTIONS.nyc_2021),
+        ...nycTallyError(ELECTIONS.nyc_2021),
 
         // Burlington
         ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),

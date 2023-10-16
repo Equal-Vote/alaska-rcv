@@ -78,7 +78,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
     },
     'alameda-2022': {
-        'failures': [FAILURE.tally, FAILURE.spoiler, FAILURE.majority],
+        'failures': [FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
     }
 };
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
@@ -137,9 +137,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const introTransition = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075') => {
+    const introTransition = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
         let intro = [new SimTransition({
-            explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li></ul></p>,
+            explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
             electionName: electionName,
             electionTag: electionName,
             failureTag: undefined,
@@ -577,6 +577,15 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             }),
             new SimTransition({
                 ...def,
+                explainer: <>
+                    <p>then Manigo get's elimated in the first round, and Hutchinson is now the winner</p>
+                    <p>The other concerning thing is that this bug existed for all of the elections in Alameda County. This just happened to be the only election that was close enough for the result to change</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'right_vs_left',
+            }),
+            new SimTransition({
+                ...def,
                 explainer: <p>
                     then Manigo get's elimated in the first round, and Hutchinson is now the winner
                 </p>,
@@ -792,13 +801,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...introTransition(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
             'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
             'https://arxiv.org/abs/2303.05985',
+            <li>NOTE: The Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</li>
         ),
         ...spoiler(ELECTIONS.alameda_2022),
         ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler,
-            <>
             <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
-            <p>(also it shows as a tie for the head-to-head matchup between Hutchinson and Manigo because Manigo only won by a fraction of a vote)</p>
-            </>
         ),
         ...majorityFailure({
             electionTag: ELECTIONS.alameda_2022,
@@ -806,16 +813,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             bulletVoteCount: 14
         }),
         ...alamedaTallyError(),
-        //...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
-        //...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
-        //...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
-        //...electionNote(ELECTIONS.minneapolis_2021, FAILURE.downward_mono,
-        //    <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
-        //),
+        ...downwardMonotonicity(ELECTIONS.alameda_2022, new VoterMovement(1, 'rightThenCenter', 'centerThenRight')),
+        ...upwardMonotonicity(ELECTIONS.alameda_2022, [new VoterMovement(16, 'rightThenLeft', 'leftThenRight')]),
+        ...compromise(ELECTIONS.alameda_2022, new VoterMovement(13, 'rightThenCenter', 'centerThenRight')),
         ...condorcetCycle(ELECTIONS.alameda_2022),
-        ...electionNote(ELECTIONS.alameda_2022, FAILURE.unselected,
-            <p>(It shows as a tie for the head-to-head matchup between Hutchinson and Manigo because they only won by a fraction of a vote)</p>
-        ),
 
         // Pierce
         ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),

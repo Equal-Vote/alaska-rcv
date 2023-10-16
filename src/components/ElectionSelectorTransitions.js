@@ -27,11 +27,12 @@ const ELECTIONS = {
     pierce_2008: 'pierce-2008',
     san_francisco_2020: 'san-francisco-2020',
     alameda_2022: 'alameda-2022',
+    moab_2021: 'moab-2021',
 
     // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
     // https://youtu.be/2aNdceVMyrM?t=162
 
-    // Maine TIE scenario
+    // Maine TIE scenario https://arxiv.org/pdf/2303.05985.pdf
 
     // Other Compromise failures, https://arxiv.org/pdf/2301.12075.pdf
     // Oakland 2010
@@ -40,7 +41,6 @@ const ELECTIONS = {
 
     // Other monotonicity failures, https://starvoting.slack.com/archives/C9U6425CM/p1695006449951199?thread_ts=1695005666.307199&cid=C9U6425CM
     // Aspen, Colorado
-    // Moab, Utah
 
     // Repeals mentioned here, https://alaskapolicyforum.org/wp-content/uploads/2020-10-APF-Ranked-Choice-Voting-Report.pdf
     // Burlington, Vermont
@@ -79,7 +79,10 @@ const elections = {
     },
     'alameda-2022': {
         'failures': [FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
-    }
+    },
+    'moab-2021': {
+        'failures': [FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show],
+    },
 };
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
     
@@ -295,7 +298,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: <>
                     <p>Then {rightCandidate} would be eliminated in the first round and {centerCandidate} would win</p>
                 </>,
-                runoffStage: 'center_vs_right'
+                runoffStage: 'center_vs_left'
             })
         ]
     }
@@ -796,6 +799,21 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),
+
+        // Moab
+        ...introTransition(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+            'Analysis of the 2021 Instant Run-Off Elections in Utah',
+            'https://vixra.org/abs/2208.0166',
+            <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
+                The first round failed to elect the condorcet winner, but they were still elected in the second round so the error didn't have any impact
+            </li>
+        ),
+        ...condorcet(ELECTIONS.moab_2021),
+        ...spoiler(ELECTIONS.moab_2021),
+        ...upwardMonotonicity(ELECTIONS.moab_2021, [
+            new VoterMovement(3, 'rightThenLeft', 'leftThenRight')
+        ]),
+        ...noShow(ELECTIONS.moab_2021, new VoterMovement(3, 'rightThenCenter', 'home')),
 
         // Alameda
         ...introTransition(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],

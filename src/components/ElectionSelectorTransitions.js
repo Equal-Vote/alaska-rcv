@@ -853,6 +853,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),
+        ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),        
+        ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]), 
+        ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
         ...condorcetCycle(ELECTIONS.minneapolis_2021),
 
         // Moab

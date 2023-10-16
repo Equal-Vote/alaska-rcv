@@ -42,6 +42,8 @@ const ELECTIONS = {
 
     // Other monotonicity failures, https://starvoting.slack.com/archives/C9U6425CM/p1695006449951199?thread_ts=1695005666.307199&cid=C9U6425CM
     // Aspen, Colorado
+        // https://rangevoting.org/TallyCorrectedTB.pdf (tally error)
+        // https://rangevoting.org/Aspen09.html
 
     // Repeals mentioned here, https://alaskapolicyforum.org/wp-content/uploads/2020-10-APF-Ranked-Choice-Voting-Report.pdf
     // Burlington, Vermont
@@ -851,6 +853,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),
+        ...condorcetCycle(ELECTIONS.minneapolis_2021),
 
         // Moab
         ...introTransition(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],

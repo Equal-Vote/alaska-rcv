@@ -28,7 +28,8 @@ export function SimContextProvider({children}){
             'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
             'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
             'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
-            'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar']
+            'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar'],
+            'alameda-2022': ['Manigo', 'Resnick', 'Hutchinson'],
         };
 
         let ctx = {

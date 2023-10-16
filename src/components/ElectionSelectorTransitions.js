@@ -16,6 +16,7 @@ const FAILURE= {
     'no_show': 'no show failure',
     'compromise': 'compromise failure',
     'spoiler': 'spoiler effect',
+    'tally': 'tally error',
 };
 
 const ELECTIONS = {
@@ -25,9 +26,12 @@ const ELECTIONS = {
     minneapolis_2021: 'minneapolis-2021',
     pierce_2008: 'pierce-2008',
     san_francisco_2020: 'san-francisco-2020',
+    alameda_2022: 'alameda-2022',
 
     // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
     // https://youtu.be/2aNdceVMyrM?t=162
+
+    // Maine TIE scenario
 
     // Other Compromise failures, https://arxiv.org/pdf/2301.12075.pdf
     // Oakland 2010
@@ -72,6 +76,9 @@ const elections = {
     },
     'san-francisco-2020': {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
+    },
+    'alameda-2022': {
+        'failures': [FAILURE.tally, FAILURE.spoiler, FAILURE.majority],
     }
 };
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
@@ -130,9 +137,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const introTransition = (electionName, description, ratio, camps) => {
+    const introTransition = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075') => {
         let intro = [new SimTransition({
-            explainer: <p>{description}<pre>       * 1 voter = {ratio} real voters</pre></p>,
+            explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li></ul></p>,
             electionName: electionName,
             electionTag: electionName,
             failureTag: undefined,
@@ -176,7 +183,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{leftCandidate} won in the final round, but then only had {winnerVoteCount}/200 of the vote (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
+                    <p>{leftCandidate} won in the final round, but then only had {winnerVoteCount}/200 votes (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left',
@@ -462,7 +469,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>This election was particularly interesting because it had a condorcet cycle (it's super rare, this the only known election where this occurred)</p>
+                    <p>This election was particularly interesting because it had a condorcet cycle (it's super rare, there are only 2 documented cases in the US)</p>
                     <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
                     <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
                 </>,
@@ -502,6 +509,97 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     this election isn't necessarily a failure of RCV. It's a super rare edge case that would be difficult for any voting method to handle</p>
                 </>,
                 runoffStage: 'center_vs_right'
+            }),
+        ]
+    }
+
+    const alamedaTallyError = () => {
+        let def = {
+            electionName: ELECTIONS.alameda_2022,
+            electionTag: ELECTIONS.alameda_2022,
+            failureTag: FAILURE.tally,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[ELECTIONS.alameda_2022];
+        return [
+            new SimTransition({
+                ...def,
+                explainer: 
+                <>
+                    <p>
+                        This election had a bug in their software, so the election originally called for Resnick instead of Hutchinson, and 
+                        the issue wasn't caught until multiple months after Resnick took office. 
+                    </p>,
+                    <p>
+                        The bug was specifically related to ballots that either skipped their first ranking, or specified a write-in for their ranking.
+                        When tallying the top 3 candidates, these votes should have been transferred to their next choice, but they weren't and a disproportionate number of the voters who misfilled their rankings were Hutchinson voters.
+                    </p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                     We can simulate how the ballots were counted by removing 1 of the Hutchinson voters from the tally
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+                voterMovements: [
+                    new VoterMovement(1, 'leftBullet', 'home')
+                ]
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                    This causes Hutchinson to be eliminated first (by a fraction of a vote), and then Resnick won in the final round
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'center_vs_right',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                    But if we start over...
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                    and include all the ballots in the count
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+                voterMovements: [
+                    new VoterMovement(1, 'home', 'leftBullet')
+                ]
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <p>
+                    then Manigo get's elimated in the first round, and Hutchinson is now the winner
+                </p>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'right_vs_left',
+            }),
+            new SimTransition({
+                ...def,
+                explainer: 
+                <>
+                    <p>To be clear, this was a accidental bug, due to human error and there was no evidence of election interference here.</p>
+                    <p>However this still tells us a few things about RCV
+                    <ol>
+                        <li><u>RCV is Complicated</u>: There are a lot of edge cases to consider, so it's easy to make an oversight when implementing the algorithm</li>
+                        <li><u>RCV is Unstable</u>: If the first choice tallies are close, then minor adjustments to the vote can change the elimination order and have a major impact to the result
+                            (whereas Approval and STAR count all the rankings so we'd expect them to be more stable)</li>
+                        <li><u>RCV is hard to audit</u>: Unlike other methods RCV needs to be tallied centrally. Under Choose-one, Approval, and STAR each juristiction can count the results decentrally, so
+                            it's easier to check your work as you go and catch errors like this. The fact that the software bug existed is only half the problem, the other half is that it took months for us to figure it out</li>
+                    </ol>
+                    </p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'right_vs_left',
             }),
         ]
     }
@@ -628,7 +726,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         selectorTransition(),
 
         // Alaska Special Election
-        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
+        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
+            'A Mathematical Analysis of the 2022 Alaska Special Election for US House',
+            'https://arxiv.org/abs/2209.04764'
+        ),
         ...condorcet(ELECTIONS.alaska_special_2022),
         ...spoiler(ELECTIONS.alaska_special_2022),
         ...majorityFailure({
@@ -642,7 +743,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // Alaska General
         ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
-            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6]),
+            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
+            'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
+            'https://arxiv.org/abs/2303.00108',
+        ),
         ...condorcetSuccess(ELECTIONS.alaska_general_2022),
         ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
             <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed</p>
@@ -683,13 +787,35 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             winnerVoteCount: 91,
             bulletVoteCount: 19
         }),
-        ...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
-        ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
-        ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
-        ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.downward_mono,
-            <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
+
+        // Alameda
+        ...introTransition(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
+            'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
+            'https://arxiv.org/abs/2303.05985',
         ),
-        ...condorcetCycle(ELECTIONS.minneapolis_2021),
+        ...spoiler(ELECTIONS.alameda_2022),
+        ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler,
+            <>
+            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
+            <p>(also it shows as a tie for the head-to-head matchup between Hutchinson and Manigo because Manigo only won by a fraction of a vote)</p>
+            </>
+        ),
+        ...majorityFailure({
+            electionTag: ELECTIONS.alameda_2022,
+            winnerVoteCount: 95,
+            bulletVoteCount: 14
+        }),
+        ...alamedaTallyError(),
+        //...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),
+        //...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]),
+        //...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
+        //...electionNote(ELECTIONS.minneapolis_2021, FAILURE.downward_mono,
+        //    <p>(It shows as a tie in the first round because they only won by a fraction of a vote)</p>
+        //),
+        ...condorcetCycle(ELECTIONS.alameda_2022),
+        ...electionNote(ELECTIONS.alameda_2022, FAILURE.unselected,
+            <p>(It shows as a tie for the head-to-head matchup between Hutchinson and Manigo because they only won by a fraction of a vote)</p>
+        ),
 
         // Pierce
         ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
@@ -717,11 +843,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>Despite picking this correct winner, the downward monotonicity failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
-
-        // foot note
-        new SimTransition({
-            explainer: <p>Read the full study <a href="https://arxiv.org/pdf/2301.12075.pdf">here</a></p> 
-        })
     ]
 }
 

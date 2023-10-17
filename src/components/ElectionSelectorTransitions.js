@@ -9,7 +9,6 @@ import { VoterMovement } from "../VoterMovement";
 const FAILURE= {
     'unselected': '<pick a failure type>',
     'condorcet': 'Condorcet Failure',
-    'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
     'upward_mono': 'Upward Monotonicity Failure',
     'downward_mono': 'Downward Monotonicity Failure',
@@ -111,7 +110,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 simState.selectorFailure=FAILURE.unselected;
 
                 let electionFailures = elections[simState.selectorElection].failures;
-
                 document.querySelectorAll('.failureOption').forEach((elem) =>{
                     elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
                 });
@@ -210,18 +208,26 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                             <select className='electionSelect' name="election" defaultValue={simState.selectorElection} onChange={(event) => {
                                 switchElection(event.target.value);
                             }}>
-                                {Object.values(ELECTIONS).map((election ,i) => 
-                                    <option className='electionOption' key={i}>{election}</option>
-                                )}
+                                {Object.entries(ELECTIONS).map(([key, election], i) => {
+                                    const url = new URLSearchParams(window.location.search);
+                                    let visible = url.get('primarySelector')=='failure'?
+                                        election == ELECTIONS.unselected || elections[election].failures.includes(simState.selectorFailure) :
+                                        election != ELECTIONS.unselected;
+                                    return <option className='electionOption' key={i} style={{display: visible? 'block' : 'none'}}>{election}</option>
+                                })}
                             </select>
                         </div>
                         <div className='failureSelector'>
                             <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                                 switchFailure(event.target.value);
                             }}>
+
                                 {Object.entries(FAILURE).map(([key, failure], i) => {
-                                    let electionFailures = simState.selectorElection == ELECTIONS.unselected? Object.values(FAILURE) : elections[simState.selectorElection].failures;
-                                    return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
+                                    const url = new URLSearchParams(window.location.search);
+                                    let visible = url.get('primarySelector')=='failure'?
+                                        failure != FAILURE.unselected :
+                                        elections[simState.selectorElection].failures.includes(failure);
+                                    return <option className='failureOption' key={i} style={{display: visible? 'block' : 'none'}}>{failure}</option>
                                 })}
                             </select>
                         </div>
@@ -231,7 +237,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const introTransition = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
+    const electionInfo = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
         let intro = [new SimTransition({
             explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
             electionName: electionName,
@@ -252,6 +258,33 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 failureTag: FAILURE.unselected,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound',
+            }));
+        }
+
+        return intro;
+    }
+
+    const failureInfo = (failureTag, content) => {
+        let intro = [new SimTransition({
+            explainer: content,
+            electionName: undefined,
+            electionTag: undefined,
+            failureTag: failureTag,
+        })];
+
+        let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
+            election != ELECTIONS.unselected && elections[election].failures.includes(failureTag)
+        );
+        console.log(electionsWithFailure);
+        if(electionsWithFailure.length  > 1){
+            console.log('create explainer');
+            intro.push(new SimTransition({
+                explainer: <p>{failureTag} occurred in the following elections : 
+                    <ul>{electionsWithFailure.map((f,i) => <li>{f}</li>)}</ul>
+                    pick from the drop down above for more details</p>,
+                electionName: 'undefined',
+                electionTag: ELECTIONS.unselected,
+                failureTag: failureTag,
             }));
         }
 
@@ -794,7 +827,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
-    const condorcet= (electionTag) => {
+    const condorcet = (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -802,15 +835,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-                    <p>Condorcet Failure<br/><i>A scenario where the election method doesn't select a condorcet winner</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
+            
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -861,12 +886,29 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
     return [
         selectorTransition(),
-
-        // Alaska Special Election
-        ...introTransition(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
+        // Election Info
+        ...electionInfo(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
             'A Mathematical Analysis of the 2022 Alaska Special Election for US House',
             'https://arxiv.org/abs/2209.04764'
         ),
+        ...electionInfo(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
+            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
+            'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
+            'https://arxiv.org/abs/2303.00108',
+        ),
+        ...electionInfo(ELECTIONS.nyc_2021, 'New York City 2021 Democratic Mayor Election',
+            4355.9, [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
+            'Harvard Data Verse',
+            'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
+        ),
+
+        // Failure Info
+        ...failureInfo(FAILURE.condorcet, <>
+            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+            <p>Condorcet Failure<br/><i>A scenario where the election method doesn't select a condorcet winner</i></p>
+        </>),
+
+        // Alaska Special Election
         ...condorcet(ELECTIONS.alaska_special_2022),
         ...spoiler(ELECTIONS.alaska_special_2022),
         ...majorityFailure({
@@ -879,11 +921,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
 
         // Alaska General
-        ...introTransition(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
-            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
-            'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
-            'https://arxiv.org/abs/2303.00108',
-        ),
         ...condorcetSuccess(ELECTIONS.alaska_general_2022),
         ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
             <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed</p>
@@ -899,11 +936,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         </>),
 
         // NYC
-        ...introTransition(ELECTIONS.nyc_2021, 'New York City 2021 Democratic Mayor Election',
-            4355.9, [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
-            'Harvard Data Verse',
-            'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
-        ),
         ...majorityFailure({
             electionTag: ELECTIONS.nyc_2021,
             winnerVoteCount: 92,
@@ -913,7 +945,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...nycTallyError(ELECTIONS.nyc_2021),
 
         // Burlington
-        ...introTransition(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [
             new VoterMovement(11, 'rightBullet', 'leftBullet'),
             new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
@@ -933,7 +965,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ),
 
         // Minneapolis
-        ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
         ...spoiler(ELECTIONS.minneapolis_2021),
         ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
             <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
@@ -949,7 +981,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetCycle(ELECTIONS.minneapolis_2021),
 
         // Moab
-        ...introTransition(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
             'Analysis of the 2021 Instant Run-Off Elections in Utah',
             'https://vixra.org/abs/2208.0166',
             <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
@@ -970,7 +1002,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ),
 
         // Alameda
-        ...introTransition(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
+        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
             'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
             'https://arxiv.org/abs/2303.05985',
             <li>NOTE: The Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</li>
@@ -991,7 +1023,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetCycle(ELECTIONS.alameda_2022),
 
         // Pierce
-        ...introTransition(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
+        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
         ...majorityFailure({
             electionTag: ELECTIONS.pierce_2008,
@@ -1011,7 +1043,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         </>),
 
         // San Francisco
-        ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
+        ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
             178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,

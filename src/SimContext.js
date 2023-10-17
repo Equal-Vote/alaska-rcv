@@ -23,6 +23,7 @@ export function SimContextProvider({children}){
         let voterRadius = 28;
         let candidateRadius = 43;
         let candidateNames = {
+            '<pick an election>': ['Begich', 'Palin', 'Peltola'], // HACK: this doesn't matter but it stops a crash
             'alaska-special-2022': ['Begich', 'Palin', 'Peltola'],
             'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
             'burlington-2009': ['Montroll', 'Wright', 'Kiss'],

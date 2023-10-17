@@ -274,11 +274,22 @@ a, a:visited{
 
 
 /* SELECTOR */
+.selectors, .selectorButtons{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.selectorsSwapped{
+  flex-direction: column-reverse;
+}
+
 .selectorPanel{
   display: flex;
   flex-direction: row;
   justify-content: top;
-  gap: 20px;
+  gap: 40px;
   margin-top: 50px;
   flex-wrap: wrap;
 }

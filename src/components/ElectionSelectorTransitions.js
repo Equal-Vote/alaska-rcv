@@ -21,6 +21,7 @@ const FAILURE= {
 };
 
 const ELECTIONS = {
+    unselected: '<pick an election>',
     alaska_special_2022: 'alaska-special-2022',
     alaska_general_2022: 'alaska-general-2022',
     burlington_2009: 'burlington-2009',
@@ -91,9 +92,85 @@ const elections = {
         'failures': [FAILURE.unselected],
     },
 };
+
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
-    
     const selectorTransition = () => {
+        const switchElection = (newElection) => {
+            console.log('switch election to', newElection);
+            console.trace();
+            simState.electionName=newElection;
+            simState.selectorElection=newElection;
+
+            document.querySelectorAll('.electionSelect').forEach((elem) =>{
+                elem.value = newElection;
+            });
+
+            const url = new URLSearchParams(window.location.search);
+
+            if(!url.get('primarySelector') || url.get('primarySelector') == 'election'){
+                simState.selectorFailure=FAILURE.unselected;
+
+                let electionFailures = elections[simState.selectorElection].failures;
+
+                document.querySelectorAll('.failureOption').forEach((elem) =>{
+                    elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
+                });
+
+                document.querySelectorAll('.electionOption').forEach((elem) =>{
+                    elem.style.display = elem.textContent == ELECTIONS.unselected ? 'none': 'block'; 
+                });
+
+                document.querySelectorAll('.failureSelect').forEach((elem) =>{
+                    elem.value = FAILURE.unselected;
+                });
+            }
+
+            url.set('selectorElection', simState.selectorElection);
+            url.set('selectorFailure', simState.selectorFailure);
+            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
+
+            refreshVoters();
+
+            setRefreshBool(b => !b);
+        }
+
+        const switchFailure = (newFailure) => {
+            console.log('switch failure to', newFailure);
+            console.trace();
+
+            simState.selectorFailure=newFailure;
+
+            document.querySelectorAll('.failureSelect').forEach((elem) =>{
+                elem.value = newFailure;
+            });
+
+            const url = new URLSearchParams(window.location.search);
+            
+            if(url.get('primarySelector') == 'failure'){
+                simState.selectorElection = ELECTIONS.unselected;
+
+                document.querySelectorAll('.electionOption').forEach((elem) =>{
+                    elem.style.display = (elem.textContent == ELECTIONS.unselected || elections[elem.textContent].failures.includes(simState.selectorFailure))? 'block' : 'none';
+                });
+
+                document.querySelectorAll('.failureOption').forEach((elem) =>{
+                    elem.style.display = elem.textContent == FAILURE.unselected ? 'none': 'block'; 
+                });
+
+                document.querySelectorAll('.electionSelect').forEach((elem) =>{
+                    elem.value = ELECTIONS.unselected;
+                });
+            }
+
+            url.set('selectorElection', simState.selectorElection);
+            url.set('selectorFailure', newFailure);
+            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
+
+            refreshVoters();
+
+            setRefreshBool(b => !b);
+        }
+
         return new SimTransition({
             visible: [Candidate, Pie],
             runoffStage: 'default',
@@ -102,59 +179,53 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 <h1 style={{marginTop: 0, marginBottom: 0}}>RCV Case Studies</h1>
                 {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
                 <div className='selectorPanel'>
-                    <div className='electionSelector'>
-                        <select name="election" defaultValue={simState.selectorElection} onChange={(event) => {
-                            simState.electionName=event.target.value;
-                            simState.selectorElection=event.target.value;
-                            simState.selectorFailure=FAILURE.unselected;
-                            
+                    <div className='selectorButtons'>
+                        <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
-                            url.set('selectorElection', event.target.value);
+                            console.log('before', url.get('primarySelector'))
+                            url.set('primarySelector', url.get('primarySelector') == 'failure'? 'election' : 'failure');
                             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
 
-                            refreshVoters();
-                            document.querySelectorAll('.failureOption').forEach((elem) =>{
-                                let electionFailures = elections[simState.selectorElection].failures;
-                                elem.style.display = electionFailures.includes(elem.textContent)? 'block' : 'none';
-                            });
-
-                            document.querySelectorAll('.failureSelect').forEach((elem) =>{
-                                elem.value = simState.selectorFailure;
-                            });
-
-                            setRefreshBool(b => !b);
-                        }}>
-                            {Object.keys(elections).map((election ,i) => 
-                                <option key={i}>{election}</option>
-                            )}
-                        </select>
-                    </div>
-                    <div className='failureSelector'>
-                        <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
-                            simState.selectorFailure=event.target.value;
-
+                            console.log('after', url.get('primarySelector'))
+                            if(url.get('primarySelector') == 'failure'){
+                                document.querySelector('.selectors').classList.add('selectorsSwapped');
+                                switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.condorcet : simState.selectorFailure);
+                            }else{
+                                document.querySelector('.selectors').classList.remove('selectorsSwapped');
+                                switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
+                            }
+                        }}>⇅</button>
+                        <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
-                            url.set('selectorFailure', event.target.value);
-                            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
-
-                            refreshVoters();
-                            setRefreshBool(b => !b);
-                        }}>
-                            {Object.entries(FAILURE).map(([key, failure], i) => {
-                                let electionFailures = elections[simState.selectorElection].failures;
-                                return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
-                            })}
-                        </select>
+                            url.set('onlySelector', 'true');
+                            url.set('selectorElection', simState.selectorElection);
+                            url.set('selectorFailure', simState.selectorFailure);
+                            navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
+                            event.target.textContent = 'Link Copied!'
+                            setTimeout(() => event.target.textContent = 'Copy Link', 800);
+                        }}>Copy Link</button>
                     </div>
-                    <button onClick={(event) => {
-                        const url = new URLSearchParams(window.location.search);
-                        url.set('onlySelector', 'true');
-                        url.set('selectorElection', simState.selectorElection);
-                        url.set('selectorFailure', simState.selectorFailure);
-                        navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
-                        event.target.textContent = 'Link Copied!'
-                        setTimeout(() => event.target.textContent = 'Copy Link', 800);
-                    }}>Copy Link</button>
+                    <div className={`selectors ${(new URLSearchParams(window.location.search).get('primarySelector') == 'failure')? 'selectorsSwapped' : ''}`}>
+                        <div className='electionSelector'>
+                            <select className='electionSelect' name="election" defaultValue={simState.selectorElection} onChange={(event) => {
+                                switchElection(event.target.value);
+                            }}>
+                                {Object.values(ELECTIONS).map((election ,i) => 
+                                    <option className='electionOption' key={i}>{election}</option>
+                                )}
+                            </select>
+                        </div>
+                        <div className='failureSelector'>
+                            <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
+                                switchFailure(event.target.value);
+                            }}>
+                                {Object.entries(FAILURE).map(([key, failure], i) => {
+                                    let electionFailures = simState.selectorElection == ELECTIONS.unselected? Object.values(FAILURE) : elections[simState.selectorElection].failures;
+                                    return <option className='failureOption' key={i} style={{display: electionFailures.includes(failure)? 'block' : 'none'}}>{failure}</option>
+                                })}
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </>
         });

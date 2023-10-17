@@ -147,7 +147,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         </select>
                     </div>
                     <button onClick={(event) => {
-                        navigator.clipboard.writeText(window.location);
+                        const url = new URLSearchParams(window.location.search);
+                        url.set('onlySelector', 'true');
+                        url.set('selectorElection', simState.selectorElection);
+                        url.set('selectorFailure', simState.selectorFailure);
+                        navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
                         event.target.textContent = 'Link Copied!'
                         setTimeout(() => event.target.textContent = 'Copy Link', 800);
                     }}>Copy Link</button>

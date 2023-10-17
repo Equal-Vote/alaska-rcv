@@ -95,8 +95,6 @@ const elections = {
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
     const selectorTransition = () => {
         const switchElection = (newElection) => {
-            console.log('switch election to', newElection);
-            console.trace();
             simState.electionName=newElection;
             simState.selectorElection=newElection;
 
@@ -133,9 +131,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
 
         const switchFailure = (newFailure) => {
-            console.log('switch failure to', newFailure);
-            console.trace();
-
             simState.selectorFailure=newFailure;
 
             document.querySelectorAll('.failureSelect').forEach((elem) =>{
@@ -180,11 +175,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <div className='selectorButtons'>
                         <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
-                            console.log('before', url.get('primarySelector'))
                             url.set('primarySelector', url.get('primarySelector') == 'failure'? 'election' : 'failure');
                             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
 
-                            console.log('after', url.get('primarySelector'))
                             if(url.get('primarySelector') == 'failure'){
                                 document.querySelector('.selectors').classList.add('selectorsSwapped');
                                 switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.condorcet : simState.selectorFailure);
@@ -252,7 +245,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             intro.push(new SimTransition({
                 explainer: <p>This election had the following issues : 
                     <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected).map((f,i) => <li>{f}</li>)}</ul>
-                    pick from the drop down above for more details</p>,
+                    Pick from the drop down above for more details</p>,
                 electionName: electionName,
                 electionTag: electionName,
                 failureTag: FAILURE.unselected,
@@ -267,7 +260,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
     const failureInfo = (failureTag, content) => {
         let intro = [new SimTransition({
             explainer: content,
-            electionName: undefined,
+            electionName: 'undefined',
+            visible: 'undefined',
+            runoffStage: 'undefined',
             electionTag: undefined,
             failureTag: failureTag,
         })];
@@ -275,14 +270,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
             election != ELECTIONS.unselected && elections[election].failures.includes(failureTag)
         );
-        console.log(electionsWithFailure);
         if(electionsWithFailure.length  > 1){
-            console.log('create explainer');
             intro.push(new SimTransition({
                 explainer: <p>{failureTag} occurred in the following elections : 
                     <ul>{electionsWithFailure.map((f,i) => <li>{f}</li>)}</ul>
-                    pick from the drop down above for more details</p>,
+                    Pick from the drop down above for more details</p>,
                 electionName: 'undefined',
+                visible: 'undefined',
+                runoffStage: 'undefined',
                 electionTag: ELECTIONS.unselected,
                 failureTag: failureTag,
             }));
@@ -291,7 +286,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         return intro;
     }
 
-    const majorityFailure= ({electionTag, winnerVoteCount, bulletVoteCount}) => {
+    const majorityFailure = ({electionTag, winnerVoteCount, bulletVoteCount}) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -299,14 +294,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
             new SimTransition({
                 ...def,
                 explainer: <>
@@ -325,20 +312,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 focused: ['centerCandidate', 'centerBullet'],
                 runoffStage: 'right_vs_left',
             }),
-            new SimTransition({
-                ...def,
-                explainer: <p>
-                    Majoritarian failures differ from the other failures in that they're so prolific. Research was conduncted on all US RCV elections
-                    that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that RCV
-                    had majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
-                </p>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'right_vs_left',
-            }),
         ];
     }
 
-    const spoiler= (electionTag) => {
+    const spoiler = (electionTag) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -346,14 +323,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Spoiler Effect<br/><i>When removing 1 or more losing candidates could cause the winner to change</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
             new SimTransition({
                 ...def,
                 explainer: <>
@@ -382,15 +351,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Truncation Failure<br/><i>Scenario where a set of voters can get a better result by supporting fewer candidates (or "truncating" their ballot)</i></p>
-                    <p>No Show Failure<br/><i>The most extreme truncation failure where where a set of voters can get a better result by not voting at all (or fully "truncating" their ballot)</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -434,14 +394,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
+            
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -486,14 +439,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Upward Monotonicity Failure<br/><i>A scenario where the winning candidate could have gained more support and lost</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
+            
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -538,16 +484,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Compromise Voting Failure<br/><i>A scenario where a group of voters can elevate the rank of a 'compromise' candidate over their actual favorite to get a better result</i></p>
-
-                    <p>This is very familiar in choose one voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
+            
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -901,11 +838,50 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             'Harvard Data Verse',
             'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
         ),
+        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
+        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+            'Analysis of the 2021 Instant Run-Off Elections in Utah',
+            'https://vixra.org/abs/2208.0166',
+            <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
+                The first round failed to elect the condorcet winner, but they were still elected in the second round so the error didn't have any impact
+            </li>
+        ),
+        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
+            'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
+            'https://arxiv.org/abs/2303.05985',
+            <li>NOTE: The Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</li>
+        ),
+        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
+        ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
+            178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
 
         // Failure Info
         ...failureInfo(FAILURE.condorcet, <>
             <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
             <p>Condorcet Failure<br/><i>A scenario where the election method doesn't select a condorcet winner</i></p>
+        </>),
+        ...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
+        ...failureInfo(FAILURE.repeal, <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>),
+        ...failureInfo(FAILURE.spoiler, <p>Spoiler Effect<br/><i>When removing 1 or more losing candidates could cause the winner to change</i></p>),
+        ...failureInfo(FAILURE.majority, <>
+            <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
+            <p>
+                Majoritarian failures differ from the other failures in that they're so prolific. Research was conduncted on all US RCV elections
+                that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that RCV
+                had majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
+            </p>
+        </>),
+        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Failure<br/><i>A scenario where the winning candidate could have gained more support and lost</i></p>),
+        ...failureInfo(FAILURE.compromise, <>
+            <p>Compromise Voting Failure<br/><i>A scenario where a group of voters can elevate the rank of a 'compromise' candidate over their actual favorite to get a better result</i></p>
+
+            <p>This is very familiar in choose one voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
+        </>),
+        ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
+        ...failureInfo(FAILURE.no_show, <>
+            <p>Truncation Failure<br/><i>Scenario where a set of voters can get a better result by supporting fewer candidates (or "truncating" their ballot)</i></p>
+            <p>No Show Failure<br/><i>The most extreme truncation failure where where a set of voters can get a better result by not voting at all (or fully "truncating" their ballot)</i></p>
         </>),
 
         // Alaska Special Election
@@ -945,7 +921,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...nycTallyError(ELECTIONS.nyc_2021),
 
         // Burlington
-        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [
             new VoterMovement(11, 'rightBullet', 'leftBullet'),
             new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
@@ -959,13 +934,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
         ...electionNote(ELECTIONS.burlington_2009, FAILURE.repeal,
-            <p>Burlington repealed RCV after having used it in 2 mayoral elections in 2006 and 2009 
-                <a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">more details</a>
+            <p>Burlington repealed RCV after having used it in 2 mayoral elections in 2006 and
+                2009 <a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">more details</a>
             </p>
         ),
 
         // Minneapolis
-        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
         ...spoiler(ELECTIONS.minneapolis_2021),
         ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
             <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
@@ -981,13 +955,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetCycle(ELECTIONS.minneapolis_2021),
 
         // Moab
-        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
-            'Analysis of the 2021 Instant Run-Off Elections in Utah',
-            'https://vixra.org/abs/2208.0166',
-            <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
-                The first round failed to elect the condorcet winner, but they were still elected in the second round so the error didn't have any impact
-            </li>
-        ),
         ...condorcet(ELECTIONS.moab_2021),
         ...spoiler(ELECTIONS.moab_2021),
         ...upwardMonotonicity(ELECTIONS.moab_2021, [
@@ -995,18 +962,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]),
         ...noShow(ELECTIONS.moab_2021, new VoterMovement(3, 'rightThenCenter', 'home')),
         ...electionNote(ELECTIONS.moab_2021, FAILURE.repeal,
-            <p>Moab used RCV under Utah's pilot program for testing the system. In 2021, 23 cities signed up, but then only 12 of those cities stayed, and moab was one of the ones that opted out
-                <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a>
-                <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
+            <p>Moab used RCV under Utah's pilot program for testing the system. In 2021, 23 cities signed up, but then only 12 of those cities stayed, and moab was one of the ones that opted
+                out <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a> <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
             </p>
         ),
 
         // Alameda
-        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
-            'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
-            'https://arxiv.org/abs/2303.05985',
-            <li>NOTE: The Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</li>
-        ),
         ...spoiler(ELECTIONS.alameda_2022),
         ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler,
             <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
@@ -1023,7 +984,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetCycle(ELECTIONS.alameda_2022),
 
         // Pierce
-        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
         ...majorityFailure({
             electionTag: ELECTIONS.pierce_2008,
@@ -1039,12 +999,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>RCV was only used for one election cycle, here's a quote from Elections Direcector Nick Handy:</p>
             <p><i>"Just three years ago, Pierce County voters enthusiastically embraced this new idea as a replacement for the then highly unpopular Pick-a-Party primary.”   Pierce County did a terrific job implementing ranked choice voting, but voters flat out did not like it.
                 The rapid rejection of this election model that has been popular in San Francisco, but few other places, was expected, but no one really anticipated how fast the cradle to grave cycle would run.  The voters wanted it. The voters got and tried it.  The voters did not like it.
-                And the voters emphatically rejected it.  All in a very quick three years."</i><a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
+                And the voters emphatically rejected it.  All in a very quick three years."</i> <a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
         </>),
 
         // San Francisco
-        ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
-            178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
             <p>(It shows as a tie here because they only won by a fraction of a vote)</p>

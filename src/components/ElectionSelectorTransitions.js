@@ -173,30 +173,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 <h1 style={{marginTop: 0, marginBottom: 0}}>RCV Case Studies</h1>
                 {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
                 <div className='selectorPanel'>
-                    <div className='selectorButtons'>
-                        <button onClick={(event) => {
-                            const url = new URLSearchParams(window.location.search);
-                            url.set('primarySelector', url.get('primarySelector') == 'failure'? 'election' : 'failure');
-                            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
-
-                            if(url.get('primarySelector') == 'failure'){
-                                document.querySelector('.selectors').classList.add('selectorsSwapped');
-                                switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.condorcet : simState.selectorFailure);
-                            }else{
-                                document.querySelector('.selectors').classList.remove('selectorsSwapped');
-                                switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
-                            }
-                        }}>⇅</button>
-                        <button onClick={(event) => {
-                            const url = new URLSearchParams(window.location.search);
-                            url.set('onlySelector', 'true');
-                            url.set('selectorElection', simState.selectorElection);
-                            url.set('selectorFailure', simState.selectorFailure);
-                            navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
-                            event.target.textContent = 'Link Copied!'
-                            setTimeout(() => event.target.textContent = 'Copy Link', 800);
-                        }}>Copy Link</button>
-                    </div>
                     <div className={`selectors ${(new URLSearchParams(window.location.search).get('primarySelector') == 'failure')? 'selectorsSwapped' : ''}`}>
                         <div className='electionSelector'>
                             <select className='electionSelect' name="election" defaultValue={simState.selectorElection} onChange={(event) => {
@@ -225,6 +201,30 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                                 })}
                             </select>
                         </div>
+                    </div>
+                    <div className='selectorButtons'>
+                        <button onClick={(event) => {
+                            const url = new URLSearchParams(window.location.search);
+                            url.set('onlySelector', 'true');
+                            url.set('selectorElection', simState.selectorElection);
+                            url.set('selectorFailure', simState.selectorFailure);
+                            navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
+                            event.target.textContent = 'Link Copied!'
+                            setTimeout(() => event.target.textContent = 'Copy Link', 800);
+                        }}>Copy Link</button>
+                        <button onClick={(event) => {
+                            const url = new URLSearchParams(window.location.search);
+                            url.set('primarySelector', url.get('primarySelector') == 'failure'? 'election' : 'failure');
+                            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
+
+                            if(url.get('primarySelector') == 'failure'){
+                                document.querySelector('.selectors').classList.add('selectorsSwapped');
+                                switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.condorcet : simState.selectorFailure);
+                            }else{
+                                document.querySelector('.selectors').classList.remove('selectorsSwapped');
+                                switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
+                            }
+                        }}>⇅</button>
                     </div>
                 </div>
             </>

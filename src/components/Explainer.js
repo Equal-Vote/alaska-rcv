@@ -16,11 +16,13 @@ const Explainer = () => {
     }).filter(explainer => explainer != undefined);
 
     let selectorRange = simState.transitions.reduce((range, t, i) => {
-        if(t.electionTag != undefined && t.failureTag != undefined && range.start == undefined) range.start = i;
-        if(t.electionTag != undefined && t.failureTag != undefined && range.start != undefined && simIndexIsVisible(i)) range.size++;
+        if(t.electionTag != undefined || t.failureTag != undefined){
+            if(range.start == undefined) range.start = i;
+            if(simIndexIsVisible(i)) range.size++; // I can't set end directly since explainers is only a subset of simState.transitions
+        }
         return range;
     }, {start: undefined, size: 0})
-    selectorRange.end = selectorRange.start+selectorRange.size;
+    selectorRange.end = selectorRange.start + selectorRange.size
     selectorRange.start--; // include the selector panel
 
     let refreshExplainers = (event) => {

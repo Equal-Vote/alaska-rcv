@@ -9,6 +9,7 @@ import { VoterMovement } from "../VoterMovement";
 const FAILURE= {
     'unselected': '<pick a failure type>',
     'condorcet': 'Condorcet Failure',
+    'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
     'upward_mono': 'Upward Monotonicity Failure',
     'downward_mono': 'Downward Monotonicity Failure',
@@ -73,7 +74,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
+        'failures': [FAILURE.unselected, FAILURE.cycle, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
     },
     'moab-2021': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show, FAILURE.repeal],
@@ -82,7 +83,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority],
     },
     'alameda-2022': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.cycle, FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
     },
     'alaska-special-2022': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
@@ -526,20 +527,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
-            failureTag: FAILURE.unselected,
+            failureTag: FAILURE.cycle,
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>This election was particularly interesting because it had a condorcet cycle (it's super rare, there are only 2 documented cases in the US)</p>
-                    <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-                    <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }),
+            
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -569,8 +561,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, 'left_beats_right', 'center_beats_left', 'right_beats_center'],
                 explainer: <>,
                     <p>So the head-to-head match ups form a cycle, and it's not clear who the ideal winner should be</p>
-                    <p>One could argue that a cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking, but 
-                    this election isn't necessarily a failure of RCV. It's a super rare edge case that would be difficult for any voting method to handle</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -882,6 +872,13 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...failureInfo(FAILURE.no_show, <>
             <p>Truncation Failure<br/><i>Scenario where a set of voters can get a better result by supporting fewer candidates (or "truncating" their ballot)</i></p>
             <p>No Show Failure<br/><i>The most extreme truncation failure where where a set of voters can get a better result by not voting at all (or fully "truncating" their ballot)</i></p>
+        </>),
+        ...failureInfo(FAILURE.cycle, <>
+            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+            <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
+            <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list)</p>
+            <p>One could argue that a cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking,
+                but Condorcet Cycles are a super rare edge case they would be difficult for any voting method to handle</p>
         </>),
 
         // Alaska Special Election

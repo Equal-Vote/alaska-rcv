@@ -319,7 +319,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['usFailures'],
             explainer: <>
-                <p>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen these failures 4 times</p>
+                <p>Yes and No. It's true that out of the 500+ RCV elections in the US, we've only seen about a handful of monotonicity and compromise failures</p>
                 <p>However this is a biased sample. RCV operates well when there's only 2 competitive candidates and the US is largely still a 2 party system.</p>
                 <p>So most of our elections don't have a competitive 3rd candidate</p>
             </>,
@@ -339,8 +339,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <img src="/alaska-rcv/images/fargoQuote.png" style={{width:'70%'}}/>
                 <p><a target="_blank" href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
                 <p>The bill was eventually vetoed, but that veto was VERY close to being overturned</p>
-                <p>But other juristictions weren't so lucky. We've seen these issues in many places, and at least 3 recent examples (Burlington, VT; Aspen, CO; and Moab, UT) have even gone as far as to repeal RCV</p>
-				<p>There have likely been other monotonicity failures we’re not aware of because the public has not been given access to the full ballot data from all RCV elections, but you can view some of the ones we do know about using the tool below</p>
+                <p>But other juristictions weren't so lucky. The election inaccuracies, and general voter confusion have caused many RCV repeals including 3 places that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
+                <p>We've even seen RCV complete banned in Tennesee, Florida, Idaho, and Montana</p>
+                <p>You can browse some of these failures and repeals in the tool below</p>
             </>,
         }),
         ...electionSelectorTransitions(simState, setRefreshBool, refreshVoters),

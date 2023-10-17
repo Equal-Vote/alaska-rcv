@@ -17,6 +17,7 @@ const FAILURE= {
     'compromise': 'Compromise Failure',
     'spoiler': 'Spoiler Effect',
     'tally': 'Tally Error',
+    'repeal': 'Repealed',
 };
 
 const ELECTIONS = {
@@ -63,10 +64,10 @@ const ELECTIONS = {
 
 const elections = {
     'pierce-2008': {
-        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority],
+        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority, FAILURE.repeal],
     },
     'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
     },
     'san-francisco-2020': {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
@@ -75,7 +76,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
     },
     'moab-2021': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show],
+        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show, FAILURE.repeal],
     },
     'nyc-2021': {
         'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority],
@@ -841,6 +842,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             bulletVoteCount: 10
         }),
         ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
+        ...electionNote(ELECTIONS.burlington_2009, FAILURE.repeal,
+            <p>Burlington repealed RCV after having used it in 2 mayoral elections in 2006 and 2009 
+                <a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">more details</a>
+            </p>
+        ),
 
         // Minneapolis
         ...introTransition(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
@@ -872,6 +878,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new VoterMovement(3, 'rightThenLeft', 'leftThenRight')
         ]),
         ...noShow(ELECTIONS.moab_2021, new VoterMovement(3, 'rightThenCenter', 'home')),
+        ...electionNote(ELECTIONS.moab_2021, FAILURE.repeal,
+            <p>Moab used RCV under Utah's pilot program for testing the system. In 2021, 23 cities signed up, but then only 12 of those cities stayed, and moab was one of the ones that opted out
+                <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a>
+                <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
+            </p>
+        ),
 
         // Alameda
         ...introTransition(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
@@ -907,6 +919,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>Despite picking this correct winner, the compromise failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
+        ...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
+            <p>RCV was only used for one election cycle, here's a quote from Elections Direcector Nick Handy:</p>
+            <p><i>"Just three years ago, Pierce County voters enthusiastically embraced this new idea as a replacement for the then highly unpopular Pick-a-Party primary.”   Pierce County did a terrific job implementing ranked choice voting, but voters flat out did not like it.
+                The rapid rejection of this election model that has been popular in San Francisco, but few other places, was expected, but no one really anticipated how fast the cradle to grave cycle would run.  The voters wanted it. The voters got and tried it.  The voters did not like it.
+                And the voters emphatically rejected it.  All in a very quick three years."</i><a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
+        </>),
 
         // San Francisco
         ...introTransition(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',

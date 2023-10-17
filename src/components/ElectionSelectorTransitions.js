@@ -107,6 +107,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                             simState.electionName=event.target.value;
                             simState.selectorElection=event.target.value;
                             simState.selectorFailure=FAILURE.unselected;
+                            
+                            const url = new URLSearchParams(window.location.search);
+                            url.set('selectorElection', event.target.value);
+                            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
+
                             refreshVoters();
                             document.querySelectorAll('.failureOption').forEach((elem) =>{
                                 let electionFailures = elections[simState.selectorElection].failures;
@@ -127,6 +132,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <div className='failureSelector'>
                         <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                             simState.selectorFailure=event.target.value;
+
+                            const url = new URLSearchParams(window.location.search);
+                            url.set('selectorFailure', event.target.value);
+                            window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
+
                             refreshVoters();
                             setRefreshBool(b => !b);
                         }}>
@@ -137,8 +147,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         </select>
                     </div>
                     <button onClick={(event) => {
-                        let link = `${window.location.href.split('?')[0]}?onlySelector=true&selectorElection=${simState.selectorElection}&selectorFailure=${simState.selectorFailure}`
-                        navigator.clipboard.writeText(link);
+                        navigator.clipboard.writeText(window.location);
                         event.target.textContent = 'Link Copied!'
                         setTimeout(() => event.target.textContent = 'Copy Link', 800);
                     }}>Copy Link</button>

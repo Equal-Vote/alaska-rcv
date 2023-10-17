@@ -191,7 +191,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>Nope! Once you have more than two competitive candidates, RCV often allows the spoiler effect.</p>
                 <br/>
                 <i>But what is the spoiler effect?</i>
-                <p>This is when removing a losing candidate causes the winner to change</p>
+                <p>This is when adding a losing candidate to the race causes the winner to change by splitting off votes from the majority</p>
                 <p>Most famously under Choose One Voting, removing Nader from the 2000 presidential election likely would have caused the winner to change from Bush to Gore</p>
             </>,
             runoffStage: 'center_vs_right',
@@ -203,8 +203,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>Here we see that removing Palin would cause the winner to change from Peltola to Begich</p>
                 <p>Hence Palin was actually the spoiler candidate in this election</p>
                 <br/>
-                <p>In this case the spoiler effect happened because of Center Squeeze</p>
-				<p>With only 2 candidates, the consensus candidate closer to the center of public opinion will usually win</p>
+                <p>The spoiler effect often causes the consensus candidate to lose and it's a main driver of polarization</p>
+                <p>If there are only two candidates then the consensus candidate who best represents the will of the people will win.</p>
                 <img src="/alaska-rcv/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
             </>,
             runoffStage: 'center_vs_left',
@@ -212,9 +212,11 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>But if you add more candidates, it could reduce the 1st choice rankings for the center candidate and cause them to be eliminated early</p>
+                <p>But if you add more candidates, the candidates in the middle ideologically have to compete with candidates on both sides of them for votes,
+                (or in the case of RCV, 1st choice votes) while more polarizing candidates only have to defend from one side or the other.</p>
                 <img src="/alaska-rcv/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
-                <p>So Center Squeeze happens when first choice votes go to candidates on either side of the spectrum, and cause the consensus candidate to lose</p>
+                <p>Just like with Choose-One voting, voters in RCV aren't able to show that they would prefer either of the candidates
+                they like over the opposition so majority factions can end up divided and conquered.</p>
                 <p>For this election, Begich was the consensus candidate for these voters, and Palin and Peltola were pulling votes from either side</p>
             </>,
             runoffStage: 'firstRound',
@@ -239,7 +241,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             focused: ['rightThenCenter'],
             explainer: <>
-                <p>This election was particularly rough for the "Palin then Begich" voters because supporting Palin gave them their worst choice, and their vote never transferred to Begich</p>
+                <p>This election was particularly rough for the "Palin 1st, Begich 2nd" voters because supporting Palin gave them their worst choice, and their vote never transferred to Begich</p>
                 <p>They may as well have been using Choose One Voting because RCV never counted their down ballot rankings</p>
                 <p>Which leads us to the next claim…</p>
             </>,
@@ -250,14 +252,15 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <h1>Claim #4: "It's safe to rank your favorite candidate first"</h1>
+                <p>Wrong again! Let’s say that some of the "Palin 1st, Begich 2nd" voters had realized that Begich was the more electable of the two Republicans. </p>
 			</>,
             runoffStage: 'firstRound',
 		}),
 		new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-                <p>Wrong again! If more “Palin then Begich” voters compromised and supported Begich</p>
-            </>,
+            explainer: <p>
+                If just a few of them had strategically ranked him first
+            </p>,
             runoffStage: 'firstRound',
 			voterMovements: [
 				new VoterMovement(4, 'rightThenCenter', 'centerThenRight')
@@ -266,16 +269,17 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
 		new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>Then Begich would have won and those voters would have been happier. </p>
-                <p>Sounds pretty familiar right? Choose One voting makes us vote for compromise candidates to avoid our worst case scenario all the time, and RCV doesn't let us get away from that</p>
+                <p>Then Begich would have won and these voters would have been happier. </p>
+                <p>Sounds familiar, right? Choose One voting makes us vote for the more electable lesser-of-two-evils type candidates to avoid our worst case scenario all the time.</p>
+                <p>This is called a compromise failure, and despite claims to the contrary, RCV doesn't solve the problem either.</p>
             </>,
             runoffStage: 'center_vs_left',
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-				<p>But this election has an even stranger scenario where Peltola could have gained supporters and lost as a result.</p>
-            </>,
+            explainer: <p>
+				But this election has an even stranger scenario where Peltola could have gained supporters and lost as a result.
+            </p>,
             voterMovements: [
 				new VoterMovement(4, 'centerThenRight', 'rightThenCenter')
 			],
@@ -284,7 +288,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>Let’s pretend 7 of the Palin bullet voters chose to support Peltola instead</p>
+                <p>Let's pretend 7 of the Palin bullet voters chose to support Peltola instead</p>
             </>,
             runoffStage: 'default',
 			voterMovements: [
@@ -339,8 +343,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <img src="/alaska-rcv/images/fargoQuote.png" style={{width:'70%'}}/>
                 <p><a target="_blank" href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
                 <p>The bill was eventually vetoed, but that veto was VERY close to being overturned</p>
-                <p>But other juristictions weren't so lucky. The election inaccuracies, and general voter confusion have caused many RCV repeals including 3 places that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
-                <p>We've even seen RCV complete banned in Tennesee, Florida, Idaho, and Montana</p>
+                <p>But other juristictions weren't so lucky. The election inaccuracies, and general voter confusion have
+                    caused many RCV repeals including 3 juristictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
+                <p>We've even seen RCV complete banned in 5 states: Tennesee, Florida, Idaho, South Dakota, and Montana</p>
                 <p>You can browse some of these failures and repeals in the tool below</p>
             </>,
         }),
@@ -356,7 +361,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     <li>RCV virtually guarantees a condorcet winner - FALSE</li>
                     <li>RCV solves the spoiler effect - FALSE</li>
                     <li>It's safe to rank your first choice - FALSE</li>
-                    <li>Alaska is a rare situation - ONLY INSIDE THE TWO PARTY SYSTEM THAT WE’RE TRYING TO SOLVE</li>
+                    <li>Alaska is a rare situation - ONLY INSIDE THE TWO PARTY SYSTEM THAT WE’RE TRYING TO TRANSCEND</li>
                 </ol>
                 <p>RCV has the most investment, but when it fails, it hurts the movement as a whole</p>
                 <p>Instead we should look closer to alternatives such as Approval Voting or STAR Voting. We don’t even have to ditch the ranked ballot because there are proposals like Ranked Robin that have a far simpler and more accurate way to tally rankings.</p> 

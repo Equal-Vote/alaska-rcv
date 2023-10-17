@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/alaska-rcv/static/css/main.5d8572b8.css",
-    "main.js": "/alaska-rcv/static/js/main.ae9eb563.js",
+    "main.css": "/alaska-rcv/static/css/main.2f6f549f.css",
+    "main.js": "/alaska-rcv/static/js/main.476c2ebc.js",
     "static/js/787.e8151e8e.chunk.js": "/alaska-rcv/static/js/787.e8151e8e.chunk.js",
     "static/media/index.cjs": "/alaska-rcv/static/media/index.87283f34b94ab8669cb4.cjs",
     "index.html": "/alaska-rcv/index.html",
-    "main.5d8572b8.css.map": "/alaska-rcv/static/css/main.5d8572b8.css.map",
-    "main.ae9eb563.js.map": "/alaska-rcv/static/js/main.ae9eb563.js.map",
+    "main.2f6f549f.css.map": "/alaska-rcv/static/css/main.2f6f549f.css.map",
+    "main.476c2ebc.js.map": "/alaska-rcv/static/js/main.476c2ebc.js.map",
     "787.e8151e8e.chunk.js.map": "/alaska-rcv/static/js/787.e8151e8e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5d8572b8.css",
-    "static/js/main.ae9eb563.js"
+    "static/css/main.2f6f549f.css",
+    "static/js/main.476c2ebc.js"
   ]
 }

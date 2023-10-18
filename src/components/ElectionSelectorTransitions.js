@@ -674,14 +674,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             }),
             new SimTransition({
                 ...def,
-                explainer: <p>
-                    then Manigo get's elimated in the first round, and Hutchinson is now the winner
-                </p>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'right_vs_left',
-            }),
-            new SimTransition({
-                ...def,
                 explainer: 
                 <>
                     <p>To be clear, this was a accidental bug, due to human error and there was no evidence of election interference here.</p>

@@ -228,18 +228,21 @@ body, #root{
   border-block: solid;
   background-position: center;
   background-size: cover;
-  transition: opacity 1s linear;
 }
 
-.candidate0 .CandidateInner{
+
+.Candidate{
+  transition: opacity 1s linear;
+}
+.Candidate.candidate0{
   transition-delay: 0s;
 }
 
-.candidate1 .CandidateInner{
+.Candidate.candidate1{
   transition-delay: .25s;
 }
 
-.candidate2 .CandidateInner{
+.Candidate.candidate2{
   transition-delay: .5s;
 }
 

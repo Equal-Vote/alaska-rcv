@@ -20,17 +20,28 @@ class Candidate extends GameObject{
                 .scale(containerSize / 100)
                 .asTranslate(),
         }}>
+            
             <div className='CandidateInner' style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: `url(\"images/${this.candidateName}.jpg\")`,
-                border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName})`,
-            }}/>
+                backgroundImage: `url(\"alaska-rcv/images/${this.candidateName.toLowerCase()}.jpg\")`,
+                border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName.toLowerCase()})`,
+            }}>
+                <h3 style={{
+                    width: '100%',
+                    margin: `${Math.round(0.002 * containerSize)}px`,
+                    fontSize: `${Math.round(0.02 * containerSize)}px`,
+                    textAlign: 'center',
+                    marginTop: `${Math.round(.12 * containerSize)}px`,
+                    backgroundColor: `var(--${this.candidateName.toLowerCase()})`,
+                }}>{this.candidateName}</h3>
+            </div>
+            
         </div>;
     }
 
     update(simState){
-        this.candidateName = simState.candidateNames[simState.electionName][this.candidateIndex].toLowerCase();
+        this.candidateName = simState.candidateNames[simState.electionName][this.candidateIndex];
     }
 
     win(){

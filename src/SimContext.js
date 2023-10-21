@@ -90,6 +90,7 @@ export function SimContextProvider({children}){
             visible: [],
             focused: [],
             runoffStage: 'default',
+            runoffTimeout: undefined,
             electionName: params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
             selectorElection: params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? '<pick a failure type>',

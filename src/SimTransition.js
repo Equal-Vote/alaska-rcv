@@ -1,4 +1,6 @@
 import Candidate from "./components/Candidate";
+import Pie from "./components/Pie";
+import VoterCount from "./components/VoterCount";
 
 export class SimTransition {
     constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-special-2022', electionTag=undefined, failureTag=undefined, resetVoters=false}) {
@@ -26,7 +28,26 @@ export class SimTransition {
     apply(simState) {
         if(this.visible != undefined) simState.visible = this.visible;
         simState.focused = this.focused;
-        if(this.runoffStage != undefined) simState.runoffStage = this.runoffStage;
+        if(this.runoffStage != undefined){
+            if(simState.runoffTimeout != undefined){
+                clearTimeout(simState.runoffTimeout)
+            }
+            if(this.runoffStage.includes('vs') && this.runoffStage != simState.runoffStage && simState.visible.includes(Pie)){
+                simState.runoffTimeout = setTimeout(() => {
+                   // get biggest voter camp 
+                   let winnerIndex = simState.objects
+                    .filter(obj => obj instanceof VoterCount)
+                    .reduce((prev, voterCount) => voterCount.count > prev.count? voterCount : prev)
+                    .candidateIndex;
+
+                   // set corresponding Candidate to be the winner
+                   simState.objects
+                    .filter(obj => obj instanceof Candidate)
+                    .filter(candidate => candidate.candidateIndex == winnerIndex)[0].win();
+                }, 400);
+            }
+            simState.runoffStage = this.runoffStage;
+        }
         if(this.electionName != undefined) simState.electionName = this.electionName;
     }
 

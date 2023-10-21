@@ -24,7 +24,7 @@ class Candidate extends GameObject{
             <div className='CandidateInner' style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: `url(\"images/${this.candidateName.toLowerCase()}.jpg\")`,
+                backgroundImage: `url(\"/alaska-rcv/images/${this.candidateName.toLowerCase()}.jpg\")`,
                 border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName.toLowerCase()})`,
             }}>
                 <h3 style={{
@@ -32,7 +32,7 @@ class Candidate extends GameObject{
                     margin: `${Math.round(0.002 * containerSize)}px`,
                     fontSize: `${Math.round(0.02 * containerSize)}px`,
                     textAlign: 'center',
-                    marginTop: `${Math.round(.13 * containerSize)}px`,
+                    marginTop: `${Math.round(.125 * containerSize)}px`,
                     backgroundColor: `var(--${this.candidateName.toLowerCase()})`,
                 }}>{this.candidateName}</h3>
             </div>

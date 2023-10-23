@@ -277,11 +277,24 @@ a, a:visited{
 
 
 /* SELECTOR */
-.selectors, .selectorButtons{
+.selectors{
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: space-between;
+}
+
+.selectorButtons{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: space-between;
+}
+
+.selectorButtons button{
+  height: 50%;
+  min-height: 20px;
+  margin: auto;
 }
 
 .selectorsSwapped{

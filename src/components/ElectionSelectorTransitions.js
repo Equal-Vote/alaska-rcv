@@ -205,15 +205,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <div className='selectorButtons'>
                         <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
-                            url.set('onlySelector', 'true');
-                            url.set('selectorElection', simState.selectorElection);
-                            url.set('selectorFailure', simState.selectorFailure);
-                            navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
-                            event.target.textContent = 'Link Copied!'
-                            setTimeout(() => event.target.textContent = 'Copy Link', 800);
-                        }}>Copy Link</button>
-                        <button onClick={(event) => {
-                            const url = new URLSearchParams(window.location.search);
                             url.set('primarySelector', url.get('primarySelector') == 'failure'? 'election' : 'failure');
                             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
 
@@ -225,6 +216,15 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                                 switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
                             }
                         }}>⇅</button>
+                        <button onClick={(event) => {
+                            const url = new URLSearchParams(window.location.search);
+                            url.set('onlySelector', 'true');
+                            url.set('selectorElection', simState.selectorElection);
+                            url.set('selectorFailure', simState.selectorFailure);
+                            navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
+                            event.target.textContent = 'Link Copied!'
+                            setTimeout(() => event.target.textContent = 'Copy Link', 800);
+                        }}>Copy Link</button>
                     </div>
                 </div>
             </>

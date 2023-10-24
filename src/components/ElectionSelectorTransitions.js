@@ -31,6 +31,7 @@ const ELECTIONS = {
     alameda_2022: 'alameda-2022',
     moab_2021: 'moab-2021',
     nyc_2021: 'nyc-2021',
+    aspen_2009: 'aspen-2009',
 
     // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
     // https://youtu.be/2aNdceVMyrM?t=162
@@ -46,6 +47,7 @@ const ELECTIONS = {
     // Aspen, Colorado
         // https://rangevoting.org/TallyCorrectedTB.pdf (tally error)
         // https://rangevoting.org/Aspen09.html
+        // https://www.preflib.org/dataset/00016
 
     // Repeals mentioned here, https://alaskapolicyforum.org/wp-content/uploads/2020-10-APF-Ranked-Choice-Voting-Report.pdf
     // Burlington, Vermont
@@ -69,6 +71,9 @@ const elections = {
     },
     'burlington-2009': {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
+    },
+    'aspen-2009': {
+        'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal],
     },
     'san-francisco-2020': {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
@@ -693,7 +698,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
-    const condorcetSuccess = (electionTag) => {
+    const condorcetSuccess = (electionTag, centerBeatsRight=true) => {
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
@@ -730,14 +735,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and looks like {centerCandidate} also beats {rightCandidate} head-to-head (but it's not relevant for this case)</p>
+                    <p>and looks like {centerBeatsRight? centerCandidate : rightCandidate} also beats {centerBeatsRight? rightCandidate : centerCandidate} head-to-head (but it's not relevant for this case)</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
             new SimTransition({
                 ...def,
-                visible: [Candidate, 'left_beats_right', 'center_beats_right', 'left_beats_center'],
-                focused: ['centerCandidate', 'left_beats_center', 'left_beats_right'],
+                visible: [Candidate, 'left_beats_right', centerBeatsRight? 'center_beats_right' : 'right_beats_center', 'left_beats_center'],
+                focused: ['leftCandidate', 'left_beats_center', 'left_beats_right'],
                 explainer: <>,
                     <p>So {leftCandidate} is the Condorcet winner! and RCV was successful in this case</p>
                 </>,
@@ -837,6 +842,17 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
             178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
+        ...electionInfo(ELECTIONS.aspen_2009, 'Aspen 2009 Council Election', 11.1, [0, 11, 19, 15, 22, 37, 24, 19, 23, 30],
+            'RangeVoting.org',
+            'https://rangevoting.org/Aspen09.html ',
+            <>
+                <li>Dataset: <a href='https://www.preflib.org/dataset/00016'>Preflib</a></li>
+                <li>NOTE: This was a 2 seat election using a heaving modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
+                    The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the monotonicity occured when determining the second seat.
+                    The computation for the second seat is identical to standard IRV.
+                </li>
+            </>
+        ),
 
         // Failure Info
         ...failureInfo(FAILURE.condorcet, <>
@@ -872,6 +888,20 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>One could argue that a cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking,
                 but Condorcet Cycles are a super rare edge case they would be difficult for any voting method to handle</p>
         </>),
+
+        // Aspen
+        ...condorcetSuccess(ELECTIONS.aspen_2009, false),
+        ...majorityFailure({
+            electionTag: ELECTIONS.aspen_2009,
+            winnerVoteCount: 96,
+            bulletVoteCount: 11
+        }),
+        ...downwardMonotonicity(ELECTIONS.aspen_2009, new VoterMovement(7, 'rightBullet', 'centerBullet')),
+        ...electionNote(ELECTIONS.aspen_2009, FAILURE.repeal,
+            <p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, view details and
+                polling <a href='https://rangevoting.org/Aspen09.html'>here</a>
+            </p>
+        ),
 
         // Alaska Special Election
         ...condorcet(ELECTIONS.alaska_special_2022),

@@ -32,6 +32,10 @@
   --garcia: #233656;
   --adams: #00AFDF;
 
+  --behrendt: #AD0006;
+  --torre: #39B449;
+  --johnson: #3D3A89;
+
   --pieGray: #222222;
   --voterGray: darkgray;
   font-family: 'Montserrat';
@@ -335,11 +339,11 @@ a, a:visited{
 
 @keyframes win{
   20%{
-    transform: scale(1.3, 1.3);
+    transform: scale(1.1, 1.1);
   }
 
   60%{
-    transform: scale(.9, .9);
+    transform: scale(.95, .95);
   }
 
   100%{

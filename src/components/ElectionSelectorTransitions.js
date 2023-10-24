@@ -851,6 +851,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the monotonicity occured when determining the second seat.
                     The computation for the second seat is identical to standard IRV.
                 </li>
+                <li>NOTE: When showing </li>
             </>
         ),
 
@@ -1026,7 +1027,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
             <p>(It shows as a tie here because they only won by a fraction of a vote)</p>
         ),
-        ...condorcetSuccess(ELECTIONS.san_francisco_2020),
+        ...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
             <p>Despite picking this correct winner, the downward monotonicity failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>

@@ -35,12 +35,14 @@ export class SimTransition {
             if(this.runoffStage.includes('vs') && this.runoffStage != simState.runoffStage && simState.visible.includes(Pie)){
                 simState.runoffTimeout = setTimeout(() => {
                    // get biggest voter camp 
-                   let winnerIndex = simState.objects
+                   let counts = simState.objects
                     .filter(obj => obj instanceof VoterCount)
-                    .reduce((prev, voterCount) => voterCount.count > prev.count? voterCount : prev)
-                    .candidateIndex;
+                    .sort((l, r) => l.count - r.count)
+
+                    if(counts[2].count == counts[1].count) return;
 
                    // set corresponding Candidate to be the winner
+                    let winnerIndex = counts[2].candidateIndex;
                    simState.objects
                     .filter(obj => obj instanceof Candidate)
                     .filter(candidate => candidate.candidateIndex == winnerIndex)[0].win();

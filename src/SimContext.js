@@ -65,15 +65,15 @@ export function SimContextProvider({children}){
             leftCount: new VoterCount(countRadius, 210, 2),
             // camps
             home: new VoterCamp(0, 0),
-            centerBullet: new VoterCamp(voterRadius, 90),
-            centerThenRight: new VoterCamp(voterRadius, 60),
-            rightThenCenter: new VoterCamp(voterRadius, 0),
-            rightBullet: new VoterCamp(voterRadius, 330),
-            rightThenLeft: new VoterCamp(voterRadius, 300),
-            leftThenRight: new VoterCamp(voterRadius, 240),
-            leftBullet: new VoterCamp(voterRadius, 210),
-            leftThenCenter: new VoterCamp(voterRadius, 180),
-            centerThenLeft: new VoterCamp(voterRadius, 120),
+            centerBullet: new VoterCamp(voterRadius, 90, 0, 0),
+            centerThenRight: new VoterCamp(voterRadius, 60, 0, 1),
+            rightThenCenter: new VoterCamp(voterRadius, 0, 1, 0),
+            rightBullet: new VoterCamp(voterRadius, 330, 1, 1),
+            rightThenLeft: new VoterCamp(voterRadius, 300, 1, 2),
+            leftThenRight: new VoterCamp(voterRadius, 240, 2, 1),
+            leftBullet: new VoterCamp(voterRadius, 210, 2, 2),
+            leftThenCenter: new VoterCamp(voterRadius, 180, 2, 0),
+            centerThenLeft: new VoterCamp(voterRadius, 120, 0, 2),
         };
 
         let objects = [];

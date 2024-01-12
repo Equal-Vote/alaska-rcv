@@ -2,15 +2,19 @@ import GameObject from "./GameObject"
 import Vector from "./Vector";
 
 class VoterCamp extends GameObject{
-    constructor(r, angle) {
+    constructor(r, angle, primaryColorIndex, secondaryColorIndex) {
         super('VoterCamp', r, angle, 3.5, -1)
         this.pieThresh = 100*(((360 - angle) + 90)%360) / 360;
         this.startR = r;
+        this.angle = angle;
         this.members = [];
         this.size.x = this.size.y*2;
         this.directMembers = [];
 
-        this.voterColor = 'var(--voterGray)';
+        this.primaryColorIndex = primaryColorIndex;
+        this.secondaryColorIndex = secondaryColorIndex;
+        this.primaryColor = 'var(--voterGray)';
+        this.secondaryColor = 'var(--voterGray)';
     }
 
     refreshMembers(){
@@ -36,12 +40,22 @@ class VoterCamp extends GameObject{
             });
         }
 
-        this.voterColor = 'var(--voterGray)';
+        if(this.startR < 5){
+            this.primaryColor = 'var(--voterGray)';
+            this.secondaryColor = '#000000';
+        }else{
+            this.primaryColor = this.indexToColor(simState, this.primaryColorIndex);
+            if(this.primaryColorIndex == this.secondaryColorIndex){
+                this.secondaryColor = '#000000';
+            }else{
+                this.secondaryColor = this.indexToColor(simState, this.secondaryColorIndex);
+            }
+        }
         if(this.startR > 5){
-            let colors = simState.pie.allPieColors[simState.runoffStage];
-            if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) this.voterColor = this.indexToColor(simState, colors[0]);
-            if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) this.voterColor = this.indexToColor(simState, colors[1]);
-            if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) this.voterColor = this.indexToColor(simState, colors[2]);
+            //let colors = simState.pie.allPieColors['firstRound'];
+            //if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) this.voterColor = this.indexToColor(simState, colors[0]);
+            //if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) this.voterColor = this.indexToColor(simState, colors[1]);
+            //if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) this.voterColor = this.indexToColor(simState, colors[2]);
         }
     }
 

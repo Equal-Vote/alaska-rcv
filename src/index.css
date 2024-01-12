@@ -1,8 +1,13 @@
 * {
   box-sizing: border-box;
-  --begich: #FFB612;
-  --palin: #F11E01;
-  --peltola: #C1E8F5;
+  --begich3: #FFE156;
+  --begich: darkgray;
+  --palin: #EE2C53;
+  --peltola: #2AA2B3;
+
+  --begich2: #FFB612;
+  --palin2: #F11E01;
+  --peltola2: #C1E8F5;
 
   --montroll: #3333FF;
   --wright: #E81B23;

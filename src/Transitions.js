@@ -110,7 +110,38 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>Then the Begich voters were transferred to their second choice, the vote was recounted, and Peltola won!</p>,
+                <p>Then the Begich voters were transferred to their second choice</p>,
+            </>,
+            runoffStage: 'right_vs_left',
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>The Begich that didn't list a second choice are exhausted, and they get removed</p>,
+            </>,
+            runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>Testing palin bullet</p>,
+            </>,
+            runoffStage: 'right_vs_left',
+            exhaustedCamp: 'rightBullet'
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>and Peltola bullet</p>,
+            </>,
+            runoffStage: 'right_vs_left',
+            exhaustedCamp: 'leftBullet'
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>Then Pelotla Wins! Congratulations to Peltola for running a great campaign. She won fair square by the rules of RCV.</p>
                 <br/>
                 <p>But did RCV pick the best winner?</p>
                 <p>This election exposed many of RCV's false claims. Let's take a closer look...</p>

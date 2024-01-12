@@ -4,6 +4,12 @@ import Vector from "./Vector";
 class VoterCamp extends GameObject{
     constructor(r, angle, primaryColorIndex, secondaryColorIndex) {
         super('VoterCamp', r, angle, 3.5, -1)
+        this.startPos = this.pos.clone();
+        if(angle == 90){
+            this.exhaustedPos = this.startPos.add(new Vector(1.1*r, angle-50, true));
+        }else{
+            this.exhaustedPos = this.startPos.add(new Vector(0, 30));
+        }
         this.pieThresh = 100*(((360 - angle) + 90)%360) / 360;
         this.startR = r;
         this.angle = angle;
@@ -40,7 +46,18 @@ class VoterCamp extends GameObject{
             });
         }
 
-        if(this.startR < 5){
+        // move to exhausted position
+        let prevPos = this.pos.clone();
+        let exhausted = simState.exhaustedCamp != undefined && simState[simState.exhaustedCamp] == this;
+        this.pos = this.pos.lerpTo(exhausted? this.exhaustedPos : this.startPos, .07);
+        let diff = this.pos.subtract(prevPos);
+        this.members.forEach(mem => mem.pos = mem.pos.add(diff))
+
+        // re-calculate color
+        if(exhausted){
+            this.primaryColor = 'var(--voterGray)';
+            this.secondaryColor = '#000000';
+        }else if(this.startR < 5){
             this.primaryColor = 'var(--voterGray)';
             this.secondaryColor = '#000000';
         }else{

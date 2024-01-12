@@ -3,12 +3,13 @@ import Pie from "./components/Pie";
 import VoterCount from "./components/VoterCount";
 
 export class SimTransition {
-    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-special-2022', electionTag=undefined, failureTag=undefined, resetVoters=false}) {
+    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-special-2022', electionTag=undefined, failureTag=undefined, resetVoters=false, exhaustedCamp=undefined}) {
         this.visible = visible;
         if(visible == 'undefined') this.visible = undefined;
 
         this.focused = focused;
         this.voterMovements = voterMovements;
+        this.exhaustedCamp = exhaustedCamp;
 
         this.explainer = explainer;
         this.runoffStage = runoffStage;
@@ -28,6 +29,7 @@ export class SimTransition {
     apply(simState) {
         if(this.visible != undefined) simState.visible = this.visible;
         simState.focused = this.focused;
+        simState.exhaustedCamp = this.exhaustedCamp;
         if(this.runoffStage != undefined){
             if(simState.runoffTimeout != undefined){
                 clearTimeout(simState.runoffTimeout)

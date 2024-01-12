@@ -49,6 +49,13 @@ export class Vector {
         return this.scale(new_mag / m);
     }
 
+    lerpTo(b, t){
+        return new Vector(
+            this.x * (1-t) + b.x * t,
+            this.y * (1-t) + b.y * t,
+        );
+    }
+
     clone(){
         return new Vector(this.x, this.y);
     }

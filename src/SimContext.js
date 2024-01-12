@@ -90,6 +90,7 @@ export function SimContextProvider({children}){
             objects,
             visible: [],
             focused: [],
+            exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
             electionName: params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',

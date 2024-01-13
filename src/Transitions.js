@@ -62,7 +62,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>12 voters ranked Begich first without ranking other candidates</p>
-                <img src="/alaska-rcv/images/begichBullet.png" style={{width: '75%'}}/>
+                <img src="/images/begichBullet.png" style={{width: '75%'}}/>
                 <p>We'll put them next to Begich.</p>
                 <br/>
                 <p>Only ranking a single candidate is called Bullet Voting</p>
@@ -75,8 +75,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>There were also 16 voters who ranked Begich first, and Peltola second, as well as 29 voters who ranked Begich first and Palin second</p>
                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                    <img src="/alaska-rcv/images/begichThenPeltola.png" style={{width: '40%'}}/>
-                    <img src="/alaska-rcv/images/begichThenPalin.png" style={{width: '40%'}}/>
+                    <img src="/images/begichThenPeltola.png" style={{width: '40%'}}/>
+                    <img src="/images/begichThenPalin.png" style={{width: '40%'}}/>
                 </div>
                 <p>We'll put them close to Begich, but also leaning toward their second choice</p>
             </>,
@@ -155,7 +155,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>This clearly wasn't true because a majority of 200 would require more than 100 votes and none of the candidates reached that.</p>
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>
-                <img src="/alaska-rcv/images/cnnResults.png" style={{width: '90%'}}/>
+                <img src="/images/cnnResults.png" style={{width: '90%'}}/>
                 <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
             </>,
             runoffStage: 'right_vs_left',
@@ -236,7 +236,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <br/>
                 <p>The spoiler effect often causes the consensus candidate to lose and it's a main driver of polarization</p>
                 <p>If there are only two candidates then the consensus candidate who best represents the will of the people will win.</p>
-                <img src="/alaska-rcv/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
+                <img src="/images/centerSqueeze1.png" style={{width: '50%', margin: 'auto'}}/>
             </>,
             runoffStage: 'center_vs_left',
         }),
@@ -245,7 +245,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>But if you add more candidates, the candidates in the middle ideologically have to compete with candidates on both sides of them for votes,
                 (or in the case of RCV, 1st choice votes) while more polarizing candidates only have to defend from one side or the other.</p>
-                <img src="/alaska-rcv/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
+                <img src="/images/centerSqueeze2.png" style={{width: '50%', margin: 'auto'}}/>
                 <p>Just like with Choose-One voting, voters in RCV aren't able to show that they would prefer either of the candidates
                 they like over the opposition so majority factions can end up divided and conquered.</p>
                 <p>For this election, Begich was the consensus candidate for these voters, and Palin and Peltola were pulling votes from either side</p>
@@ -371,7 +371,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again? Or even voting honestly?</p>
                 <p>On top of that, the failure in Alaska caused a state-wide repeal attempt in North Dakota against both RCV and Approval Voting, a simpler voting method that lacks the issues we’ve seen in RCV</p>
-                <img src="/alaska-rcv/images/fargoQuote.png" style={{width:'70%'}}/>
+                <img src="/images/fargoQuote.png" style={{width:'70%'}}/>
                 <p><a target="_blank" href="https://bismarcktribune.com/news/state-and-regional/govt-and-politics/north-dakota-lawmakers-ban-approval-voting-system-used-in-fargo/article_7f463c8e-cf47-11ed-86f6-974992b1a2bf.html">link</a></p>
                 <p>The bill was eventually vetoed, but that veto was VERY close to being overturned</p>
                 <p>But other juristictions weren't so lucky. The election inaccuracies, and general voter confusion have

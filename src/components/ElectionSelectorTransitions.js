@@ -176,7 +176,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             electionName: 'undefined',
             explainer:  <>
                 <h1 style={{marginTop: 0, marginBottom: 0}}>RCV Case Studies</h1>
-                {new URLSearchParams(window.location.search).get('onlySelector') && <a href={`${window.location.href.split('?')[0]}`}>Link to full article</a>}
                 <div className='selectorPanel'>
                     <div className={`selectors ${(new URLSearchParams(window.location.search).get('primarySelector') == 'failure')? 'selectorsSwapped' : ''}`}>
                         <div className='electionSelector'>

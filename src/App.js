@@ -1,6 +1,7 @@
 import { SimContextProvider } from './SimContext';
 import Simulation from './components/Simulation';
 import Explainer from './components/Explainer';
+import Nav from './components/Nav';
 
 function App() {
     return (

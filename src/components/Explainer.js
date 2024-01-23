@@ -28,6 +28,7 @@ const Explainer = () => {
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();
         let mid = (rect.top + rect.bottom) / 2;
+        console.log(mid);
 
         let focusedElem = explainerRefs.current.reduce((prev, e, i) => {
             if(!simIndexIsVisible(i)) return prev;

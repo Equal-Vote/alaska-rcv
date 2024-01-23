@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SimContext } from '../SimContext';
+import Nav from "./Nav";
 
 const Simulation = () => {
     let [bool, setBool] = useState(false);
@@ -45,8 +46,11 @@ const Simulation = () => {
     }, [])
 
     return (
-        <div ref={simRef} className='simulation'>
-            {simState.objects.map(o => o.asComponent(simState, simRef.current == null ? 800 : simRef.current.clientHeight))}
+        <div className="simPanel">
+            <Nav/>
+            <div ref={simRef} className='simulation'>
+                {simState.objects.map(o => o.asComponent(simState, simRef.current == null ? 800 : simRef.current.clientHeight))}
+            </div>
         </div>
     )
 }

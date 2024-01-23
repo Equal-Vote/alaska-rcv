@@ -77,6 +77,11 @@ body, #root{
   border: 0;
 }
 
+.simPanel{
+  display: flex;
+  flex-direction: column;
+}
+
 /**** EXPLAINER ****/
 .explainer{
   position: relative;
@@ -323,6 +328,10 @@ a, a:visited{
   width: 120px;
 }
 
+.nav{
+  margin: 10px;
+}
+
 .electionSelector, .failureSelctor{
   display: flex;
   flex-direction: column;
@@ -355,7 +364,6 @@ a, a:visited{
     transform: scale(1, 1);
   }
 }
-
 
 @media(max-width: 900px){
   .explainerPadding{

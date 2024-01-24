@@ -54,10 +54,11 @@ class VoterCamp extends GameObject{
         this.members.forEach(mem => mem.pos = mem.pos.add(diff))
 
         // re-calculate color
-        if(exhausted){
-            this.primaryColor = 'var(--voterGray)';
-            this.secondaryColor = '#000000';
-        }else if(this.startR < 5){
+        //if(exhausted){
+        //    this.primaryColor = 'var(--voterGray)';
+        //    this.secondaryColor = '#000000';
+        //}else
+        if(this.startR < 5){
             this.primaryColor = 'var(--voterGray)';
             this.secondaryColor = '#000000';
         }else{

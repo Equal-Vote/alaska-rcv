@@ -24,6 +24,8 @@ class VoterCount extends GameObject{
         return {
             ...super.getStyle(containerSize),
             fontSize: `${Math.round(0.05 * containerSize)}px`,
+            //color: 'black',
+            color: this.candidateColor, 
         }
     }
 
@@ -32,7 +34,7 @@ class VoterCount extends GameObject{
     }
 
     update(simState){
-        //this.candidateColor = `var(--${simState.candidateNames[simState.electionName][this.candidateIndex].toLowerCase()})`
+        this.candidateColor = `var(--${simState.candidateNames[simState.electionName][this.candidateIndex].toLowerCase()})`
 
         let targetCount = camps.reduce((prev, camp) => prev + (simState[camp].currentCandidateIndex(simState) == this.candidateIndex) * simState[camp].members.length, 0);
         let t = .4;

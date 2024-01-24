@@ -1,5 +1,6 @@
 import GameObject from "./GameObject";
 
+
 const piePoints = {
     'default': [0, 33, 33, 66, 66, 100],
     'firstRound': [16, 16, 50, 50, 83, 83],
@@ -71,8 +72,17 @@ class Pie extends GameObject{
     getStyle(containerSize){
         return {
             ...super.getStyle(containerSize),
+            display: 'flex',
             backgroundImage: 'conic-gradient('+this.conicPairs.map(([color, point], i) => `${color} 0, ${color} ${point}%`).join(',')+')'
         }
+    }
+
+    asComponent(simState, containerSize) {
+        let innerSize = '95%';
+        // this is the inner pie
+        //<div style={{margin: 'auto', borderRadius: '100%', width: innerSize, height: innerSize, background: 'var(--pieGray)'}}/>
+        return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)}>
+        </div>;
     }
 }
 

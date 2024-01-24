@@ -1,13 +1,8 @@
 * {
   box-sizing: border-box;
   --begich: #FFE156;
-  --begich3: darkgray;
   --palin: #EE2C53;
   --peltola: #2AA2B3;
-
-  --begich2: #FFB612;
-  --palin2: #F11E01;
-  --peltola2: #C1E8F5;
 
   --montroll: #3333FF;
   --wright: #E81B23;
@@ -41,10 +36,48 @@
   --torre: #39B449;
   --johnson: #3D3A89;
 
-  --pieGray: #222222;
+  --pieGray: #111111;
   --voterGray: darkgray;
   font-family: 'Montserrat';
   font-weight: bold;
+}
+
+.campaignColors {
+  --begich: #FFB612;
+  --palin: #F11E01;
+  --peltola: #C1E8F5;
+
+  --montroll: #3333FF;
+  --wright: #E81B23;
+  --kiss: #C64C4B;
+
+  --gordon: #17AA5C;
+  --arab: #5C068B;
+  --worlobah: #ED8C3B;
+
+  --bunney: purple;
+  --goings: orange;
+  --mccarthy: cyan;
+
+  --engardio: #F8641A;
+  --melgar: #B51E83;
+  --nguyen: #00AAA4;
+
+  --hutchinson: #122110;
+  --manigo: #4D0EC1;
+  --resnick: #238C23;
+
+  --wojciechowski: #0C152D;
+  --kovash: #C66230;
+  --taylor: #C0AF9B;
+
+  --wiley: #9C64AA;
+  --garcia: #233656;
+  --adams: #00AFDF;
+
+  --behrendt: #AD0006;
+  --torre: #39B449;
+  --johnson: #3D3A89;
 }
 
 body, #root{
@@ -155,7 +188,7 @@ body, #root{
 }
 
 .Pie.objectVisible{
-  opacity: .3;
+  opacity: .1;
 }
 
 .VoterCount{
@@ -163,10 +196,6 @@ body, #root{
   flex-direction: column;
   justify-content: center;
   text-align: center;
-}
-
-.VoterCount h1{
-  color: black;
 }
 
 .object{

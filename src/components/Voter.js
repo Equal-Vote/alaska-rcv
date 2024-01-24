@@ -41,10 +41,11 @@ class Voter extends GameObject{
     }
 
     getStyle(containerSize){
+        let insidePie = this.pos.magnitude() < 43;
         return {
             ...super.getStyle(containerSize),
-            background: this.isMember() ? this.camp.primaryColor : 'var(--voterGray)',
-            border: `${Math.round(0.002 * containerSize)}px solid ${this.isMember() ? this.camp.secondaryColor : 'black'}`,
+            background: this.isMember() && insidePie ? this.camp.primaryColor : 'var(--voterGray)',
+            border: `${Math.round(0.002 * containerSize)}px solid ${this.isMember() && insidePie ? this.camp.secondaryColor : 'black'}`,
         }
     }
 
@@ -57,7 +58,7 @@ class Voter extends GameObject{
     }
 
     isFocused(simState){
-        return this.isMember() && this.camp.isFocused(simState);
+        return !this.isMember() || this.camp.isFocused(simState);
     }
 
     onCollide(other){

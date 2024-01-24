@@ -1,40 +1,49 @@
 * {
   box-sizing: border-box;
-  --begich: #FFE156;
-  --palin: #EE2C53;
-  --peltola: #2AA2B3;
 
-  --montroll: #3333FF;
-  --wright: #E81B23;
-  --kiss: #C64C4B;
+  --brand-red: #EE2C53;
+  --brand-orange: #E69F00FF;
+  --brand-yellow: #FFE156;
+  --brand-green: #C4E44C;
+  --brand-ltblue: #2AA2B3;
+  --brand-dkblue: #02627C;
+  --brand-purple: #4D2586;
 
-  --gordon: #17AA5C;
-  --arab: #5C068B;
-  --worlobah: #ED8C3B;
+  --begich: var(--brand-yellow);
+  --palin: var(--brand-red);
+  --peltola: var(--brand-ltblue);
 
-  --bunney: purple;
-  --goings: orange;
-  --mccarthy: cyan;
+  --montroll: var(--brand-purple);
+  --wright: var(--brand-red);
+  --kiss: var(--brand-green);
 
-  --engardio: #F8641A;
-  --melgar: #B51E83;
-  --nguyen: #00AAA4;
+  --gordon: var(--brand-green);
+  --arab: var(--brand-purple);
+  --worlobah: var(--brand-orange);
 
-  --hutchinson: #122110;
-  --manigo: #4D0EC1;
-  --resnick: #238C23;
+  --bunney: var(--brand-purple);
+  --goings: var(--brand-orange);
+  --mccarthy: var(--brand-ltblue);
 
-  --wojciechowski: #0C152D;
-  --kovash: #C66230;
-  --taylor: #C0AF9B;
+  --engardio: var(--brand-orange);
+  --melgar: var(--brand-purple);
+  --nguyen: var(--brand-ltblue);
 
-  --wiley: #9C64AA;
-  --garcia: #233656;
-  --adams: #00AFDF;
+  --hutchinson: var(--brand-dkblue);
+  --manigo: var(--brand-purple);
+  --resnick: var(--brand-green);
 
-  --behrendt: #AD0006;
-  --torre: #39B449;
-  --johnson: #3D3A89;
+  --wojciechowski: var(--brand-dkblue);
+  --kovash: var(--brand-orange);
+  --taylor: var(--brand-purple);
+
+  --wiley: var(--brand-purple);
+  --garcia: var(--brand-dkblue);
+  --adams: var(--brand-ltblue);
+
+  --behrendt: var(--brand-red);
+  --torre: var(--brand-green);
+  --johnson: var(--brand-purple);
 
   --pieGray: #111111;
   --voterGray: darkgray;

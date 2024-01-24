@@ -76,6 +76,14 @@ class VoterCamp extends GameObject{
         }
     }
 
+    currentCandidateIndex(simState){
+        let colors = simState.pie.allPieColors['firstRound'];
+        if(simState.pie.points[5] < this.pieThresh || this.pieThresh < simState.pie.points[0]) return colors[0];
+        if(simState.pie.points[1] < this.pieThresh && this.pieThresh < simState.pie.points[2]) return colors[1];
+        if(simState.pie.points[3] < this.pieThresh && this.pieThresh < simState.pie.points[4]) return colors[2];
+        return -1;
+    }
+
     asComponent(simState, containerSize) {
         return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)}>
             {this.members.length > 0 &&

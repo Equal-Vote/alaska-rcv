@@ -99,6 +99,10 @@ const elections = {
 };
 
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
+    const urlFormat = (txt) => {
+        return txt.replace('<', '').replace('>', '');
+    }
+
     const selectorTransition = () => {
         const switchElection = (newElection) => {
             simState.electionName=newElection;
@@ -127,8 +131,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 });
             }
 
-            url.set('selectorElection', simState.selectorElection);
-            url.set('selectorFailure', simState.selectorFailure);
+            url.set('selectorElection', urlFormat(simState.selectorElection));
+            url.set('selectorFailure', urlFormat(simState.selectorFailure));
             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
 
             refreshVoters();
@@ -161,8 +165,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 });
             }
 
-            url.set('selectorElection', simState.selectorElection);
-            url.set('selectorFailure', newFailure);
+            url.set('selectorElection', urlFormat(simState.selectorElection));
+            url.set('selectorFailure', urlFormat(newFailure));
             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
 
             refreshVoters();
@@ -223,8 +227,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
                             url.set('onlySelector', 'true');
-                            url.set('selectorElection', simState.selectorElection);
-                            url.set('selectorFailure', simState.selectorFailure);
+                            url.set('selectorElection', urlFormat(simState.selectorElection));
+                            url.set('selectorFailure', urlFormat(simState.selectorFailure));
                             navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?${url.toString()}`);
                             event.target.textContent = 'Link Copied!'
                             setTimeout(() => event.target.textContent = 'Copy Link', 800);

@@ -28,6 +28,7 @@ class Pie extends GameObject{
 
     indexToColor(simState, index){
         if(index == -1) return 'var(--pieGray)';
+        console.log(simState.electionName, index);
         return `var(--${simState.candidateNames[simState.electionName][index].toLowerCase()})`;
     }
 

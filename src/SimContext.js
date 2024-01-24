@@ -95,9 +95,13 @@ export function SimContextProvider({children}){
             runoffTimeout: undefined,
             electionName: params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
             selectorElection: params.get('selectorElection') ?? 'burlington-2009',
-            selectorFailure: params.get('selectorFailure') ?? '<pick a failure type>',
+            selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
             candidateNames
         }
+
+        if(ctx.electionName == 'pick an election') ctx.electionName = '<pick an election>';
+        if(ctx.selectorElection == 'pick an election') ctx.selectorElection = '<pick an election>';
+        if(ctx.selectorFailure == 'pick a failure type') ctx.selectorFailure = '<pick a failure type>';
 
         // must be after the { ... } since that breaks the reference
 

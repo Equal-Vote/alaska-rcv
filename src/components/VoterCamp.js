@@ -26,7 +26,6 @@ class VoterCamp extends GameObject{
     refreshMembers(){
         this.members = this.members.filter(o => o.camp == this);
         this.directMembers = this.directMembers.filter(o => o.camp == this);
-        console.log('refresh', this.angle, this.members.length, this.directMembers.length)
     }
 
     // copied fro Pie.js

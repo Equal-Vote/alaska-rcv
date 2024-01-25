@@ -62,9 +62,13 @@ export class VoterMovement {
 
         // adding undefined made this messy :'(
         if(to == undefined){
+            console.log("reset all positions");
             simState.objects
                 .filter(o => o instanceof Voter)
-                .forEach(o => o.camp = undefined);
+                .forEach(o => {
+                    o.resetToStartPos(); // must set position early so that voters can be assigned properly later
+                    o.camp = undefined
+                });
             if(from == 'anywhere'){
                 campIds.forEach(c => simState[c].refreshMembers());
             }else if(from != undefined){
@@ -81,7 +85,14 @@ export class VoterMovement {
             })
             .sort((l, r) => {
                 let campScore = (o) => o.finalCamp != simState[to];
-                let dist = (o) => o.pos.subtract(simState[to].pos).magnitude();
+                let dist = (o) => {
+                    // when coming from outside the circle, use the angle distance
+                    if(o.pos.magnitude() > 50){
+                        return o.clockAngle();
+                    }else{
+                        return o.pos.subtract(simState[to].pos).magnitude();
+                    }
+                };
                 return 1000 * (campScore(l) - campScore(r)) + dist(l) - dist(r);
             })
             .filter((_, i) => i < n)

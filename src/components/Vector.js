@@ -43,6 +43,10 @@ export class Vector {
         return Math.sqrt(this.x*this.x + this.y*this.y);
     }
 
+    angle(){
+        return Math.atan2(-this.y, this.x) * 360 / (2 * Math.PI);
+    }
+
     scaleTo(new_mag){
         let m = this.magnitude();
         if(m == 0) return new Vector(0);

@@ -82,7 +82,7 @@ export function SimContextProvider({children}){
             objects.push(o);
         });
         for(var i = 0; i < 200; i++){
-            objects.push(new Voter(80+Math.random()*10, (i/200)*360+.3, undefined));
+            objects.push(new Voter(60+Math.random()*10, (i/200)*360+.3, undefined));
         }
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)

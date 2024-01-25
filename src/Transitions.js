@@ -52,8 +52,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 </ul>
             </>,
             voterMovements: [
+                new VoterMovement(200, 'anywhere', undefined),
                 new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
-                new VoterMovement(200, undefined, undefined)
+                new VoterMovement(200, 'anywhere', undefined)
             ],
         }),
         new SimTransition({

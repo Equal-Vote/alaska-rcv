@@ -29,7 +29,7 @@ class Pie extends GameObject{
 
     indexToColor(simState, index){
         if(index == -1) return 'var(--pieGray)';
-        return ['#999999', '#666666', '#444444'][index];
+        //return ['#999999', '#666666', '#444444'][index];
         return `var(--${simState.candidateNames[simState.electionName][index].toLowerCase()})`;
     }
 
@@ -81,8 +81,15 @@ class Pie extends GameObject{
     asComponent(simState, containerSize) {
         let innerSize = '95%';
         // this is the inner pie
-        //<div style={{margin: 'auto', borderRadius: '100%', width: innerSize, height: innerSize, background: 'var(--pieGray)'}}/>
         return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)}>
+            <div style={{
+                margin: 'auto',
+                borderRadius: '100%',
+                width: innerSize,
+                height: innerSize,
+                filter: 'brightness(.2) grayscale(1)',
+                backgroundImage: 'conic-gradient('+this.conicPairs.map(([color, point], i) => `${color} 0, ${color} ${point}%`).join(',')+')'
+            }}/>
         </div>;
     }
 }

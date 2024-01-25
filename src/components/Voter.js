@@ -9,7 +9,8 @@ class Voter extends GameObject{
 
     constructor(r, angle, camp) {
         super('Voter', r, angle, 1.7, startMass);
-        this.camp = camp;
+        this.finalCamp = camp;
+        this.camp = undefined;
         this.startPos = this.pos.clone();
         this.grav = startGrav;
         this.prevCamp = undefined;
@@ -28,6 +29,7 @@ class Voter extends GameObject{
             this.grav = startGrav; 
             if(!this.isDirectMember()) this.phyMass = startMass;
         }
+        //console.log(this.phyMass, this.camp, this.isMember(), this.isDirectMember(), this.camp != undefined ? this.camp.directMembersLocked() : '');
         if(this.camp == undefined){
             this.pos = this.startPos.clone();
             this.vel = new Vector(0);
@@ -44,8 +46,8 @@ class Voter extends GameObject{
         let insidePie = this.pos.magnitude() < 43;
         return {
             ...super.getStyle(containerSize),
-            background: this.isMember() && insidePie ? this.camp.primaryColor : 'var(--voterGray)',
-            border: `${Math.round(0.002 * containerSize)}px solid ${this.isMember() && insidePie ? this.camp.secondaryColor : 'black'}`,
+            background: this.finalCamp != undefined && insidePie ? this.finalCamp.primaryColor : 'var(--voterGray)',
+            border: `${Math.round(0.002 * containerSize)}px solid ${this.isMember() && this.finalCamp != undefined ? this.finalCamp.secondaryColor : 'black'}`,
         }
     }
 

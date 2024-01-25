@@ -16,7 +16,7 @@ export class VoterMovement {
         this.prevCounts = {};
     }
 
-    move(n, from, to, simState) {
+    move(n, from, to, simState, updateFinalCamp=false) {
         if(Array.isArray(n)){
             n = [...n];
 
@@ -48,12 +48,12 @@ export class VoterMovement {
             })
 
             // move all undefineds to home
-            new VoterMovement(200, undefined, 'home').apply(simState);
+            new VoterMovement(200, 'anywhere', 'home').apply(simState);
 
             // then have everything else grab from home
             campIds.forEach((c, i) => {
                 if(n[i] == 0) return;
-                new VoterMovement(n[i], 'home', c).apply(simState);
+                new VoterMovement(n[i], 'home', c).apply(simState, true);
             })
 
             campIds.forEach(c => simState[c].refreshMembers());
@@ -80,11 +80,14 @@ export class VoterMovement {
                 return from == undefined? o.camp == undefined : o.camp == simState[from]
             })
             .sort((l, r) => {
+                let campScore = (o) => o.finalCamp != simState[to];
                 let dist = (o) => o.pos.subtract(simState[to].pos).magnitude();
-                return dist(l) - dist(r);
+                return 1000 * (campScore(l) - campScore(r)) + dist(l) - dist(r);
             })
             .filter((_, i) => i < n)
             .forEach(o => {
+                if(updateFinalCamp)
+                    o.finalCamp = simState[to];
                 o.camp = simState[to];
                 o.phyMass = 1;
             });
@@ -94,11 +97,11 @@ export class VoterMovement {
         }else if(from != undefined){
             simState[from].refreshMembers();
         }
-
     }
 
-    apply(simState) {
+    apply(simState, updateFinalCamp=false) {
         if(this.from == 'anywhere'){
+            // only recording this for reverting
             this.counts = campIds.map(c => 
                 simState.objects
                 .filter(o => o instanceof Voter)
@@ -106,7 +109,7 @@ export class VoterMovement {
             );
         }
 
-        this.move(this.count, this.from, this.to, simState);
+        this.move(this.count, this.from, this.to, simState, updateFinalCamp);
     }
 
     revert(simState) {

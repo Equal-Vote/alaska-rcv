@@ -50,7 +50,11 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     <li>Sarah Palin (R)</li>
                     <li>Mary Peltola (D)</li>
                 </ul>
-            </>
+            </>,
+            voterMovements: [
+                new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
+                new VoterMovement(200, undefined, undefined)
+            ],
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp],

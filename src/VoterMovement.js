@@ -86,12 +86,7 @@ export class VoterMovement {
             .sort((l, r) => {
                 let campScore = (o) => o.finalCamp != simState[to];
                 let dist = (o) => {
-                    // when coming from outside the circle, use the angle distance
-                    if(o.pos.magnitude() > 50){
-                        return o.clockAngle();
-                    }else{
-                        return o.pos.subtract(simState[to].pos).magnitude();
-                    }
+                    return o.pos.subtract(simState[to].pos).magnitude();
                 };
                 return 1000 * (campScore(l) - campScore(r)) + dist(l) - dist(r);
             })
@@ -102,6 +97,13 @@ export class VoterMovement {
                 o.camp = simState[to];
                 o.phyMass = 1;
             });
+
+        console.log(
+            simState.objects
+                .filter(o => o instanceof Voter)
+                .sort((l, r) => l.index - r.index)
+                .map(o => o.camp.getSimKey())
+        );
 
         if(from == 'anywhere'){
             campIds.forEach(c => simState[c].refreshMembers());

@@ -12,10 +12,14 @@ import { VoterMovement } from './VoterMovement';
 
 export const SimContext = createContext({});
 
+
 export function SimContextProvider({children}){
+    // this was genetated programatically, and then copied from the log and fed into a single line formatter
+    const campMappings = ["rightThenCenter","centerThenRight","rightThenCenter","centerThenRight","centerThenRight","centerThenRight","rightThenCenter","rightThenCenter","leftThenCenter","rightThenCenter","centerThenRight","centerThenRight","rightThenCenter","centerThenRight","centerThenRight","centerThenRight","leftThenCenter","rightThenCenter","centerThenRight","rightThenCenter","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","leftBullet","leftThenCenter","centerThenRight","leftThenCenter","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerBullet","centerThenRight","leftThenCenter","centerThenRight","leftThenCenter","leftThenCenter","centerThenRight","leftThenCenter","centerThenRight","leftThenCenter","centerBullet","centerThenRight","centerThenLeft","centerBullet","centerBullet","centerBullet","centerBullet","centerThenLeft","centerBullet","centerBullet","centerBullet","leftBullet","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","centerBullet","centerThenRight","centerThenLeft","centerBullet","centerThenLeft","leftBullet","leftThenCenter","centerThenLeft","leftThenCenter","leftThenCenter","centerThenLeft","centerBullet","centerThenLeft","centerThenLeft","centerThenLeft","leftThenCenter","leftThenCenter","centerThenLeft","leftThenCenter","centerThenRight","leftThenCenter","centerThenLeft","centerThenLeft","centerThenLeft","centerThenLeft","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","centerThenLeft","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftBullet","leftThenCenter","leftThenCenter","leftThenCenter","leftBullet","leftThenCenter","centerThenLeft","leftThenCenter","leftBullet","leftBullet","leftThenCenter","leftThenCenter","leftBullet","rightBullet","rightThenCenter","leftThenCenter","leftBullet","leftThenCenter","leftBullet","leftBullet","leftBullet","leftThenRight","leftBullet","leftBullet","leftBullet","leftBullet","leftBullet","leftBullet","rightThenLeft","leftBullet","rightThenCenter","leftThenCenter","leftBullet","leftThenCenter","rightThenCenter","leftBullet","rightBullet","leftThenRight","leftBullet","leftThenRight","leftThenCenter","leftThenCenter","rightBullet","rightThenCenter","leftThenCenter","leftThenRight","leftBullet","leftThenRight","rightThenLeft","rightBullet","rightBullet","leftThenCenter","leftBullet","rightThenCenter","leftThenCenter","rightThenLeft","rightThenLeft","rightBullet","rightBullet","rightBullet","rightBullet","rightBullet","rightBullet","rightBullet","leftThenCenter","rightBullet","leftThenCenter","rightBullet","rightBullet","rightThenCenter","rightThenCenter","rightThenCenter","leftThenCenter","rightBullet","rightBullet","rightThenCenter","rightBullet","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightBullet","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightBullet","rightThenCenter","leftBullet","rightBullet","leftThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","leftThenCenter","rightBullet","rightBullet","rightThenCenter","rightThenCenter"]
     let [refreshBool, setRefreshBool] = useState(false);
     let simState = useRef(initSimContext()).current;
     let simIndex = useRef(0);
+
 
     function initSimContext(){
 
@@ -81,8 +85,10 @@ export function SimContextProvider({children}){
         Object.entries(ctx).forEach(([_, o]) => {
             objects.push(o);
         });
+        let r = 5;
         for(var i = 0; i < 200; i++){
-            objects.push(new Voter(60+Math.random()*10, (i/200)*360+.3, undefined));
+            r = (1466021743 + r * i) % 10;
+            objects.push(new Voter(i, 80+r, (i/200)*360+.3, ctx[campMappings[i]]));
         }
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)

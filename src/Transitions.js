@@ -26,15 +26,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         // intro
         new SimTransition({
             visible: ['choose_one'],
-            explainer: <p>For decades, we've been cursed with a voting method where it's not safe to pick your favorite</p>,
+            explainer: <p>For centuries, we've been cursed with a voting method where it's not safe to pick your favorite</p>,
         }),
         new SimTransition({
             visible: ['alaska'],
             explainer: <>
                 <p>
-                    But in 2020, Alaska made a change and adopted Ranked Choice Voting with an open integrated primary
-                <br/>
-                    Let's see how the first election went in August 2022
+                    But Alaska decided to change that, and in 2022 they ran their first election replacing the Choose One Voting system with Ranked Choice Voting 
                 </p>
             </>,
         }),
@@ -51,11 +49,6 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     <li>Mary Peltola (D)</li>
                 </ul>
             </>,
-            voterMovements: [
-                new VoterMovement(200, 'anywhere', undefined),
-                new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16]),
-                new VoterMovement(200, 'anywhere', undefined)
-            ],
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp],

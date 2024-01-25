@@ -7,10 +7,11 @@ const startGrav = .08;
 
 class Voter extends GameObject{
 
-    constructor(r, angle, camp) {
+    constructor(i, r, angle, camp) {
         //let maxROffset = 100;
         //r += maxROffset * (1 - (Math.min(Math.abs(angle-90), Math.abs(360 - Math.abs(angle-90))) / 180));
         super('Voter', r, angle, 1.7, startMass);
+        this.index = i;
         this.finalCamp = camp;
         this.camp = undefined;
         this.startPos = this.pos.clone();
@@ -36,45 +37,39 @@ class Voter extends GameObject{
             this.vel = new Vector(0);
         }else{
             let toCamp = this.camp.pos.subtract(this.pos);
-            if(this.grav > .16){
+            if(this.grav > .16 && this.camp.getSimKey() != 'home' && this.camp != undefined){
                 toCamp = toCamp.add(new Vector(Math.random(), Math.random()).scale(this.grav * .25))
             }
-            var m = 1.5;
-            if(this.vel.magnitude() > m) this.vel = this.vel.scaleTo(m); // moving before grav so chaos still works
+            //var m = 1.5;
+            //if(this.vel.magnitude() > m) this.vel = this.vel.scaleTo(m); // moving before grav so chaos still works
             this.vel = this.vel.add(toCamp.scaleTo(this.grav));
         }
     }
 
     resetToStartPos(){
         this.pos = this.startPos.clone();
-        if(this.finalCamp == undefined) return;
-        let offset = [
-            'rightBullet',
-            'rightThenLeft',
-            'rightThenCenter',
-            'leftThenRight',
-            'leftThenCenter',
-            'leftBullet',
-            'centerThenRight',
-            'centerThenLeft',
-            'centerBullet',
-        ].indexOf(this.finalCamp.getSimKey());
-        console.log(this.finalCamp.getSimKey(), offset);
-        this.pos = this.pos.add(this.pos.scaleTo(offset*20));
-    }
-
-    clockAngle(){
-        return ((-this.startPos.angle())+90+360)%360; // sorting clockwise from the top
     }
 
     getStyle(containerSize){
         let exhausted = this.isMember() && this.pos.magnitude() > 43;
+        let pri, sec;
+        if(this.finalCamp != undefined && !exhausted){
+            pri = this.finalCamp.primaryColor;
+            sec = this.finalCamp.secondaryColor;
+        }else{
+            pri = 'var(--voterGray)';
+            sec = 'black';
+        }
         return {
             ...super.getStyle(containerSize),
-            background: this.finalCamp != undefined && !exhausted ? this.finalCamp.primaryColor : 'var(--voterGray)',
-            border: `${Math.round(0.002 * containerSize)}px solid ${this.finalCamp != undefined && !exhausted ? this.finalCamp.secondaryColor : 'black'}`,
+            background: pri,
+            border: `${Math.round(0.002 * containerSize)}px solid ${sec}`
         }
     }
+
+    //isVisible(simState){
+    //    return super.isVisible(simState) && this.pos.magnitude() < 70;
+    //}
 
     isMember(){
         return this.camp != undefined && this.camp.members.includes(this);

@@ -34,6 +34,7 @@ class Candidate extends GameObject{
                     textAlign: 'center',
                     marginTop: `${Math.round(.125 * containerSize)}px`,
                     backgroundColor: `var(--${this.candidateName.toLowerCase()})`,
+                    color: 'black',
                 }}>{this.candidateName}</h3>
             </div>
             

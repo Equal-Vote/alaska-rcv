@@ -129,20 +129,22 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>This election exposed many of the common RCV misconceptions. Let's take a closer look...</p>
             </>,
             runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
         }),
         
         // Condorcet
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <h1>Misconception #1: "RCV elects the most preferred candidate"</h1>
+                <h1>❌ Misconception #1: "RCV elects the most preferred candidate"</h1>
                 <p>Actually Peltola wasn't this most preferred candidate</p>
                 <br/>
-                <p>The most preferred candidate is also known as the Condorcet winner</p>
-                <p>And the Condorcet winner is the candidate who beat any of the other candidates head-to-head</p>
+                <p>The most preferred candidate is also known as the Condorcet winner
+                and the Condorcet winner is the candidate who beat any of the other candidates head-to-head</p>
                 <p>We know that Peltola beats Palin head-to-head but what about the other matchups?</p>
             </>,
             runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -150,6 +152,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>Begich beats Peltola head-to-head</p>
             </>,
             runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -157,6 +160,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>And Begich beats Palin head-to-head</p>
             </>,
             runoffStage: 'center_vs_right',
+            exhaustedCamp: 'leftBullet'
         }),
         new SimTransition({
             visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
@@ -171,65 +175,97 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             focused: ['rightCandidate', 'center_beats_right', 'left_beats_right'],
             explainer: <>
                 <p>Additionally, Palin lost all her head-to-head matchups</p>
-                <p>That makes her the Condorcet Loser for this election. She never really had a chance to win this election.</p>
+                <p>That makes her the Condorcet loser for this election. She never really had a chance to win this election.</p>
             </>,
-            runoffStage: 'center_vs_right',
+            runoffStage: 'firstRound',
         }),
         // spoiler effect
         new SimTransition({
-            visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
+            visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <h1>Misconception #2: "RCV solves the spoiler effect"</h1>
+                <h1>❌ Misconception #2: "RCV solves the spoiler effect"</h1>
                 <p>Once you have more than two competitive candidates, RCV DOES allow for the spoiler effect.</p>
                 <br/>
                 <i>But what is the spoiler effect?</i>
+            </>,
+            runoffStage: 'firstRound',
+        }),
+        new SimTransition({
+            visible: [],
+            explainer: <>
                 <p>Well the most famous example happened in the 2000 US presidential election</p>
-                <p>Gore likey would have been the majority winner if he faced Bush head-to-head, but adding Nader to the race took votes from Gore and as a result the win went to Bush</p>
+                <p>Gore likey would have been the majority winner if he faced Bush head-to-head</p>
+            </>,
+            runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
+        }),
+        new SimTransition({
+            visible: [],
+            explainer: <>
+                <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush</p>
                 <p>In that race Nader was the spoiler candidate because he had no chance of winning but he still impacted the results</p>
             </>,
-            runoffStage: 'center_vs_right',
+            runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>Here we see that removing Palin would cause the winner to change from Peltola to Begich. Therefore Palin was the spoiler candidate in this election</p>
-                <p>Palin would have lost regardless, but her presense in the race was still enough to spoil the election and change the result</p>
+                <p>Palin would have lost regardless, but her presence in the race was still enough to spoil the election and change the result</p>
             </>,
             runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
         }),
         
         // majority
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <h1>Misconception #3: "RCV guarantees a majority winner"</h1>
-                <p>This clearly wasn't true because a majority of 200 would require more than 100 votes and none of the candidates reached that.</p>
+                <h1>❌ Misconception #3: "RCV guarantees a majority winner"</h1>
+                <p>If we look back at the actual finalists, Peltola clearly didn't have a true majority because
+                    a majority of 200 would require more than 100 votes and none of the candidates reached that.</p>
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>
                 <img src="/images/cnnResults.png" style={{width: '90%'}}/>
                 <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
             </>,
             runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             focused: ['centerBullet', 'centerCandidate'],
             explainer: <>
                 <p>This was only possible by hiding the 12 Begich bullet votes from the count.</p>
-                <p>So the outlet reported Peltola had 96/188 = 51% , but she actually had 96/200 = 45%</p>
+                <p>So the outlet reported that Peltola had 96/188 = 51% , but she actually had 96/200 = 45%</p>
                 <p>The majority is an illusion! In reality, it's impossible for any voting method to guarantee a true majority winner because a majority winner doesn’t always exist</p>
             </>,
             runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
         }),
+
         
         // monotonicity
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <h1>❌ Misconception #4: "It's safe to rank your favorite candidate first"</h1>
+			</>,
+            runoffStage: 'firstRound',
+		}),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
             focused: ['rightThenCenter'],
             explainer: <>
-                <h1>Misconception #4: "It's safe to rank your favorite candidate first"</h1>
                 <p>This election was particularly rough for the "Palin 1st, Begich 2nd" voters because supporting Palin gave them their worst choice, and their vote never transferred to Begich</p>
                 <p>They may as well have been using Choose One Voting because RCV never counted their down ballot rankings</p>
+			</>,
+            runoffStage: 'firstRound',
+		}),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
                 <p>Let's say that some of the "Palin 1st, Begich 2nd" voters had realized that Begich was the more electable of the two Republicans. </p>
 			</>,
             runoffStage: 'firstRound',
@@ -252,6 +288,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>This is called a compromise failure, and despite claims to the contrary, RCV doesn't solve the problem either.</p>
             </>,
             runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -289,11 +326,12 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>Monotonicity Paradoxes are when increasing support for a winning candidate can cause them to lose or if decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem</p>
             </>,
             runoffStage: 'center_vs_left',
+            exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [],
             explainer: <>
-                <h1>Misconception #5: "Alaska was a very rare edge case"</h1>
+                <h1>❌ Misconception #5: "Alaska was a very rare edge case"</h1>
             </>,
             voterMovements: [],
             runoffStage: 'default',
@@ -340,7 +378,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
             explainer: <>
                 <p>...and also the elections where the 3rd candidate was too small to be threatening</p>
-                <p>Now our failure rate has gone up to 3 out of 88, or 3.5%, but this is still a very small sample size</p>
+                <p>Now our failure rate has gone up to 3 out of 88, or 3.5%.
+                   That's starting to get a little concerning but this is still a very small sample size</p>
             </>
         }),
         new SimTransition({
@@ -359,7 +398,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [],
             explainer: <>
-                <h1>The Consequences</h1>
+                <h1>❌ The Consequences</h1>
                 <p>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again? Or even voting honestly?</p>
             </>,
             voterMovements: [],
@@ -370,7 +409,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>The election inaccuracies, and general voter confusion have
                     caused many RCV repeals including 3 juristictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
-                <p>We've even seen RCV complete banned in 5 states: Tennesee, Florida, Idaho, South Dakota, and Montana</p>
+                <p>We've even seen RCV get completely banned in 5 states: Tennesee, Florida, Idaho, South Dakota, and Montana</p>
                 <p>You can browse some of these failures and repeals in the tool below</p>
             </>,
         }),
@@ -392,7 +431,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [],
             explainer: <p>
-                Approval Voting let's you pick as many candidates as they like, and it's the best option for simplicity
+                Approval Voting let's you pick as many candidates as you like, and it's the best option for simplicity
             </p>,
         }),
         new SimTransition({
@@ -404,13 +443,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [],
             explainer: <>
-                <p>Here's a list of all the misconceptions we've discussed. All are either false or misleading</p>
+                <p>In summary, here are the points to remember</p>
                 <ol>
-                    <li>RCV guarantees a majority winner - FALSE</li>
-                    <li>RCV virtually guarantees a condorcet winner - FALSE</li>
-                    <li>RCV solves the spoiler effect - FALSE</li>
-                    <li>It's safe to rank your first choice - FALSE</li>
-                    <li>Alaska is a rare situation - ONLY INSIDE THE TWO PARTY SYSTEM THAT WE’RE TRYING TO TRANSCEND</li>
+                    <li>RCV does NOT guarantee a condorcet winner</li>
+                    <li>RCV does NOT solve the spoiler effect</li>
+                    <li>RCV does NOT guarantee a majority winner</li>
+                    <li>RCV does NOT make it safe to rank your favorite first</li>
+                    <li>RCV failures will become much more common as our elections become more competitive</li>
                 </ol>
                 <p>We need to start considering other voting methods, but before we can do that we need to stop overselling the claims of RCV</p>
             </>,
@@ -418,9 +457,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
 		new SimTransition({
             visible: [],
             explainer: <>
-                <p>This animation was based on paper by Adam Graham-Squire and David McCune <a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">link</a> (It's only 5 pages long, definitely worth a read! )</p>
+                <p>This article was created by Arend Peter Castelein, with the help & feedback of the Equal Vote community</p>
                 <br/>
-                <p>Here's another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">link</a></p>
+                <p>Pencil animations were created by Annie Kallen</p>
+                <br/>
+                <p>The content was based on <a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">paper by Adam Graham-Squire and David McCune</a> (It's only 5 pages long, definitely worth a read! )</p>
+                <br/>
+                <p>Here's <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods</a></p>
             </>,
             runoffStage: 'firstRound',
         }),

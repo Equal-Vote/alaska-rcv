@@ -41,7 +41,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: 
             <>
                 <p>
-                    RCV claims to let more candidates run without fear of vote splitting. So this election had 3 candidates
+                    This election had the following candidates
                 </p>
                 <ul>
                     <li>Nick Begich (R)</li>
@@ -49,6 +49,15 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     <li>Mary Peltola (D)</li>
                 </ul>
             </>,
+        }),
+        new SimTransition({
+            visible: [Candidate],
+            explainer: 
+                <p>
+                    RCV claims to let more more people run without fear of splitting the vote,
+                    so Republicans figured it was safe to run multiple candidates.
+                </p>
+            ,
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp],
@@ -174,8 +183,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
             focused: ['rightCandidate', 'center_beats_right', 'left_beats_right'],
             explainer: <>
-                <p>Additionally, Palin lost all her head-to-head matchups</p>
-                <p>That makes her the Condorcet loser for this election. She never really had a chance to win this election.</p>
+                <p>Additionally, Palin lost all her head-to-head matchups.
+                That makes her the Condorcet loser for this election. She never really had a chance to win this election.</p>
             </>,
             runoffStage: 'firstRound',
         }),
@@ -194,7 +203,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
             explainer: <>
                 <p>Well the most famous example happened in the 2000 US presidential election</p>
-                <p>Gore likey would have been the majority winner if he faced Bush head-to-head</p>
+                <p>Gore likely would have been the majority winner if he faced Bush head-to-head</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
@@ -228,7 +237,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>
                 <img src="/images/cnnResults.png" style={{width: '90%'}}/>
-                <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">link</a></p>
+                <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">CNN Results</a></p>
             </>,
             runoffStage: 'right_vs_left',
             exhaustedCamp: 'centerBullet'
@@ -408,8 +417,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
             explainer: <>
                 <p>The election inaccuracies, and general voter confusion have
-                    caused many RCV repeals including 3 juristictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
-                <p>We've even seen RCV get completely banned in 5 states: Tennesee, Florida, Idaho, South Dakota, and Montana</p>
+                    caused many RCV repeals including 3 jurisdictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
+            </>,
+        }),
+        new SimTransition({
+            visible: [],
+            explainer: <>
+                <p>Many states have been considering legislation to limit RCV, and 5 have gone so far as to ban it entirely (Tennessee, Florida, Idaho, South Dakota, and Montana)</p>
                 <p>You can browse some of these failures and repeals in the tool below</p>
             </>,
         }),

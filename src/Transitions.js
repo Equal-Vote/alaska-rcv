@@ -190,7 +190,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         }),
         // spoiler effect
         new SimTransition({
-            visible: [Candidate, Voter, VoterCamp, Pie],
+            visible: [],
             explainer: <>
                 <h1>❌ Misconception #2: "RCV solves the spoiler effect"</h1>
                 <p>Once you have more than two competitive candidates, RCV DOES allow for the spoiler effect.</p>
@@ -200,22 +200,24 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             runoffStage: 'firstRound',
         }),
         new SimTransition({
-            visible: [],
+            visible: ['spoiler_2000'],
             explainer: <>
                 <p>Well the most famous example happened in the 2000 US presidential election</p>
                 <p>Gore likely would have been the majority winner if he faced Bush head-to-head</p>
             </>,
             runoffStage: 'center_vs_left',
-            exhaustedCamp: 'rightBullet'
+            exhaustedCamp: 'rightBullet',
+            videoStopTime: 3
         }),
         new SimTransition({
-            visible: [],
+            visible: ['spoiler_2000'],
             explainer: <>
                 <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush</p>
                 <p>In that race Nader was the spoiler candidate because he had no chance of winning but he still impacted the results</p>
             </>,
             runoffStage: 'center_vs_left',
-            exhaustedCamp: 'rightBullet'
+            exhaustedCamp: 'rightBullet',
+            videoStopTime: 7
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],

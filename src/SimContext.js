@@ -9,6 +9,7 @@ import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
 import { VoterMovement } from './VoterMovement';
+import Video from './components/Video';
 
 export const SimContext = createContext({});
 
@@ -55,6 +56,8 @@ export function SimContextProvider({children}){
             right_beats_left: new ImageObject(0, 0, 100, 'rightBeatsLeft.png'),
             usFailures: new ImageObject(25, 90, 60, 'usRCVFailures.png', 'contain'),
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
+            // videos
+            spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring

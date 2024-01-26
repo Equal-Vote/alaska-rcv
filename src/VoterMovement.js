@@ -62,7 +62,6 @@ export class VoterMovement {
 
         // adding undefined made this messy :'(
         if(to == undefined){
-            console.log("reset all positions");
             simState.objects
                 .filter(o => o instanceof Voter)
                 .forEach(o => {
@@ -97,13 +96,6 @@ export class VoterMovement {
                 o.camp = simState[to];
                 o.phyMass = 1;
             });
-
-        console.log(
-            simState.objects
-                .filter(o => o instanceof Voter)
-                .sort((l, r) => l.index - r.index)
-                .map(o => o.camp.getSimKey())
-        );
 
         if(from == 'anywhere'){
             campIds.forEach(c => simState[c].refreshMembers());

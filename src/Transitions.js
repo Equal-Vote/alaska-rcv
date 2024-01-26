@@ -69,7 +69,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>12 voters ranked Begich first without ranking other candidates</p>
-                <img src="/images/begichBullet.png" style={{width: '75%'}}/>
+                <img src={require("./assets/begichBullet.png")} style={{width: '75%'}}/>
                 <p>We'll put them next to Begich.</p>
                 <br/>
                 <p>Only ranking a single candidate is called Bullet Voting</p>
@@ -82,8 +82,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>There were also 16 voters who ranked Begich first, and Peltola second, as well as 29 voters who ranked Begich first and Palin second</p>
                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                    <img src="/images/begichThenPeltola.png" style={{width: '40%'}}/>
-                    <img src="/images/begichThenPalin.png" style={{width: '40%'}}/>
+                    <img src={require("./assets/begichThenPeltola.png")} style={{width: '40%'}}/>
+                    <img src={require("./assets/begichThenPalin.png")} style={{width: '40%'}}/>
                 </div>
                 <p>We'll put them close to Begich, but also leaning toward their second choice</p>
             </>,
@@ -236,7 +236,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     a majority of 200 would require more than 100 votes and none of the candidates reached that.</p>
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>
-                <img src="/images/cnnResults.png" style={{width: '90%'}}/>
+                <img src={require("./assets/cnnResults.png")} style={{width: '90%'}}/>
                 <p><a target="_blank" href="https://www.cnn.com/election/2022/results/alaska/special-election/us-house-district-1-final">CNN Results</a></p>
             </>,
             runoffStage: 'right_vs_left',

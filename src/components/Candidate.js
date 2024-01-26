@@ -11,6 +11,8 @@ class Candidate extends GameObject{
     }
     
     asComponent(simState, containerSize) {
+        if(this.candidateName == 'placeholder') return <div/>
+        let img = require(`../assets/${this.candidateName.toLowerCase()}.jpg`);
         return <div className={this.getClassNames(simState)} style={{
             width: `${this.size.x}%`,
             height: `${this.size.y}%`,
@@ -24,7 +26,7 @@ class Candidate extends GameObject{
             <div className='CandidateInner' style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: `url(\"/images/${this.candidateName.toLowerCase()}.jpg\")`,
+                backgroundImage: `url(${img})`,
                 border: `${Math.round(0.006 * containerSize)}px solid var(--${this.candidateName.toLowerCase()})`,
             }}>
                 <h3 style={{

@@ -323,12 +323,6 @@ a, a:visited{
   border-radius: 5px;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  /* nothing */
-}
-
-
 /* SELECTOR */
 .selectors{
   display: flex;

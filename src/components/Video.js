@@ -24,7 +24,12 @@ class Video extends GameObject{
     }
 
     asComponent(simState, containerSize){
-        return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)} >
+        return <div className={this.getClassNames(simState)} style={{
+            ...this.getStyle(containerSize),
+            height: '100%',
+            background: 'black',
+            transform: 'scale(1.1)',
+        }} >
             <video id={`video_${this.videoId}`} width='100%' height='100%' muted>
                 <source src={this.video} type='video/mp4' />
                 Couldn't load video

@@ -222,7 +222,7 @@ body, #root{
   background-repeat: no-repeat;
   border-width: 0;
   transition-property: opacity;
-  transition-duration: .2s;
+  transition-duration: .5s;
 }
 
 .objectVisible.objectFocused{
@@ -252,7 +252,7 @@ body, #root{
 }
 
 .ImageObject.objectVisible{
-  transition-delay: .5s;
+  /*transition-delay: .5s;*/
 }
 
 .Voter{

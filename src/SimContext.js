@@ -46,7 +46,6 @@ export function SimContextProvider({children}){
             star_vs_rcv_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS', 25, 90),
             approval_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/m8VXIIaC9Zw?si=cTyOSt1pMmkCQAtv', 25, 270),
             // images
-            choose_one: new ImageObject(0, 0, 70, 'chooseOneBallot.png'),
             alaska: new ImageObject(0, 0, 70, 'alaska.png'),
             center_beats_right: new ImageObject(0, 0, 100, 'centerBeatsRight.png'),
             right_beats_center: new ImageObject(0, 0, 100, 'rightBeatsCenter.png'),
@@ -57,6 +56,7 @@ export function SimContextProvider({children}){
             usFailures: new ImageObject(25, 90, 60, 'usRCVFailures.png', 'contain'),
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
             // videos
+            choose_one: new Video(100, 'chooseOne.mkv'),
             spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),
             // darken layer
             darken: new DarkenLayer(),

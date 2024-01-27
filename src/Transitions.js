@@ -216,8 +216,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>In that race Nader was the spoiler candidate because he had no chance of winning but he still impacted the results</p>
             </>,
             runoffStage: 'center_vs_left',
-            exhaustedCamp: 'rightBullet',
-            videoStopTime: 7
+            exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],

@@ -6,6 +6,7 @@ class Video extends GameObject{
         this.size.y = this.size.x/1.77;
         this.video = require(`../assets/${fileName}`);
         this.startTime = startTime;
+        this.videoId = fileName.split('\.')[0];
     }
 
     isFocused(){
@@ -13,8 +14,8 @@ class Video extends GameObject{
     }
 
     update(simState){
-        let vid = document.getElementById(`video_${this.fileName}`);
-        let shouldPlay = this.isVisible(simState) && vid.currentTime < simState.videoStopTime;
+        let vid = document.getElementById(`video_${this.videoId}`);
+        let shouldPlay = this.isVisible(simState) && vid.currentTime < simState.videoStopTime && !vid.ended;
         if(vid.paused && shouldPlay) vid.play();
         if(!vid.paused && !shouldPlay) vid.pause();
 
@@ -24,7 +25,7 @@ class Video extends GameObject{
 
     asComponent(simState, containerSize){
         return <div className={this.getClassNames(simState)} style={this.getStyle(containerSize)} >
-            <video id={`video_${this.fileName}`} width='100%' height='100%' autoplay muted>
+            <video id={`video_${this.videoId}`} width='100%' height='100%' muted>
                 <source src={this.video} type='video/mp4' />
                 Couldn't load video
             </video>

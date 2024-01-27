@@ -55,9 +55,13 @@ export function SimContextProvider({children}){
             right_beats_left: new ImageObject(0, 0, 100, 'rightBeatsLeft.png'),
             usFailures: new ImageObject(25, 90, 60, 'usRCVFailures.png', 'contain'),
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
+            australia: new ImageObject(0, 0, 100, 'australia.png', 'contain'),
+            australia_house: new ImageObject(0, 0, 100, 'australiaHouse.jpg', 'contain'),
             // videos
             choose_one: new Video(100, 'chooseOne.mkv'),
             spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),
+            all_elections_1: new Video(100, 'allElections1.mp4'),
+            all_elections_2: new Video(100, 'allElections2.mp4'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring

@@ -347,23 +347,33 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             runoffStage: 'default',
         }),
         new SimTransition({
-            visible: [],
+            visible: ['all_elections_1'],
             explainer: <p>
-                Yes and No. There have been over 500 RCV elections in the US, and we have data for 448 of them, and half of them had at least one of the failures we discussed
-            </p>
+                Yes and No. There have been over 500 RCV elections in the US, and we have data for 448 of them. We can look at the failure rates to see how rare Alaska was
+            </p>,
+            videoStopTime: 3
         }),
         new SimTransition({
-            visible: [],
+            visible: ['all_elections_1'],
+            explainer: <p>
+                Half of them had at least one of the failures we discussed
+            </p>,
+            videoStopTime: 6
+        }),
+        new SimTransition({
+            visible: ['all_elections_1'],
             explainer: <p>
                 However most of them only had majority failures, if we just look at condorcet, monotonicity, and compromise failures then there are only 11 left
-            </p>
+            </p>,
+            videoStopTime: 9
         }),
         new SimTransition({
-            visible: [],
+            visible: ['all_elections_1'],
             explainer: <>
                 <p>And this goes down to 3 if we only look at condorcet failures</p>
                 <i>So is a 0.6% failure rate really so bad?</i>
-            </>
+            </>,
+            videoStopTime: 10
         }),
         new SimTransition({
             visible: [],
@@ -379,13 +389,14 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             </>
         }),
         new SimTransition({
-            visible: [],
+            visible: ['all_elections_2'],
             explainer: <>
                 <p>To help answer this let's remove the elections that only had 2 candidates</p>
-            </>
+            </>,
+            videoStopTime: 2.6
         }),
         new SimTransition({
-            visible: [],
+            visible: ['all_elections_2'],
             explainer: <>
                 <p>...and also the elections where the 3rd candidate was too small to be threatening</p>
                 <p>Now our failure rate has gone up to 3 out of 88, or 3.5%.
@@ -393,13 +404,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             </>
         }),
         new SimTransition({
-            visible: [],
+            visible: ['australia'],
             explainer: <>
                 <p>For a bigger sample size let's look at Australia. Their house of representatives have been using RCV for over 100 years, and their condorcet failure rate is close to 7%</p>
             </>
         }),
         new SimTransition({
-            visible: [],
+            visible: ['australia_house'],
             explainer: <>
                 <p>And despite all of that time they're still stuck in a 2 party dominated system</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes</p>

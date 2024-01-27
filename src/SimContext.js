@@ -57,6 +57,12 @@ export function SimContextProvider({children}){
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
             australia: new ImageObject(0, 0, 100, 'australia.png', 'contain'),
             australia_house: new ImageObject(0, 0, 100, 'australiaHouse.jpg', 'contain'),
+            usa_1: new ImageObject(0, 0, 100, 'usa1.png', 'contain'),
+            usa_2: new ImageObject(0, 0, 100, 'usa2.png', 'contain'),
+            usa_3: new ImageObject(0, 0, 100, 'usa3.png', 'contain'),
+            star_ballot: new ImageObject(0, 0, 100, 'starBallot.png', 'contain'),
+            approval_ballot: new ImageObject(0, 0, 100, 'approvalBallot.png', 'contain'),
+            ranked_ballot: new ImageObject(0, 0, 100, 'rankedBallot.png', 'contain'),
             // videos
             choose_one: new Video(100, 'chooseOne.mkv'),
             spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),

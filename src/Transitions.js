@@ -385,8 +385,14 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
             explainer: <>
                 <p>What we really want is a system where many parties can exist together without fear of vote splitting</p>
-                <p>We've seen that RCV has a low failure rate under the status quo, but does it perform well in scenarios with many competitive candidates?</p>
             </>
+        }),
+        new SimTransition({
+            visible: ['all_elections_2'],
+            explainer: <>
+                <p>We've seen that RCV has a low failure rate under the status quo, but does it perform well in scenarios with many competitive candidates?</p>
+            </>,
+            videoStopTime: 1
         }),
         new SimTransition({
             visible: ['all_elections_2'],
@@ -417,7 +423,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             </>
         }),
         new SimTransition({
-            visible: [],
+            visible: ['usa_1'],
             explainer: <>
                 <h1>❌ The Consequences</h1>
                 <p>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again? Or even voting honestly?</p>
@@ -426,14 +432,14 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             runoffStage: 'default',
         }),
         new SimTransition({
-            visible: [],
+            visible: ['usa_2'],
             explainer: <>
                 <p>The election inaccuracies, and general voter confusion have
                     caused many RCV repeals including 3 jurisdictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
             </>,
         }),
         new SimTransition({
-            visible: [],
+            visible: ['usa_3'],
             explainer: <>
                 <p>Many states have been considering legislation to limit RCV, and 5 have gone so far as to ban it entirely (Tennessee, Florida, Idaho, South Dakota, and Montana)</p>
                 <p>You can browse some of these failures and repeals in the tool below</p>
@@ -449,19 +455,19 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             </>,
         }),
         new SimTransition({
-            visible: [],
+            visible: ['star_ballot'],
             explainer: <p>
                 STAR Voting let's you score candidates from 0 to 5, and it's the best option we have for voter expression and accuracy
             </p>,
         }),
         new SimTransition({
-            visible: [],
+            visible: ['approval_ballot'],
             explainer: <p>
                 Approval Voting let's you pick as many candidates as you like, and it's the best option for simplicity
             </p>,
         }),
         new SimTransition({
-            visible: [],
+            visible: ['ranked_ballot'],
             explainer: <p>
                 And you don't even need to ditch the ranked ballot. There are ranked methods, such as Ranked Robin, that have a far simpler and more accurate way to tally rankings
             </p>,

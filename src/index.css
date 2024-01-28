@@ -225,6 +225,11 @@ body, #root{
   transition-duration: .5s;
 }
 
+.Video{
+  transition-property: opacity;
+  transition-duration: .5s;
+}
+
 .objectVisible.objectFocused{
   z-index: 2;
 }

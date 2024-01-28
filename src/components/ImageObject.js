@@ -3,7 +3,6 @@ import GameObject from "./GameObject";
 class ImageObject extends GameObject{
     constructor(r, angle, size, url, backgroundSize='cover'){
         super('ImageObject', r, angle, size, undefined);
-        console.log(url, `../assets/${url}`);
         this.url = require(`../assets/${url}`);
         this.backgroundSize = backgroundSize;
     }

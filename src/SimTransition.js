@@ -10,6 +10,7 @@ export class SimTransition {
         this.focused = focused;
         this.voterMovements = voterMovements;
         this.exhaustedCamp = exhaustedCamp;
+        this.videoStartTime = 0;
         this.videoStopTime = videoStopTime;
 
         this.explainer = explainer;
@@ -31,6 +32,7 @@ export class SimTransition {
         if(this.visible != undefined) simState.visible = this.visible;
         simState.focused = this.focused;
         simState.exhaustedCamp = this.exhaustedCamp;
+        simState.videoStartTime = this.videoStartTime;
         simState.videoStopTime = this.videoStopTime;
         if(this.runoffStage != undefined){
             if(simState.runoffTimeout != undefined){

@@ -68,6 +68,7 @@ export function SimContextProvider({children}){
             spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),
             all_elections_1: new Video(100, 'allElections1.mp4'),
             all_elections_2: new Video(100, 'allElections2.mp4'),
+            parties: new Video(100, 'parties.mp4'),
             // darken layer
             darken: new DarkenLayer(),
             // voter ring
@@ -126,6 +127,14 @@ export function SimContextProvider({children}){
 
         ctx.transitions = transitions(ctx, setRefreshBool, () => {
             updateSimIndex(i => i, true);
+        });
+        ctx.transitions.forEach((t, i) => {
+            if(i == 0) return;
+            if(ctx.transitions[i-1].videoStopTime == 999999 || ctx.transitions[i-1].videoStopTime > t.videoStopTime){
+                t.videoStartTime = 0;
+            }else{
+                t.videoStartTime = ctx.transitions[i-1].videoStopTime;
+            }
         });
 
         ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });

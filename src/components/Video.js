@@ -5,22 +5,81 @@ class Video extends GameObject{
         super('Video', r, angle, size, undefined);
         this.size.y = this.size.x/1.77;
         this.video = require(`../assets/${fileName}`);
-        this.startTime = startTime;
         this.videoId = fileName.split('\.')[0];
+        this.blocked = false;
+        this.startTime = startTime;
+        this.windowFocused = true;
+
+        document.addEventListener("visibilitychange", (event) => {
+            if (document.visibilityState == "visible") {
+                this.windowFocused = true;
+            } else {
+                this.windowFocused = false;
+                this.pause();
+            }
+        });
     }
 
     isFocused(){
         return true;
     }
 
+    play(){
+        let vid = document.getElementById(`video_${this.videoId}`)
+        if(this.blocked) return;
+        if(!this.windowFocused) return;
+        var isPlaying = vid.currentTime > 0 && !vid.paused && !vid.ended 
+    && vid.readyState > vid.HAVE_CURRENT_DATA; // https://stackoverflow.com/questions/36803176/how-to-prevent-the-play-request-was-interrupted-by-a-call-to-pause-error
+        if(isPlaying) return;
+        this.blocked = true;
+        let p = vid.play();
+        if(p == undefined){
+            this.blocked = false;
+        }else{
+            p.then(() => {
+                this.blocked = false;
+            })
+        }
+    }
+
+    pause(){
+        let vid = document.getElementById(`video_${this.videoId}`)
+        if(this.blocked) return;
+        if(vid.paused) return;
+        this.blocked = true;
+        let p = vid.pause();
+        if(p == undefined){
+            this.blocked = false;
+        }else{
+            p.then(() => {
+                this.blocked = false;
+            })
+        }
+    }
+
     update(simState){
         let vid = document.getElementById(`video_${this.videoId}`);
-        let shouldPlay = this.isVisible(simState) && vid.currentTime < simState.videoStopTime && !vid.ended;
-        if(vid.paused && shouldPlay) vid.play();
-        if(!vid.paused && !shouldPlay) vid.pause();
 
-        if(this.isVisible && vid.currentTime > simState.videoStopTime) vid.currentTime = simState.videoStopTime;
-        if(!this.isVisible(simState)) vid.currentTime = this.startTime;
+        let start = Math.max(this.startTime, simState.videoStartTime);
+        let stop = simState.videoStopTime;
+        if(this.isVisible(simState)){
+            if(vid.currentTime < start){
+                vid.currentTime = start;
+            }
+
+            if(vid.ended){
+                this.pause();
+            }else if(vid.currentTime > stop){
+                this.pause();
+                vid.currentTime = stop;
+            }else if(vid.currentTime < stop){
+                this.play();
+            }
+            console.log(vid.paused, vid.currentTime);
+        }else{
+            vid.currentTime = start;
+            this.pause();
+        }
     }
 
     asComponent(simState, containerSize){
@@ -30,7 +89,7 @@ class Video extends GameObject{
             background: 'black',
             transform: 'scale(1.1)',
         }} >
-            <video id={`video_${this.videoId}`} width='100%' height='100%' muted>
+            <video id={`video_${this.videoId}`} width='100%' height='100%' muted preload>
                 <source src={this.video} type='video/mp4' />
                 Couldn't load video
             </video>

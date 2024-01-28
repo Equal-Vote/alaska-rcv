@@ -376,13 +376,14 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             videoStopTime: 10
         }),
         new SimTransition({
-            visible: [],
+            visible: ['parties'],
             explainer: <p>
                 Let's reframe that a bit. The US has been trapped in a 2 party system for so long that it's quite rare to have races with a competitive 3rd candidate
-            </p>
+            </p>,
+            videoStopTime: 3.5
         }),
         new SimTransition({
-            visible: [],
+            visible: ['parties'],
             explainer: <>
                 <p>What we really want is a system where many parties can exist together without fear of vote splitting</p>
             </>

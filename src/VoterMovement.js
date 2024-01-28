@@ -20,7 +20,7 @@ export class VoterMovement {
         if(Array.isArray(n)){
             n = [...n];
 
-            // first first release the camps that have excess
+            // first release the camps that have excess
             campIds.forEach((c, i) => {
                 let votersInCamp = simState.objects
                     .filter(o => o instanceof Voter)
@@ -29,7 +29,7 @@ export class VoterMovement {
                         let dist = (o) => o.pos.subtract(simState.home.pos).magnitude();
                         return dist(l) - dist(r); // furthest first
                     });
-
+                
                 let diff = votersInCamp.length - n[i];
                 
                 if(diff > 0){
@@ -45,16 +45,23 @@ export class VoterMovement {
                 }else{
                     n[i] = -diff;
                 }
-            })
+            });
 
             // move all undefineds to home
-            new VoterMovement(200, 'anywhere', 'home').apply(simState);
+            new VoterMovement(200, undefined, 'home').apply(simState);
 
             // then have everything else grab from home
             campIds.forEach((c, i) => {
                 if(n[i] == 0) return;
                 new VoterMovement(n[i], 'home', c).apply(simState, true);
-            })
+            });
+
+            simState.objects
+                .filter(o => o instanceof Voter)
+                .forEach(o => {
+                    if(o.camp == undefined) return
+                    o.finalCamp = o.camp;
+                })
 
             campIds.forEach(c => simState[c].refreshMembers());
             return;

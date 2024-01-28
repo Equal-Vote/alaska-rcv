@@ -1,6 +1,6 @@
 export default () => {
     let params = new URLSearchParams(window.location.search)
-    return <div className='nav'>
+    return <div className='Nav'>
         {params.get('onlySelector') == 'true' ?
             <a href='/'>Full Alaska Article</a>
             :

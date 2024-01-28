@@ -337,6 +337,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
+
         }),
         new SimTransition({
             visible: [],
@@ -351,7 +352,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <p>
                 Yes and No. There have been over 500 RCV elections in the US, and we have data for 448 of them. We can look at the failure rates to see how rare Alaska was
             </p>,
-            videoStopTime: 3
+            videoStopTime: 3,
         }),
         new SimTransition({
             visible: ['all_elections_1'],
@@ -438,6 +439,10 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>The election inaccuracies, and general voter confusion have
                     caused many RCV repeals including 3 jurisdictions that experience monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
             </>,
+            // reset so we can scrollback properly
+			voterMovements: [
+				new VoterMovement(7, 'leftBullet', 'rightBullet')
+			]
         }),
         new SimTransition({
             visible: ['usa_3'],
@@ -445,6 +450,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>Many states have been considering legislation to limit RCV, and 5 have gone so far as to ban it entirely (Tennessee, Florida, Idaho, South Dakota, and Montana)</p>
                 <p>You can browse some of these failures and repeals in the tool below</p>
             </>,
+            voterMovements: [new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16])] // reset to handle cases where you scroll back from the election selector
         }),
         ...electionSelectorTransitions(simState, setRefreshBool, refreshVoters),
 		new SimTransition({

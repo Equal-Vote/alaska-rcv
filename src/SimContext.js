@@ -117,7 +117,7 @@ export function SimContextProvider({children}){
             selectorElection: params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
             candidateNames
-        }
+        };
 
         if(ctx.electionName == 'pick an election') ctx.electionName = '<pick an election>';
         if(ctx.selectorElection == 'pick an election') ctx.selectorElection = '<pick an election>';

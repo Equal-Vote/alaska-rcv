@@ -75,7 +75,6 @@ class Video extends GameObject{
             }else if(vid.currentTime < stop){
                 this.play();
             }
-            console.log(vid.paused, vid.currentTime);
         }else{
             vid.currentTime = start;
             this.pause();

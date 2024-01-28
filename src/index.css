@@ -230,6 +230,10 @@ body, #root{
   transition-duration: .5s;
 }
 
+.Nav{
+  z-index: 20;
+}
+
 .objectVisible.objectFocused{
   z-index: 2;
 }

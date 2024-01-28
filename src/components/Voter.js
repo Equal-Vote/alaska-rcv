@@ -24,6 +24,14 @@ class Voter extends GameObject{
             this.prevCamp = this.camp;
         }
         super.update();
+
+        // randomly leave membership to make sure we can be reassigned (handles edge cases where membership was incorrect)
+        if((Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)
+            if(this.camp != undefined && !this.isDirectMember()){
+                this.camp.members.splice(this.camp.members.indexOf(this), 1);
+            }
+        }
+
         if(this.camp != undefined && (!this.isMember() || (!this.isDirectMember() && !this.camp.directMembersLocked()))){
             // slowly inject chaos if we're stuck
             this.phyMass *= 1.01;

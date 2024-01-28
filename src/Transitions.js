@@ -500,7 +500,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <br/>
                 <p>Pencil animations were created by Annie Kallen</p>
                 <br/>
-                <p>The content was based on <a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">paper by Adam Graham-Squire and David McCune</a> (It's only 5 pages long, definitely worth a read! )</p>
+                <p>The content was based on a <a target="_blank" href="https://arxiv.org/pdf/2209.04764.pdf">paper by Adam Graham-Squire and David McCune</a> (It's only 5 pages long, definitely worth a read! )</p>
                 <br/>
                 <p>Here's <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">another paper by Jeanne N. Clelland simulating the Alaska election with other voting methods</a></p>
             </>,

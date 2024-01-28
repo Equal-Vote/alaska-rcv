@@ -850,11 +850,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             'https://rangevoting.org/Aspen09.html ',
             <>
                 <li>Dataset: <a href='https://www.preflib.org/dataset/00016'>Preflib</a></li>
-                <li>NOTE: This was a 2 seat election using a heaving modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
+                <li>NOTE: This was a 2 seat election using a heavily modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
                     The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the monotonicity occured when determining the second seat.
                     The computation for the second seat is identical to standard IRV.
                 </li>
-                <li>NOTE: When showing </li>
             </>
         ),
 

@@ -32,7 +32,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['alaska'],
             explainer: <>
                 <p>
-                    But Alaska decided to change that, and in 2022 they ran their first election replacing the Choose One Voting system with Ranked Choice Voting 
+                    But Alaska decided to change that, and in 2022 they ran their first election replacing the Choose One Voting system with Ranked Choice Voting (also called RCV)
                 </p>
             </>,
         }),
@@ -73,7 +73,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>We'll put them next to Begich.</p>
                 <br/>
                 <p>Only ranking a single candidate is called Bullet Voting</p>
-                <p>Bullet voting isn't an effective strategy under RCV, but some voters genuinely only like one candidate, and that’s okay</p>
+                <p>Bullet voting is not an effective strategy under RCV, but some voters genuinely only like one candidate, and that’s okay</p>
             </>,
             voterMovements: [new VoterMovement(12, 'home', 'centerBullet')]
         }),
@@ -132,7 +132,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>Then Pelotla Wins! Congratulations to Peltola for running a great campaign. She won fair square by the rules of RCV.</p>
+                <p>Then Peltola Wins! Congratulations to Peltola for running a great campaign. She won fair square by the rules of RCV.</p>
                 <br/>
                 <p>But did RCV pick the best winner?</p>
                 <p>This election exposed many of the common RCV misconceptions. Let's take a closer look...</p>
@@ -146,9 +146,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <h1>❌ Misconception #1: "RCV elects the most preferred candidate"</h1>
-                <p>Actually Peltola wasn't this most preferred candidate</p>
+                <p>Actually Peltola was not this election's most preferred candidate</p>
                 <br/>
-                <p>The most preferred candidate is also known as the Condorcet winner
+                <p>The most preferred candidate is also known as the Condorcet winner,
                 and the Condorcet winner is the candidate who beat any of the other candidates head-to-head</p>
                 <p>We know that Peltola beats Palin head-to-head but what about the other matchups?</p>
             </>,
@@ -213,7 +213,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['spoiler_2000'],
             explainer: <>
                 <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush</p>
-                <p>In that race Nader was the spoiler candidate because he had no chance of winning but he still impacted the results</p>
+                <p>In that race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
@@ -233,8 +233,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <h1>❌ Misconception #3: "RCV guarantees a majority winner"</h1>
-                <p>If we look back at the actual finalists, Peltola clearly didn't have a true majority because
-                    a majority of 200 would require more than 100 votes and none of the candidates reached that.</p>
+                <p>If we look back at the actual finalists, Peltola clearly did not have a true majority because
+                    a majority of 200 would require more than 100 votes, and none of the candidates reached that.</p>
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>
                 <img src={require("./assets/cnnResults.png")} style={{width: '90%'}}/>
@@ -295,7 +295,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>Then Begich would have won and these voters would have been happier. </p>
                 <p>Sounds familiar, right? Choose One voting makes us vote for the more electable lesser-of-two-evils type candidates to avoid our worst case scenario all the time.</p>
-                <p>This is called a compromise failure, and despite claims to the contrary, RCV doesn't solve the problem either.</p>
+                <p>This is called a compromise failure, and despite claims to the contrary, RCV does not solve this problem either.</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
@@ -333,7 +333,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>And then Peltola loses in the final round!</p>
                 <br/>
                 <p>This is known as a Monotonicity Paradox</p>
-                <p>Monotonicity Paradoxes are when increasing support for a winning candidate can cause them to lose or if decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem</p>
+                <p>Monotonicity Paradoxes are when increasing support for a winning candidate can cause them to lose or decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
@@ -399,7 +399,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['all_elections_2'],
             explainer: <>
-                <p>To help answer this let's remove the elections that only had 2 candidates</p>
+                <p>To help answer this, let's remove the elections that only had 2 candidates</p>
             </>,
             videoStopTime: 2.6
         }),
@@ -414,13 +414,13 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['australia'],
             explainer: <>
-                <p>For a bigger sample size let's look at Australia. Their house of representatives have been using RCV for over 100 years, and their condorcet failure rate is close to 7%</p>
+                <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, and their condorcet failure rate is close to 7%</p>
             </>
         }),
         new SimTransition({
             visible: ['australia_house'],
             explainer: <>
-                <p>And despite all of that time they're still stuck in a 2 party dominated system</p>
+                <p>And despite all of that time, they're still stuck in a 2 party dominated system</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes</p>
             </>
         }),
@@ -470,7 +470,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['approval_ballot'],
             explainer: <p>
-                Approval Voting let's you pick as many candidates as you like, and it's the best option for simplicity
+                Approval Voting lets you pick as many candidates as you like, and it's the best option for simplicity
             </p>,
         }),
         new SimTransition({
@@ -490,7 +490,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                     <li>RCV does NOT make it safe to rank your favorite first</li>
                     <li>RCV failures will become much more common as our elections become more competitive</li>
                 </ol>
-                <p>We need to start considering other voting methods, but before we can do that we need to stop overselling the claims of RCV</p>
+                <p>We need to start considering other voting methods, but before we can do that, we need to stop overselling the claims of RCV</p>
             </>,
         }),
 		new SimTransition({

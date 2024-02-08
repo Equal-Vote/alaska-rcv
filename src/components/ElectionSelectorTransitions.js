@@ -860,7 +860,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         // Failure Info
         ...failureInfo(FAILURE.condorcet, <>
             <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-            <p>Condorcet Failure<br/><i>A scenario where the election method doesn't select a condorcet winner</i></p>
+            <p>Condorcet Failure<br/><i>A scenario where the voting method doesn't elect the candidate who was preferred over all others.</i></p>
+            <p>Condorcet Failures are especially problematic for ranked methods like RCV that only look at voter preferences.
+                In other methods like STAR Voting where voters can show their level of support for each candidate in addition to their preference order the case
+                can be made that the Condorcet winner may not have been the most representative overall, but under ranked voting methods the Condorcet winner is
+                widely recognized as the correct winner and is used to assess the voting method's accuracy.</p>
         </>),
         ...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
         ...failureInfo(FAILURE.repeal, <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>),
@@ -877,7 +881,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...failureInfo(FAILURE.compromise, <>
             <p>Compromise Voting Failure<br/><i>A scenario where a group of voters can elevate the rank of a 'compromise' candidate over their actual favorite to get a better result</i></p>
 
-            <p>This is very familiar in choose one voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
+            <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
         </>),
         ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         ...failureInfo(FAILURE.no_show, <>

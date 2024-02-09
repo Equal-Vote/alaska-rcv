@@ -18,6 +18,7 @@ const FAILURE= {
     'spoiler': 'Spoiler Effect',
     'tally': 'Tally Error',
     'repeal': 'Repealed',
+    'bullet_allocation': 'Bullet Vote Allocation'
 };
 
 const ELECTIONS = {
@@ -85,7 +86,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show, FAILURE.repeal],
     },
     'nyc-2021': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority],
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation],
     },
     'alameda-2022': {
         'failures': [FAILURE.unselected, FAILURE.cycle, FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
@@ -619,6 +620,55 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
+    const nycBulletAllocation = () => {
+        let def = {
+            electionName: ELECTIONS.nyc_2021,
+            electionTag: ELECTIONS.nyc_2021,
+            failureTag: FAILURE.bullet_allocation,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[def.electionTag];
+
+        return [
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
+                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay. </p>
+                    <p>However other voters bullet vote because they're confused about the voting system and
+                        likely would have ranked more if they had a better understanding.</p>
+                    <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
+                        Wiley bullet voters were confused and would have prefferred Garcia over Adams then we get a different result.</p>
+                </>,
+                runoffStage: 'firstRound'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Let's assume that 4 of the Wiley bullet voters were confused and that their second choice picks were proportional to the second choice picks of the other Wiley voters (3 for Garcia, and 1 for Adams).</p>
+                    <p>This level of voter confusion is reasonable considering that this was the first RCV election held in New York City. There's a learning curve before voter behaviour becomes more ideal.</p>
+                </>,
+                voterMovements: [
+                    new VoterMovement(1, 'centerBullet', 'centerThenLeft'),
+                    new VoterMovement(3, 'centerBullet', 'centerThenRight')
+                ],
+                runoffStage: 'firstRound'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
+                    <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of her bullet voters came out for Garcia then the results would have been different.</p>
+                    <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
+                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the nyc election</a></p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+        ]
+    }
+
     const alamedaTallyError = () => {
         let def = {
             electionName: ELECTIONS.alameda_2022,
@@ -964,6 +1014,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...condorcetSuccess(ELECTIONS.nyc_2021),
         ...nycTallyError(ELECTIONS.nyc_2021),
+        ...nycBulletAllocation(ELECTIONS.nyc_2021),
 
         // Burlington
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [

@@ -367,7 +367,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <p>
                 However most of them only had majority failures, if we just look at Condorcet, Monotonicity, and Compromise failures then there are only 11 left
             </p>,
-            videoStopTime: 9
+            videoStopTime: 8.5
         }),
         new SimTransition({
             visible: ['all_elections_1'],

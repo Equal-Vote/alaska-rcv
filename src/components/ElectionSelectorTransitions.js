@@ -662,7 +662,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
                     <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
                     <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
-                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the nyc election</a></p>
+                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a></p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),

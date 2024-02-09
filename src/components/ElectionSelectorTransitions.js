@@ -8,14 +8,14 @@ import { VoterMovement } from "../VoterMovement";
 
 const FAILURE= {
     'unselected': '<pick a failure type>',
+    'spoiler': 'Spoiler Effect',
     'condorcet': 'Condorcet Failure',
     'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
-    'upward_mono': 'Upward Monotonicity Failure',
-    'downward_mono': 'Downward Monotonicity Failure',
+    'upward_mono': 'Upward Monotonicity Pathology',
+    'downward_mono': 'Downward Monotonicity Pathology',
     'no_show': 'No Show Failure',
-    'compromise': 'Compromise Failure',
-    'spoiler': 'Spoiler Effect',
+    'compromise': 'Lesser-Evil Failure',
     'tally': 'Tally Error',
     'repeal': 'Repealed',
     'bullet_allocation': 'Bullet Vote Allocation'
@@ -71,7 +71,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority, FAILURE.repeal],
     },
     'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
     },
     'aspen-2009': {
         'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal],
@@ -80,19 +80,19 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.cycle, FAILURE.spoiler, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
     },
     'moab-2021': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.spoiler, FAILURE.no_show, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal],
     },
     'nyc-2021': {
         'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation],
     },
     'alameda-2022': {
-        'failures': [FAILURE.unselected, FAILURE.cycle, FAILURE.tally, FAILURE.spoiler, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
     },
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.condorcet, FAILURE.spoiler, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
     },
     'alaska-general-2022': {
         'failures': [FAILURE.unselected],
@@ -219,7 +219,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
                             if(url.get('primarySelector') == 'failure'){
                                 document.querySelector('.selectors').classList.add('selectorsSwapped');
-                                switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.condorcet : simState.selectorFailure);
+                                switchFailure(simState.selectorFailure == FAILURE.unselected ? FAILURE.spoiler : simState.selectorFailure);
                             }else{
                                 document.querySelector('.selectors').classList.remove('selectorsSwapped');
                                 switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
@@ -782,7 +782,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>For this election RCV did successfully elect the condorcet winner  </p>
+                    <p>For this election RCV did successfully elect the Condorcet Winner  </p>
                     <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -817,7 +817,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, 'left_beats_right', centerBeatsRight? 'center_beats_right' : 'right_beats_center', 'left_beats_center'],
                 focused: ['leftCandidate', 'left_beats_center', 'left_beats_right'],
                 explainer: <>,
-                    <p>So {leftCandidate} is the Condorcet winner! and RCV was successful in this case</p>
+                    <p>So {leftCandidate} is the Condorcet Winner! and RCV was successful in this case</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -862,7 +862,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, 'left_beats_right', 'center_beats_right', 'center_beats_left'],
                 focused: ['centerCandidate', 'center_beats_right', 'center_beats_left'],
                 explainer: <>,
-                    <p>So {centerCandidate} is the actual Condorcet winner! and RCV failed to elect them</p>
+                    <p>So {centerCandidate} is the actual Condorcet Winner! and RCV failed to elect them</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -904,7 +904,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             'Analysis of the 2021 Instant Run-Off Elections in Utah',
             'https://vixra.org/abs/2208.0166',
             <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
-                The first round failed to elect the Condorcet winner, but they were still elected in the second round so the error didn't have any impact
+                The first round failed to elect the Condorcet Winner, but they were still elected in the second round so the error didn't have any impact
             </li>
         ),
         ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
@@ -933,7 +933,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>Condorcet Failure<br/><i>A scenario where the voting method doesn't elect the candidate who was preferred over all others.</i></p>
             <p>Condorcet Failures are especially problematic for ranked methods like RCV that only look at voter preferences.
                 In other methods, like STAR Voting, where voters can show their level of support for each candidate in addition to their preference order, the case
-                can be made that the Condorcet winner may not have been the most representative overall, but under ranked voting methods the Condorcet winner is
+                can be made that the Condorcet Winner may not have been the most representative overall, but under ranked voting methods the Condorcet Winner is
                 widely recognized as the correct winner and is used to assess the voting method's accuracy.</p>
         </>),
         ...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
@@ -942,19 +942,19 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...failureInfo(FAILURE.majority, <>
             <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
             <p>
-                Majoritarian failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
+                Majoritarian Failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
                 that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that <a href="https://arxiv.org/pdf/2301.12075.pdf">RCV
-                had Majoritarian failures 52% of the time</a>
+                had Majoritarian Failures 52% of the time</a>
             </p>
         </>),
-        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Failure<br/>
+        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Pathology<br/>
         <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         ...failureInfo(FAILURE.compromise, <>
             <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
                 elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
             <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
         </>),
-        ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
+        ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         ...failureInfo(FAILURE.no_show, <>
             <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
         </>),
@@ -996,7 +996,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
             <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed</p>
             <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case</p>
-            <p>Instead voters shifted left across the board and Peltola was the true condorcet winner this time</p>
+            <p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time</p>
             <p>There are 2 primary explanations for this <ul>
                 <li>The general election had much more voters, and voters in general elections tend to be more left leaning</li>
                 <li>Sarah Palin had the most name recognition going into the special election, and this likely created an electability bias in her favor.
@@ -1088,7 +1088,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...condorcetSuccess(ELECTIONS.pierce_2008),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
-            <p>Despite picking this correct winner, the Lesser-Evil failure is still concerning because it shows that the result isn't stable,
+            <p>Despite picking this correct winner, the Lesser-Evil Failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
@@ -1105,7 +1105,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ),
         ...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
-            <p>Despite picking this correct winner, the Downward Monotonicity failure is still concerning because it shows that the result isn't stable,
+            <p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
     ]

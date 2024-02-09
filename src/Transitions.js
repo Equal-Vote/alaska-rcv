@@ -148,8 +148,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <h1>❌ Misconception #1: "RCV elects the most preferred candidate"</h1>
                 <p>Actually Peltola was not this election's most preferred candidate</p>
                 <br/>
-                <p>The most preferred candidate is also known as the Condorcet winner,
-                and the Condorcet winner is the candidate who beat any of the other candidates head-to-head</p>
+                <p>The most preferred candidate is also known as the Condorcet Winner,
+                and the Condorcet Winner is the candidate who beat any of the other candidates head-to-head</p>
                 <p>We know that Peltola beats Palin head-to-head but what about the other matchups?</p>
             </>,
             runoffStage: 'right_vs_left',
@@ -175,7 +175,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, 'center_beats_right', 'center_beats_left', 'left_beats_right'],
             focused: ['centerCandidate', 'center_beats_right', 'center_beats_left'],
             explainer: <>,
-                <p>So Begich is the actual Condorcet winner!</p>
+                <p>So Begich is the actual Condorcet Winner!</p>
             </>,
             runoffStage: 'center_vs_right',
         }),
@@ -184,7 +184,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             focused: ['rightCandidate', 'center_beats_right', 'left_beats_right'],
             explainer: <>
                 <p>Additionally, Palin lost all her head-to-head matchups.
-                That makes her the Condorcet loser for this election. She never really had a chance to win this election.</p>
+                That makes her the Condorcet Loser for this election. She never really had a chance to win this election.</p>
             </>,
             runoffStage: 'firstRound',
         }),
@@ -192,10 +192,10 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [],
             explainer: <>
-                <h1>❌ Misconception #2: "RCV solves the spoiler effect"</h1>
-                <p>Once you have more than two competitive candidates, RCV DOES allow for the spoiler effect.</p>
+                <h1>❌ Misconception #2: "RCV solves the Spoiler Effect"</h1>
+                <p>Once you have more than two competitive candidates, RCV DOES allow for the Spoiler Effect.</p>
                 <br/>
-                <i>But what is the spoiler effect?</i>
+                <i>But what is the Spoiler Effect?</i>
             </>,
             runoffStage: 'firstRound',
         }),
@@ -203,7 +203,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['spoiler_2000'],
             explainer: <>
                 <p>Well the most famous example happened in the 2000 US presidential election</p>
-                <p>Gore likely would have been the majority winner if he faced Bush head-to-head</p>
+                <p>Gore likely would have been the Majority Winner if he faced Bush head-to-head</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet',
@@ -232,7 +232,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <h1>❌ Misconception #3: "RCV guarantees a majority winner"</h1>
+                <h1>❌ Misconception #3: "RCV guarantees a Majority Winner"</h1>
                 <p>If we look back at the actual finalists, Peltola clearly did not have a true majority because
                     a majority of 200 would require more than 100 votes, and none of the candidates reached that.</p>
                 <br/>
@@ -250,7 +250,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>The outlets reported this as a majority because the 12 bullet votes for Begich
                     weren't able to transfer and weren't counted in the final round.</p>
                 <p>So they reported that Peltola had 96/188 = 51% , but she actually had 96/200 = 45%</p>
-                <p>The majority is an illusion! In reality, it's impossible for any voting method to guarantee a true majority winner because a majority winner doesn’t always exist</p>
+                <p>The majority is an illusion! In reality, it's impossible for any voting method to guarantee a true Majority Winner because a Majority Winner doesn't always exist</p>
             </>,
             runoffStage: 'right_vs_left',
             exhaustedCamp: 'centerBullet'
@@ -333,8 +333,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>And then Peltola loses in the final round!</p>
                 <br/>
-                <p>This is known as a Monotonicity Paradox</p>
-                <p>Monotonicity Paradoxes are when increasing support for a winning candidate can cause them to lose or decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem</p>
+                <p>This is known as a Monotonicity Pathology</p>
+                <p>A Monotonicity Pathology is when increasing support for a winning candidate can cause them to lose or if decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
@@ -365,14 +365,14 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <p>
-                However most of them only had majority failures, if we just look at Condorcet, Monotonicity, and Compromise failures then there are only 11 left
+                However most of them only had Majority Failures, if we just look at Condorcet, Monotonicity, and Lesser-Evil Failures then there are only 11 left
             </p>,
             videoStopTime: 8.5
         }),
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <>
-                <p>And this goes down to 3 if we only look at Condorcet failures</p>
+                <p>And this goes down to 3 if we only look at Condorcet Failures</p>
                 <i>So is a 0.6% failure rate really so bad?</i>
             </>,
             videoStopTime: 10
@@ -438,7 +438,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['usa_2'],
             explainer: <>
                 <p>The election inaccuracies, and general voter confusion have
-                    caused many RCV repeals including 3 jurisdictions that experience Monotonicity or compromise failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
+                    caused many RCV repeals including 3 jurisdictions that experience Monotonicity Pathology or Lesser-Evil Failures (Burlington, VT; Pierce, WA; and Moab, UT)</p>
             </>,
             // reset so we can scrollback properly
 			voterMovements: [
@@ -485,9 +485,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>In summary, here are the points to remember</p>
                 <ol>
-                    <li>RCV does NOT guarantee a Condorcet winner</li>
-                    <li>RCV does NOT solve the spoiler effect</li>
-                    <li>RCV does NOT guarantee a majority winner</li>
+                    <li>RCV does NOT guarantee a Condorcet Winner</li>
+                    <li>RCV does NOT solve the Spoiler Effect</li>
+                    <li>RCV does NOT guarantee a Majority Winner</li>
                     <li>RCV does NOT make it safe to rank your favorite first</li>
                     <li>RCV failures will become much more common as our elections become more competitive</li>
                 </ol>

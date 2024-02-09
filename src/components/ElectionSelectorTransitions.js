@@ -314,8 +314,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>The outlets reported this as a majority because the {bulletVoteCount} bullet voters who voted for {centerCandidate} weren't counted in the total</p>
-                    <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount}={Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%</p>
+                    <p>The outlets reported this as a majority because the {bulletVoteCount} bullet votes for {centerCandidate} weren't able to transfer and weren't counted in the final round.</p>
+                    <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount} = {Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['centerCandidate', 'centerBullet'],
@@ -590,17 +590,27 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: 
                 <>
                     <p>
-                        This election had an issue where 135,000 test ballots were accidentally included in the final tally (the equivalent of 31 simulated voters ) when they originally reported the results.
+                        In this election, over 135,000 official looking test ballots were run through the system and were added to the
+                        official preliminary results tally and reported to the public. The error was discovered by a candidate
+                        who had done extensive exit polling and who called the preliminary results into question after finding
+                        that the official results were inconsistent with his campaign's internal data.
                         NYC had to issue an apology and do a recount <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>Full Story</a>
                     </p>,
                     <p>(unfortunately we don't have the data to show the effect in the simulation)</p>
-                    <p>To be clear this was just human error and there was no evidence of election interference here.</p>
-                    <p>However this still highlights a problem with RCV in that it's hard to audit.
-                        Unlike other methods RCV needs to be tallied centrally. Under Choose-one, Approval, and STAR each juristiction can count the results decentrally, so
-                        it's easier to check your work as you go and catch errors like this.
+                    <p>To be clear, this was the first election to use RCV in NYC. Running test ballots through voting software is
+                        standard practice for system testing, but these ballots should have been deleted before the official
+                        tabulation began and using real ballots filled out for real candidates for this kind of testing is not
+                        consistent with best practices.</p>
+                    <p>While this error wasn't specific to RCV, it still highlights the fact that RCV's complexity makes
+                        it less transparent, harder to audit, and harder to detect errors that may occur. Unlike other
+                        methods, with RCV all ballots have to be centralized in one location in order to determine the
+                        elimination order and the vote transfers, which in turn means that early returns can't be fully
+                        processed. Under Choose One, Approval, and STAR Voting, any subset of ballots can be tallied
+                        separately and then added together later. This makes it much easier to tally ballots in the
+                        first place, and makes it easier for election officials to check their work as they go.
                     </p>
                     <p>
-                        The test ballots being included is only half the problem, the other half is that the election board was unable to discover the issue themselves before releasing the results
+                        The test ballots being included in the official count is only half the problem, the other half is that the election board was unable to discover the issue themselves before releasing the results.
                     </p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -622,12 +632,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: 
                 <>
                     <p>
-                        This election had a bug in their software, so the election originally called for Resnick instead of Hutchinson, and 
-                        the issue wasn't caught until multiple months after Resnick took office. 
-                    </p>,
+                        A bug in the software caused votes to not transfer correctly.
+                        In one race this caused the candidates to be eliminated in the wrong order and the election was incorrectly
+                        called for Resnick instead of Hutchinson. The issue was discovered 50 days later after the election
+                        had been certified. Resnick took office initially, but the matter was eventually resolved in court.
+                    </p>
                     <p>
-                        The bug was specifically related to ballots that either skipped their first ranking, or specified a write-in for their ranking.
-                        When tallying the top 3 candidates, these votes should have been transferred to their next choice, but they weren't and a disproportionate number of the voters who misfilled their rankings were Hutchinson voters.
+                        The bug was specifically related to ballots that either skipped their first ranking or that specified a write-in for their first ranking.
+                        These votes should have transferred to the next choice ranked.
                     </p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -684,14 +696,22 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 explainer: 
                 <>
-                    <p>To be clear, this was a accidental bug, due to human error and there was no evidence of election interference here.</p>
-                    <p>However this still tells us a few things about RCV
+                    <p>To be clear, this bug was likely caused by human error and there was no evidence of election interference.</p>
+                    <p>However, this still tells us a few things about RCV
                     <ol>
-                        <li><u>RCV is Complicated</u>: There are a lot of edge cases to consider, so it's easy to make an oversight when implementing the algorithm</li>
+                        <li><u>RCV is Complicated</u>:
+                       Most ballot data will never be counted, and determining which data to count in what order is inherently complex.
+                       There are a lot of edge cases to consider so it's easy to miss an important detail when implementing the algorithm, and errors made are harder to catch.</li>
                         <li><u>RCV is Unstable</u>: If the first choice tallies are close, then minor adjustments to the vote can change the elimination order and have a major impact to the result
-                            (whereas Approval and STAR count all the rankings so we'd expect them to be more stable)</li>
-                        <li><u>RCV is hard to audit</u>: Unlike other methods RCV needs to be tallied centrally. Under Choose-one, Approval, and STAR each juristiction can count the results decentrally, so
-                            it's easier to check your work as you go and catch errors like this. The fact that the software bug existed is only half the problem, the other half is that it took months for us to figure it out</li>
+                            (Most other voting methods, including Approval and STAR Voting, count all ballot data given to ensure that popular candidates aren't eliminated prematurely.)</li>
+                        <li><u>RCV is hard to audit</u>: Unlike other methods, with RCV all ballots have to be centralized
+                        in one location in order to determine the elimination order and the vote transfers, which in turn
+                        means that early returns can't be fully processed. Under Choose One, Approval, and STAR Voting, any
+                        subset of ballots can be tallied separately and then added together later. This makes it much easier
+                        to tally ballots in the first place, and makes it easier for election officials to check their work
+                        as they go. The fact that the RCV software bug existed was only half the problem, the other half is
+                        that it took over a month to realize that an error had even occurred and months to correct the issue
+                        and then seat the correct candidate.</li>
                     </ol>
                     </p>
                 </>,
@@ -834,7 +854,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             'Analysis of the 2021 Instant Run-Off Elections in Utah',
             'https://vixra.org/abs/2208.0166',
             <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
-                The first round failed to elect the condorcet winner, but they were still elected in the second round so the error didn't have any impact
+                The first round failed to elect the Condorcet winner, but they were still elected in the second round so the error didn't have any impact
             </li>
         ),
         ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
@@ -851,7 +871,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <>
                 <li>Dataset: <a href='https://www.preflib.org/dataset/00016'>Preflib</a></li>
                 <li>NOTE: This was a 2 seat election using a heavily modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
-                    The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the monotonicity occured when determining the second seat.
+                    The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the Monotonicity occured when determining the second seat.
                     The computation for the second seat is identical to standard IRV.
                 </li>
             </>
@@ -872,28 +892,27 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...failureInfo(FAILURE.majority, <>
             <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
             <p>
-                Majoritarian failures differ from the other failures in that they're so prolific. Research was conduncted on all US RCV elections
-                that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that RCV
-                had majoritarian failures 52% of the time <a href="https://arxiv.org/pdf/2301.12075.pdf">link</a>
+                Majoritarian failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
+                that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that <a href="https://arxiv.org/pdf/2301.12075.pdf">RCV
+                had Majoritarian failures 52% of the time</a>
             </p>
         </>),
-        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Failure<br/><i>A scenario where the winning candidate could have gained more support and lost</i></p>),
+        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Failure<br/>
+        <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         ...failureInfo(FAILURE.compromise, <>
-            <p>Compromise Voting Failure<br/><i>A scenario where a group of voters can elevate the rank of a 'compromise' candidate over their actual favorite to get a better result</i></p>
-
+            <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
+                elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
             <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
         </>),
         ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Failure<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         ...failureInfo(FAILURE.no_show, <>
-            <p>Truncation Failure<br/><i>Scenario where a set of voters can get a better result by supporting fewer candidates (or "truncating" their ballot)</i></p>
-            <p>No Show Failure<br/><i>The most extreme truncation failure where where a set of voters can get a better result by not voting at all (or fully "truncating" their ballot)</i></p>
+            <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
         </>),
         ...failureInfo(FAILURE.cycle, <>
             <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
             <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
-            <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list)</p>
-            <p>One could argue that a cardinal (or scoring) voting system like STAR or Approval could have done a better job of guaging level of support in addition to relative ranking,
-                but Condorcet Cycles are a super rare edge case they would be difficult for any voting method to handle</p>
+            <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list).
+                In some scenarios, voter preferences are cyclical and there is no one candidate preferred over all others.</p>
         </>),
 
         // Aspen
@@ -1018,7 +1037,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...condorcetSuccess(ELECTIONS.pierce_2008),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
-            <p>Despite picking this correct winner, the compromise failure is still concerning because it shows that the result isn't stable,
+            <p>Despite picking this correct winner, the Lesser-Evil failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
@@ -1035,7 +1054,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ),
         ...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
-            <p>Despite picking this correct winner, the downward monotonicity failure is still concerning because it shows that the result isn't stable,
+            <p>Despite picking this correct winner, the Downward Monotonicity failure is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting</p>
         ),
     ]

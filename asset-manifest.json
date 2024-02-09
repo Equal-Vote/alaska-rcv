@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.9f2a75f2.css",
-    "main.js": "/static/js/main.59b2f847.js",
+    "main.js": "/static/js/main.47d15051.js",
     "static/js/787.e8151e8e.chunk.js": "/static/js/787.e8151e8e.chunk.js",
     "static/media/allElections1.mp4": "/static/media/allElections1.0050f81e379cb3c64b92.mp4",
     "static/media/chooseOneBallot.png": "/static/media/chooseOneBallot.ad76f0c73d7ddc0b2528.png",
     "static/media/chooseOne.mkv": "/static/media/chooseOne.f615c0b2632f1c34657c.mkv",
     "static/media/hutchinson.jpg": "/static/media/hutchinson.5bc32c4019a0528553dc.jpg",
+    "static/media/parties.mp4": "/static/media/parties.8da4886527e64a2ffb92.mp4",
     "static/media/begichThenPalin.pdn": "/static/media/begichThenPalin.b96bbebd219aa898174d.pdn",
-    "static/media/parties.mp4": "/static/media/parties.49b49007f4d9ed7b900f.mp4",
     "static/media/allElections2.mp4": "/static/media/allElections2.ec5fcb18f96e67af7290.mp4",
     "static/media/usa3.png": "/static/media/usa3.4e406675cb2e191d627f.png",
     "static/media/usa2.png": "/static/media/usa2.7d0792179e22b97efb8f.png",
@@ -66,11 +66,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.9f2a75f2.css.map": "/static/css/main.9f2a75f2.css.map",
-    "main.59b2f847.js.map": "/static/js/main.59b2f847.js.map",
+    "main.47d15051.js.map": "/static/js/main.47d15051.js.map",
     "787.e8151e8e.chunk.js.map": "/static/js/787.e8151e8e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9f2a75f2.css",
-    "static/js/main.59b2f847.js"
+    "static/js/main.47d15051.js"
   ]
 }

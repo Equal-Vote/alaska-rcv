@@ -636,9 +636,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
                     <p>Some voters who bullet vote genuinely only like one candidate, and that's okay. </p>
                     <p>However other voters bullet vote because they're confused about the voting system and
-                        likely would have ranked more if they had a better understanding.</p>
+                        likely would have ranked more candidates if they had a better understanding.</p>
                     <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
-                        Wiley bullet voters were confused and would have prefferred Garcia over Adams then we get a different result.</p>
+                        Wiley bullet voters were confused and would have preferred Garcia over Adams then we get a different result.</p>
                 </>,
                 runoffStage: 'firstRound'
             }),
@@ -660,7 +660,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
-                    <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of her bullet voters came out for Garcia then the results would have been different.</p>
+                    <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
                     <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
                     <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the nyc election</a></p>
                 </>,

@@ -336,21 +336,29 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{leftCandidate} won the election, and {rightCandidate} lost.</p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'right_vs_left'
-            }),
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>but if {rightCandidate} was removed, the winner would change to {centerCandidate}.</p>
-                    <p>therefore {rightCandidate} was a spoiler for this election.</p>
+                    <p>If the election was between {leftCandidate} and {centerCandidate} then {centerCandidate} would have won</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'center_vs_left'
             }),
-        ];
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>but when {rightCandidate} joins the race he pulls voters away from {centerCandidate}.</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound'
+            }),
+            new SimTransition({
+                ...def,
+                explainer: <>
+                    <p>Then {centerCandidate} gets eliminated in the first round and {leftCandidate} wins!</p>
+                    <p>So {rightCandidate} was a spoiler. {rightCandidate} would have lost regardless, but their presence in the race still impacted the winner</p>
+                </>,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'right_vs_left'
+            }),
+        ]
     }
 
     const noShow = (electionTag, movement) => {
@@ -937,7 +945,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         </>),
         ...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
         ...failureInfo(FAILURE.repeal, <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>),
-        ...failureInfo(FAILURE.spoiler, <p>Spoiler Effect<br/><i>When removing 1 or more losing candidates could cause the winner to change</i></p>),
+        ...failureInfo(FAILURE.spoiler, <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
         ...failureInfo(FAILURE.majority, <>
             <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
             <p>
@@ -1061,10 +1069,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ),
 
         // Alameda
+        ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
+            <p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
+        </>),
         ...spoiler(ELECTIONS.alameda_2022),
         ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
             <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
-            <p>Also note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
         </>),
         ...majorityFailure({
             electionTag: ELECTIONS.alameda_2022,

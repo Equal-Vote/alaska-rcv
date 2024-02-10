@@ -212,20 +212,33 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['spoiler_2000'],
             explainer: <>
-                <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush</p>
-                <p>In that race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results</p>
+                <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush.</p>
+                <p>In that race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results.</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <>
-                <p>Here we see that removing Palin would cause the winner to change from Peltola to Begich. Therefore Palin was the spoiler candidate in this election</p>
-                <p>Palin would have lost regardless, but her presence in the race was still enough to spoil the election and change the result</p>
-            </>,
+            explainer: <p>Here we see that if the election was just Peltola and Begich, then Begich would have won.</p>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <p>
+                <p>But once we add Palin back to the race she pulls voters away from Begich.</p>
+            </p>,
+            runoffStage: 'firstRound',
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>Then Begich gets eliminated in the first round and Peltola wins!</p>
+                <p>Therefore Palin was the spoiler candidate in this election. She would have lost regardless, but her presence in the race was still enough to spoil the election and change the result.</p>
+            </>,
+            runoffStage: 'right_vs_left',
+            exhaustedCamp: 'centerBullet'
         }),
         
         // majority

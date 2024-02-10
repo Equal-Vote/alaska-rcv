@@ -307,7 +307,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{leftCandidate} won in the final round, but then only had {winnerVoteCount}/200 votes (that's {Math.round(100*winnerVoteCount/200)}% of the vote)</p>
+                    <p>{leftCandidate} won in the final round, but then only had {winnerVoteCount}/200 votes (that's {Math.round(100*winnerVoteCount/200)}% of the vote).</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left',
@@ -316,7 +316,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 explainer: <>
                     <p>The outlets reported this as a majority because the {bulletVoteCount} bullet votes for {centerCandidate} weren't able to transfer and weren't counted in the final round.</p>
-                    <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount} = {Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%</p>
+                    <p>So as a result, the tally was reported as {winnerVoteCount}/{200-bulletVoteCount} = {Math.round(100*winnerVoteCount/(200-bulletVoteCount))}% instead of {Math.round(100*winnerVoteCount/200)}%.</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['centerCandidate', 'centerBullet'],
@@ -336,7 +336,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>{leftCandidate} won the election, and {rightCandidate} lost</p>
+                    <p>{leftCandidate} won the election, and {rightCandidate} lost.</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left'
@@ -344,8 +344,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>but if {rightCandidate} was removed, the winner would change to {centerCandidate}</p>
-                    <p>therefore {rightCandidate} was a spoiler for this election</p>
+                    <p>but if {rightCandidate} was removed, the winner would change to {centerCandidate}.</p>
+                    <p>therefore {rightCandidate} was a spoiler for this election.</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'center_vs_left'
@@ -365,7 +365,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -373,7 +373,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>But if we restart the election</p>
+                    <p>But if we restart the election.</p>
                 </>,
                 runoffStage: 'firstRound',
             }),
@@ -381,7 +381,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And pretend that {movement.count} {rightCandidate} voters stayed home</p>
+                    <p>And pretend that {movement.count} {rightCandidate} voters stayed home.</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: [movement]
@@ -390,7 +390,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {rightCandidate} would be eliminated in the first round and {centerCandidate} would win</p>
+                    <p>Then {rightCandidate} would be eliminated in the first round and {centerCandidate} would win.</p>
                 </>,
                 runoffStage: 'center_vs_left'
             })
@@ -409,7 +409,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -417,7 +417,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>But if we restart the election</p>
+                    <p>But if we restart the election.</p>
                 </>,
                 runoffStage: 'firstRound',
             }),
@@ -425,7 +425,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And pretend {rightCandidate} lost {movement.count} voters to {centerCandidate}</p>
+                    <p>And pretend {rightCandidate} lost {movement.count} voters to {centerCandidate}.</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: [movement]
@@ -434,7 +434,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {leftCandidate} would be eliminated in the first round and {rightCandidate} would win</p>
+                    <p>Then {leftCandidate} would be eliminated in the first round and {rightCandidate} would win.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             })
@@ -454,7 +454,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -462,7 +462,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>But if we restart the election</p>
+                    <p>But if we restart the election.</p>
                 </>,
                 runoffStage: 'firstRound',
             }),
@@ -470,7 +470,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And pretend {leftCandidate} gained {movements.reduce((p, m) => p + m.count, 0)} voters from {rightCandidate}</p>
+                    <p>And pretend {leftCandidate} gained {movements.reduce((p, m) => p + m.count, 0)} voters from {rightCandidate}.</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: movements
@@ -479,7 +479,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {leftCandidate} would have lost to {centerCandidate} in the runoff</p>
+                    <p>Then {leftCandidate} would have lost to {centerCandidate} in the runoff.</p>
                 </>,
                 runoffStage: 'center_vs_left'
             })
@@ -499,7 +499,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -507,7 +507,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>But if we restart the election</p>
+                    <p>But if we restart the election.</p>
                 </>,
                 runoffStage: 'firstRound',
             }),
@@ -524,8 +524,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Then {centerCandidate} would have won instead of {leftCandidate}</p>
-                    <p>Therefore it was not safe for the "{rightCandidate} > {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario</p>
+                    <p>Then {centerCandidate} would have won instead of {leftCandidate}.</p>
+                    <p>Therefore it was not safe for the "{rightCandidate} > {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario.</p>
                 </>,
                 runoffStage: alternateRound
             })
@@ -545,7 +545,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -553,7 +553,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head</p>
+                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head.</p>
                 </>,
                 runoffStage: 'center_vs_left'
             }),
@@ -561,7 +561,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and {rightCandidate} would have beaten {centerCandidate} head-to-head</p>
+                    <p>and {rightCandidate} would have beaten {centerCandidate} head-to-head.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -569,7 +569,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, 'left_beats_right', 'center_beats_left', 'right_beats_center'],
                 explainer: <>,
-                    <p>So the head-to-head match ups form a cycle, and it's not clear who the ideal winner should be</p>
+                    <p>So the head-to-head match ups form a cycle, and it's not clear who the ideal winner should be.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -595,7 +595,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         official preliminary results tally and reported to the public. The error was discovered by a candidate
                         who had done extensive exit polling and who called the preliminary results into question after finding
                         that the official results were inconsistent with his campaign's internal data.
-                        NYC had to issue an apology and do a recount <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>Full Story</a>
+                        <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>NYC had to issue an apology and do a recount</a>.
                     </p>,
                     <p>(unfortunately we don't have the data to show the effect in the simulation)</p>
                     <p>To be clear, this was the first election to use RCV in NYC. Running test ballots through voting software is
@@ -634,7 +634,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
-                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay. </p>
+                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay.</p>
                     <p>However other voters bullet vote because they're confused about the voting system and
                         likely would have ranked more candidates if they had a better understanding.</p>
                     <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
@@ -662,7 +662,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
                     <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
                     <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
-                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a></p>
+                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a>.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -698,7 +698,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <p>
-                     We can simulate how the ballots were counted by removing 1 of the Hutchinson voters from the tally
+                     We can simulate how the ballots were counted by removing 1 of the Hutchinson voters from the tally.
                 </p>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound',
@@ -709,7 +709,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <p>
-                    This causes Hutchinson to be eliminated first (by a fraction of a vote), and then Resnick won in the final round
+                    This causes Hutchinson to be eliminated first (by a fraction of a vote), and then Resnick won in the final round.
                 </p>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'center_vs_right',
@@ -725,7 +725,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <p>
-                    and include all the ballots in the count
+                    and include all the ballots in the count...
                 </p>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound',
@@ -736,8 +736,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>then Manigo get's elimated in the first round, and Hutchinson is now the winner</p>
-                    <p>The other concerning thing is that this bug existed for all of the elections in Alameda County. This just happened to be the only election that was close enough for the result to change</p>
+                    <p>then Manigo get's elimated in the first round, and Hutchinson is now the winner.</p>
+                    <p>The other concerning thing is that this bug existed for all of the elections in Alameda County. This just happened to be the only election that was close enough for the result to change.</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left',
@@ -747,13 +747,13 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: 
                 <>
                     <p>To be clear, this bug was likely caused by human error and there was no evidence of election interference.</p>
-                    <p>However, this still tells us a few things about RCV
+                    <p>However, this still tells us a few things about RCV:
                     <ol>
                         <li><u>RCV is Complicated</u>:
                        Most ballot data will never be counted, and determining which data to count in what order is inherently complex.
                        There are a lot of edge cases to consider so it's easy to miss an important detail when implementing the algorithm, and errors made are harder to catch.</li>
                         <li><u>RCV is Unstable</u>: If the first choice tallies are close, then minor adjustments to the vote can change the elimination order and have a major impact to the result
-                            (Most other voting methods, including Approval and STAR Voting, count all ballot data given to ensure that popular candidates aren't eliminated prematurely.)</li>
+                            (Most other voting methods, including Approval and STAR Voting, count all ballot data given to ensure that popular candidates aren't eliminated prematurely).</li>
                         <li><u>RCV is hard to audit</u>: Unlike other methods, with RCV all ballots have to be centralized
                         in one location in order to determine the elimination order and the vote transfers, which in turn
                         means that early returns can't be fully processed. Under Choose One, Approval, and STAR Voting, any
@@ -782,7 +782,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>For this election RCV did successfully elect the Condorcet Winner  </p>
+                    <p>For this election RCV did successfully elect the Condorcet Winner.</p>
                     <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -792,7 +792,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -800,7 +800,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and {leftCandidate} would have also beaten {centerCandidate} head-to-head</p>
+                    <p>and {leftCandidate} would have also beaten {centerCandidate} head-to-head.</p>
                 </>,
                 runoffStage: 'center_vs_left'
             }),
@@ -808,7 +808,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and looks like {centerBeatsRight? centerCandidate : rightCandidate} also beats {centerBeatsRight? rightCandidate : centerCandidate} head-to-head (but it's not relevant for this case)</p>
+                    <p>and looks like {centerBeatsRight? centerCandidate : rightCandidate} also beats {centerBeatsRight? rightCandidate : centerCandidate} head-to-head (but it's not relevant for this case).</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -817,7 +817,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, 'left_beats_right', centerBeatsRight? 'center_beats_right' : 'right_beats_center', 'left_beats_center'],
                 focused: ['leftCandidate', 'left_beats_center', 'left_beats_right'],
                 explainer: <>,
-                    <p>So {leftCandidate} is the Condorcet Winner! and RCV was successful in this case</p>
+                    <p>So {leftCandidate} is the Condorcet Winner! and RCV was successful in this case.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -837,7 +837,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>{leftCandidate} won in the runoff</p>
+                    <p>{leftCandidate} won in the runoff.</p>
                 </>,
                 runoffStage: 'right_vs_left'
             }),
@@ -845,7 +845,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head</p>
+                    <p>but {centerCandidate} would have beaten {leftCandidate} head-to-head.</p>
                 </>,
                 runoffStage: 'center_vs_left'
             }),
@@ -853,7 +853,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>and {centerCandidate} also beats {rightCandidate} head-to-head</p>
+                    <p>and {centerCandidate} also beats {rightCandidate} head-to-head.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -862,7 +862,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, 'left_beats_right', 'center_beats_right', 'center_beats_left'],
                 focused: ['centerCandidate', 'center_beats_right', 'center_beats_left'],
                 explainer: <>,
-                    <p>So {centerCandidate} is the actual Condorcet Winner! and RCV failed to elect them</p>
+                    <p>So {centerCandidate} is the actual Condorcet Winner! and RCV failed to elect them.</p>
                 </>,
                 runoffStage: 'center_vs_right'
             }),
@@ -910,7 +910,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
             'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
             'https://arxiv.org/abs/2303.05985',
-            <li>NOTE: The Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</li>
         ),
         ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
         ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
@@ -952,7 +951,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...failureInfo(FAILURE.compromise, <>
             <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
                 elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
-            <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite</p>
+            <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite.</p>
         </>),
         ...failureInfo(FAILURE.downward_mono, <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         ...failureInfo(FAILURE.no_show, <>
@@ -974,9 +973,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...downwardMonotonicity(ELECTIONS.aspen_2009, new VoterMovement(7, 'rightBullet', 'centerBullet')),
         ...electionNote(ELECTIONS.aspen_2009, FAILURE.repeal,
-            <p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, view details and
-                polling <a href='https://rangevoting.org/Aspen09.html'>here</a>
-            </p>
+            <p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, <a href='https://rangevoting.org/Aspen09.html'>view details</a></p>
         ),
 
         // Alaska Special Election
@@ -994,14 +991,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         // Alaska General
         ...condorcetSuccess(ELECTIONS.alaska_general_2022),
         ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
-            <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed</p>
-            <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case</p>
-            <p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time</p>
+            <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed.</p>
+            <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case.</p>
+            <p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time.</p>
             <p>There are 2 primary explanations for this <ul>
-                <li>The general election had much more voters, and voters in general elections tend to be more left leaning</li>
+                <li>The general election had much more voters, and voters in general elections tend to be more left leaning.</li>
                 <li>Sarah Palin had the most name recognition going into the special election, and this likely created an electability bias in her favor.
                     Going into the general Peltola was the incumbant, so this shifted the electability bias to her. This implies that one unrepresentative
-                    outcome can create a domino effect and give the that candidate an edge in future elections
+                    outcome can create a domino effect and give the that candidate an edge in future elections.
                 </li>
             </ul></p>
         </>),
@@ -1030,15 +1027,15 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         }),
         ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
         ...electionNote(ELECTIONS.burlington_2009, FAILURE.repeal,
-            <p>Burlington repealed RCV after having used it in 2 mayoral elections in 2006 and
-                2009 <a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">more details</a>
+            <p><a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">Burlington repealed RCV</a>
+                    after having used it in 2 mayoral elections in 2006 and 2009
             </p>
         ),
 
         // Minneapolis
         ...spoiler(ELECTIONS.minneapolis_2021),
         ...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
-            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
+            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
         ),
         ...majorityFailure({
             electionTag: ELECTIONS.minneapolis_2021,
@@ -1065,9 +1062,10 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // Alameda
         ...spoiler(ELECTIONS.alameda_2022),
-        ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler,
-            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen</p>
-        ),
+        ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
+            <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
+            <p>Also note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
+        </>),
         ...majorityFailure({
             electionTag: ELECTIONS.alameda_2022,
             winnerVoteCount: 95,
@@ -1077,6 +1075,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...downwardMonotonicity(ELECTIONS.alameda_2022, new VoterMovement(1, 'rightThenCenter', 'centerThenRight')),
         ...upwardMonotonicity(ELECTIONS.alameda_2022, [new VoterMovement(16, 'rightThenLeft', 'leftThenRight')]),
         ...compromise(ELECTIONS.alameda_2022, new VoterMovement(13, 'rightThenCenter', 'centerThenRight')),
+        ...electionNote(ELECTIONS.alameda_2022, FAILURE.cycle,
+            <p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
+        ),
         ...condorcetCycle(ELECTIONS.alameda_2022),
 
         // Pierce
@@ -1089,7 +1090,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetSuccess(ELECTIONS.pierce_2008),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
             <p>Despite picking this correct winner, the Lesser-Evil Failure is still concerning because it shows that the result isn't stable,
-                and could potentially be vulnerable to strategic voting</p>
+                and could potentially be vulnerable to strategic voting.</p>
         ),
         ...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
             <p>RCV was only used for one election cycle, here's a quote from Elections Direcector Nick Handy:</p>
@@ -1101,12 +1102,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         // San Francisco
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
-            <p>(It shows as a tie here because they only won by a fraction of a vote)</p>
+            <p>(It shows as a tie here because they only won by a fraction of a vote).</p>
         ),
         ...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
         ...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
             <p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,
-                and could potentially be vulnerable to strategic voting</p>
+                and could potentially be vulnerable to strategic voting.</p>
         ),
     ]
 }

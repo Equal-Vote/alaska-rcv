@@ -246,7 +246,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <h1>❌ Misconception #3: "RCV guarantees a Majority Winner"</h1>
-                <p>If we look back at the actual finalists, Peltola clearly did not have a true majority because
+                <p>Peltola clearly did not have a true majority because
                     a majority of 200 would require more than 100 votes, and none of the candidates reached that.</p>
                 <br/>
                 <i>But then why did outlets report a majority for Peltola?</i>

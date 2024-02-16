@@ -86,7 +86,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal],
     },
     'nyc-2021': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation],
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, /*FAILURE.bullet_allocation*/],
     },
     'alameda-2022': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],

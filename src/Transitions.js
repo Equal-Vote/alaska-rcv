@@ -450,8 +450,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['usa_2'],
             explainer: <>
-                <p>The election inaccuracies, and general voter confusion have
-                    caused many RCV repeals including 3 jurisdictions that experience Monotonicity Pathology or Lesser-Evil Failures (Burlington, VT; Pierce, WA; and Moab, UT).</p>
+                <p>The election inaccuracies and general voter confusion have
+                    caused many RCV repeals including 3 jurisdictions that experienced Monotonicity Pathologies or Lesser-Evil Failures (Burlington, VT; Pierce, WA; and Moab, UT).</p>
             </>,
             // reset so we can scrollback properly
 			voterMovements: [
@@ -471,7 +471,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
 			electionName: 'burlington-2009', // presetting burlington so it's ready at the next step
             explainer: <>
-                <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. Instead we should look closer to alternatives such as STAR Voting, Approval Voting, and Ranked Robin.</p>
+                <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. Instead we should look closer at alternatives such as STAR Voting, Approval Voting, and Ranked Robin.</p>
                 
             </>,
         }),

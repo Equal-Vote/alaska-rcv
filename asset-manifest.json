@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.9f2a75f2.css",
+    "main.css": "/static/css/main.5b82df53.css",
     "main.js": "/static/js/main.587c4bd7.js",
     "static/js/787.e8151e8e.chunk.js": "/static/js/787.e8151e8e.chunk.js",
     "static/media/allElections1.mp4": "/static/media/allElections1.0050f81e379cb3c64b92.mp4",
@@ -65,12 +65,12 @@
     "static/media/wiley.jpg": "/static/media/wiley.7b2cc1f00df44d39a8c3.jpg",
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
-    "main.9f2a75f2.css.map": "/static/css/main.9f2a75f2.css.map",
+    "main.5b82df53.css.map": "/static/css/main.5b82df53.css.map",
     "main.587c4bd7.js.map": "/static/js/main.587c4bd7.js.map",
     "787.e8151e8e.chunk.js.map": "/static/js/787.e8151e8e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9f2a75f2.css",
+    "static/css/main.5b82df53.css",
     "static/js/main.587c4bd7.js"
   ]
 }

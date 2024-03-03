@@ -449,6 +449,10 @@ a, a:visited{
     min-height: 150px;
   }
 
+  .Voter{
+    display: block;
+  }
+
   .app{
     overflow: visible;
     padding: 1vh;

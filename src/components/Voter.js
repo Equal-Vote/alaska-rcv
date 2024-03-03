@@ -105,7 +105,8 @@ class Voter extends GameObject{
         return {
             ...super.getStyle(containerSize),
             background: pri,
-            border: `${Math.max(1, Math.round(0.002 * containerSize))}px solid ${sec}`
+            // Note I can't round here because then it might not display on mobile
+            border: `${0.002 * containerSize}px solid ${sec}`
         }
     }
 

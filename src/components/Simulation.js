@@ -17,8 +17,11 @@ const Simulation = () => {
         objs.forEach(o => o.update(simState));
 
         // only do these steps if voters are visible
-        simState.activeFrames--;
-        if(simState.visible.includes(Voter) && simState.activeFrames > 0){
+
+        let allObjsAreMember = objs.reduce((prev, obj) => prev && (obj.className != 'Voter' || obj.isMember()), true)
+        if(allObjsAreMember) simState.activeFrames--;
+        let isMobile = (window.innerWidth < 900);
+        if(!isMobile || (simState.visible.includes(Voter) && simState.activeFrames > 0)){
             // collisions
             // TODO: figure out cthener way to iterate over all pair
             // TODO: we might do more passes to get more accurate results, but this is fine for now
@@ -50,8 +53,6 @@ const Simulation = () => {
 
                 k++;
             }
-
-            console.log(ii, awakeObjects.length);
         }
 
         // refresh

@@ -3,7 +3,7 @@ import Vector from "./Vector";
 import VoterCamp from "./VoterCamp";
 
 const startMass = 1;
-const startGrav = .4;
+const startGrav = (window.innerWidth < 900)? .3 : .08;
 
 class Voter extends GameObject{
 
@@ -21,25 +21,44 @@ class Voter extends GameObject{
         this.prevPos = undefined;
     }
 
+    campName(simState){
+        if(this.camp == undefined) return '';
+
+        if(this.camp == simState.centerBullet) return 'centerBullet';
+        if(this.camp == simState.centerThenRight) return 'centerThenRight';
+        if(this.camp == simState.rightThenCenter) return 'rightThenCenter';
+        if(this.camp == simState.rightBullet) return 'rightBullet';
+        if(this.camp == simState.rightThenLeft) return 'rightThenLeft';
+        if(this.camp == simState.leftThenRight) return 'leftThenRight';
+        if(this.camp == simState.leftBullet) return 'leftBullet';
+        if(this.camp == simState.leftThenCenter) return 'leftThenCenter';
+        if(this.camp == simState.centerThenLeft) return 'centerThenLeft';
+        if(this.camp == simState.home) return 'home';
+
+        return 'none';
+    }
+
     update(simState){
         if(this.prevCamp != this.camp){
             this.prevCamp = this.camp;
         }
         super.update();
 
+        if(simState.activeFrames <= 0) return;
+
         //this.awake = simState.visible.includes(Voter) && (!this.isMember() || this.vel.magnitude() > .1);
-        this.awake = !this.isMember() || this.prevPos.subtract(this.pos).magnitude() > .1;
+        //this.awake = !this.isMember() || this.prevPos.subtract(this.pos).magnitude() > .1;
         //console.log(this.isMember(), this.camp != undefined, this.camp != undefined && this.camp.members.includes(this));
 
-        if(!this.awake){
-            if(!this.isDirectMember()) this.phyMass = 5*startMass;
-            return;
-        }
+        //if(!this.awake){
+        //    if(!this.isDirectMember()) this.phyMass = 5*startMass;
+        //    return;
+        //}
 
         this.prevPos = this.pos.clone();
 
         // randomly leave membership to make sure we can be reassigned (handles edge cases where membership was incorrect)
-        if((Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)
+        if(Date.now() - simState.startTime > 3 * 60 * 1000 && (Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)
             if(this.camp != undefined && !this.isDirectMember()){
                 this.camp.members.splice(this.camp.members.indexOf(this), 1);
             }
@@ -58,7 +77,7 @@ class Voter extends GameObject{
             this.vel = new Vector(0);
         }else{
             let toCamp = this.camp.pos.subtract(this.pos);
-            if(this.grav > .16 && this.camp.getSimKey() != 'home' && this.camp != undefined){
+            if(this.grav > startGrav * 2 && this.camp.getSimKey() != 'home' && this.camp != undefined){
                 toCamp = toCamp.add(new Vector(Math.random(), Math.random()).scale(this.grav * .25))
             }
             //var m = 1.5;

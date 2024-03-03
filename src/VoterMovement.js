@@ -17,7 +17,7 @@ export class VoterMovement {
     }
 
     move(n, from, to, simState, updateFinalCamp=false) {
-        simState.activeFrames = 30;
+        simState.activeFrames = 20;
 
         if(Array.isArray(n)){
             n = [...n];
@@ -93,6 +93,7 @@ export class VoterMovement {
             })
             .sort((l, r) => {
                 let campScore = (o) => o.finalCamp != simState[to];
+                //let campScore = () => 0; // set to 0 if you're trying to print camp mappings
                 let dist = (o) => {
                     return o.pos.subtract(simState[to].pos).magnitude();
                 };

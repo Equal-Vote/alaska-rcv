@@ -3,7 +3,7 @@ import Vector from "./Vector";
 import VoterCamp from "./VoterCamp";
 
 const startMass = 1;
-const startGrav = .3;
+const startGrav = .4;
 
 class Voter extends GameObject{
 

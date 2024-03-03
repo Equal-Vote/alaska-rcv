@@ -100,10 +100,12 @@ class Voter extends GameObject{
             pri = 'var(--voterGray)';
             sec = 'black';
         }
+
+        let isMobile = (window.innerWidth < 900);
         return {
             ...super.getStyle(containerSize),
             background: pri,
-            border: `${Math.round(0.002 * containerSize)}px solid ${sec}`
+            border: `${Math.max(1, Math.round(0.002 * containerSize))}px solid ${sec}`
         }
     }
 

@@ -3,7 +3,7 @@ import Vector from "./Vector";
 import VoterCamp from "./VoterCamp";
 
 const startMass = 1;
-const startGrav = .08;
+const startGrav = .3;
 
 class Voter extends GameObject{
 
@@ -17,13 +17,26 @@ class Voter extends GameObject{
         this.startPos = this.pos.clone();
         this.grav = startGrav;
         this.prevCamp = undefined;
+        this.awake = true;
+        this.prevPos = undefined;
     }
 
-    update(){
+    update(simState){
         if(this.prevCamp != this.camp){
             this.prevCamp = this.camp;
         }
         super.update();
+
+        //this.awake = simState.visible.includes(Voter) && (!this.isMember() || this.vel.magnitude() > .1);
+        this.awake = !this.isMember() || this.prevPos.subtract(this.pos).magnitude() > .1;
+        //console.log(this.isMember(), this.camp != undefined, this.camp != undefined && this.camp.members.includes(this));
+
+        if(!this.awake){
+            if(!this.isDirectMember()) this.phyMass = 5*startMass;
+            return;
+        }
+
+        this.prevPos = this.pos.clone();
 
         // randomly leave membership to make sure we can be reassigned (handles edge cases where membership was incorrect)
         if((Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)

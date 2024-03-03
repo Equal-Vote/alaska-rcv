@@ -17,6 +17,8 @@ export class VoterMovement {
     }
 
     move(n, from, to, simState, updateFinalCamp=false) {
+        simState.activeFrames = 60;
+
         if(Array.isArray(n)){
             n = [...n];
 

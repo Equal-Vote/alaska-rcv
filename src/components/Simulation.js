@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { SimContext } from '../SimContext';
 import Nav from "./Nav";
+import Voter from "./Voter";
 
 const Simulation = () => {
     let [bool, setBool] = useState(false);
@@ -15,24 +16,42 @@ const Simulation = () => {
         // update
         objs.forEach(o => o.update(simState));
 
-        // move
-        objs.forEach(o => o.applyVelocity());
+        // only do these steps if voters are visible
+        simState.activeFrames--;
+        if(simState.visible.includes(Voter) && simState.activeFrames > 0){
+            // collisions
+            // TODO: figure out cthener way to iterate over all pair
+            // TODO: we might do more passes to get more accurate results, but this is fine for now
+            let anyCollision = true;
+            let k = 0;
+            let max_steps = 15;
+            let awakeObjects = objs.filter(o => o.phyMass != undefined && o.awake);
+            let asleepObjects = objs.filter(o => o.phyMass != undefined && !o.awake);
 
-        // collisions
-        // TODO: figure out cthener way to iterate over all pair
-        // TODO: we might do more passes to get more accurate results, but this is fine for now
-        let anyCollision = true;
-        let k = 0;
-        let max_steps = 15;
-        while(anyCollision && k < max_steps){
-            anyCollision = false;
-            let phyObjs = objs.filter(o => o.phyMass != undefined);
-            for(var i = 0; i < phyObjs.length; i++){
-                for(var j = i+1; j < phyObjs.length; j++){
-                    anyCollision = phyObjs[i].tryCollision(phyObjs[j]) || anyCollision;
+            // move
+            awakeObjects.forEach(o => o.applyVelocity());
+
+            let ii = 0;
+            while(anyCollision && k < max_steps){
+                anyCollision = false;
+                for(var i = 0; i < awakeObjects.length; i++){
+                    for(var j = i+1; j < awakeObjects.length; j++){
+                        ii++;
+                        anyCollision = awakeObjects[i].tryCollision(awakeObjects[j]) || anyCollision;
+                    }
                 }
+
+                for(var i = 0; i < awakeObjects.length; i++){
+                    for(var j = 0; j < asleepObjects.length; j++){
+                        ii++;
+                        anyCollision = awakeObjects[i].tryCollision(asleepObjects[j]) || anyCollision;
+                    }
+                }
+
+                k++;
             }
-            k++;
+
+            console.log(ii, awakeObjects.length);
         }
 
         // refresh

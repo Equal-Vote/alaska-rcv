@@ -107,6 +107,7 @@ export function SimContextProvider({children}){
         ctx.objects = objects;
         let params = new URLSearchParams(window.location.search)
         ctx = {...ctx,
+            activeFrames: 0,
             objects,
             visible: [],
             focused: [],

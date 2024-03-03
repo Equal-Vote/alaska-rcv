@@ -12,6 +12,7 @@ export class GameObject {
         this.customClass = customClass;
         this.prevFocused = true;
         this.className = className;
+        this.awake = false;
     }
 
     getStyle(containerSize) {
@@ -85,6 +86,7 @@ export class GameObject {
     onCollide(other){}
 
     applyVelocity(){
+        //if(this.vel < .3) return;
         this.pos = this.pos.add(this.vel);
     }
 

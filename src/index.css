@@ -99,7 +99,7 @@ body, #root{
 .Nav{
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
 
   background: #202020;
@@ -120,10 +120,17 @@ body, #root{
   align-items: center;
 
   height: 50px;
-  padding: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin: 5px;
 
   text-decoration: none;
+}
+
+.NavButton h4{
+  color: white;
 }
 
 .NavButton:hover{
@@ -459,6 +466,16 @@ a, a:visited{
 }
 
 @media(max-width: 900px){
+  .Nav{
+    gap: 5px;
+  }
+  .NavButton{
+    height: 35px;
+  }
+  .NavButton h4{
+    font-size: .7rem;
+  }
+
   .explainerPadding{
     height: 40vh;
   }

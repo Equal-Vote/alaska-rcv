@@ -22,15 +22,10 @@ export default ({navTop}) => {
             href: '?selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
         });
     }
-        //{params.get('onlySelector') == 'true' ?
-        //    <a href='/'>Full Alaska Article</a>
-        //    :
-        //    <a href='?selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'>More Case Studies</a>
-        //}
     return <div className={`Nav ${params.get('onlySelector') == 'true'? 'USA' : 'Alaska'}`} style={{top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>
         {navs.map(item => <a href={item.href}><div className='NavButton'>
             <img src={item.icon}/>
-            <h3>{item.text}</h3>
+            <h4>{item.text}</h4>
         </div></a>
         )}
     </div>

@@ -434,7 +434,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['australia_house'],
             explainer: <>
-                <p>And despite all of that time, they're still stuck in a 2 party dominated system.</p>
+                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses STV instead of RCV and they have more 3rd party representation as a result</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes.</p>
             </>
         }),
@@ -451,7 +451,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['usa_2'],
             explainer: <>
                 <p>The election inaccuracies and general voter confusion have
-                    caused many RCV repeals including 3 jurisdictions that experienced Monotonicity Pathologies or Lesser-Evil Failures (Burlington, VT; Pierce, WA; and Moab, UT).</p>
+                    caused many RCV repeals including 3 jurisdictions that experienced Monotonicity Pathologies or Lesser-Evil Failures (Burlington, VT (later-reinstated); Pierce, WA; and Moab, UT).
+                </p>
             </>,
             // reset so we can scrollback properly
 			voterMovements: [

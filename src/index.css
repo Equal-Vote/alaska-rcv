@@ -476,12 +476,18 @@ a, a:visited{
     font-size: .7rem;
   }
 
+
   .explainerPadding{
     height: 40vh;
   }
 
+  .CandidateInner h3{
+    font-size: 20rem;
+  }
+
   .columns{
     flex-direction: column;
+    padding: 1vh;
   }
 
   .simulation{
@@ -523,7 +529,6 @@ a, a:visited{
 
   .app{
     overflow: visible;
-    padding: 1vh;
   }
 
   * {
@@ -537,7 +542,11 @@ a, a:visited{
     padding: 0;
   }
 
+  .explainer{
+    padding-left: 5%;
+  }
+
   .explainerInner{
-    padding-left: 30px;
+    padding-left: 50px;
   }
 }

@@ -17,9 +17,10 @@ export class VoterMovement {
     }
 
     move(n, from, to, simState, updateFinalCamp=false) {
-        simState.activeFrames = 20;
+        simState.activeFrames = Math.max(simState.activeFrames, 20);
 
         if(Array.isArray(n)){
+            simState.activeFrames = Math.max(simState.activeFrames, 60);
             n = [...n];
 
             // first release the camps that have excess

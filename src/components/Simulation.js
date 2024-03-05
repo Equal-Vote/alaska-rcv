@@ -21,7 +21,6 @@ const Simulation = () => {
         let allObjsAreMember = objs.reduce((prev, obj) => prev && (obj.className != 'Voter' || obj.isMember()), true)
         if(allObjsAreMember) simState.activeFrames--;
         let isMobile = (window.innerWidth < 900);
-        console.log(isMobile);
         if(!isMobile || (simState.visible.includes(Voter) && simState.activeFrames > 0)){
             // collisions
             // TODO: figure out cthener way to iterate over all pair

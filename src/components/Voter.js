@@ -44,8 +44,6 @@ class Voter extends GameObject{
         }
         super.update();
 
-        if(simState.activeFrames <= 0) return;
-
         //this.awake = simState.visible.includes(Voter) && (!this.isMember() || this.vel.magnitude() > .1);
         //this.awake = !this.isMember() || this.prevPos.subtract(this.pos).magnitude() > .1;
         //console.log(this.isMember(), this.camp != undefined, this.camp != undefined && this.camp.members.includes(this));

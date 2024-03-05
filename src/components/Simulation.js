@@ -67,7 +67,6 @@ const Simulation = () => {
 
     return (
         <div className="simPanel">
-            <Nav/>
             <div ref={simRef} className='simulation'>
                 {simState.objects.map(o => o.asComponent(simState, simRef.current == null ? 800 : simRef.current.clientHeight))}
             </div>

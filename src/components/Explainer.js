@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef} from "react";
 import { SimContext } from "../SimContext";
 
-const Explainer = () => {
+const Explainer = ({setNavTop}) => {
     const {simState, updateSimIndex, simIndexIsVisible, refreshBool} = useContext(SimContext);
     const explainerRefs = useRef([]);
     const containerRef = useRef(null);
@@ -25,6 +25,8 @@ const Explainer = () => {
     selectorRange.end = selectorRange.start + selectorRange.size
     selectorRange.start--; // include the selector panel
 
+
+    let prevScrollY = 0;
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();
         let mid = (rect.top + rect.bottom) / 2;
@@ -45,7 +47,12 @@ const Explainer = () => {
         })
 
         updateSimIndex(explainerRefs.current.indexOf(focusedElem));
+
+        // Update nav
+        setNavTop(v => Math.max(-100, Math.min(0, v-(containerRef.current.scrollTop - prevScrollY))));
+        prevScrollY = containerRef.current.scrollTop;
     }
+
 
     // I couldn't get global scroll to feel good,so I'm disabling it for now
     //let onGlobalScroll = (event) => {
@@ -57,6 +64,7 @@ const Explainer = () => {
     //}
 
     useEffect(() => {
+
         explainerRefs.current.forEach((e, i) => {
             e.classList.remove('explainerFocused');
             e.classList.remove('explainerUnfocused');

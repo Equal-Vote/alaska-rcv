@@ -96,7 +96,57 @@ body, #root{
   background: black;
 }
 
+.Nav{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+
+  background: #202020;
+  position: absolute;
+  width: 100%;
+  top: 30px;
+  overflow: hidden;
+}
+
+.Nav.USA{
+  position: relative;
+}
+
+.NavButton{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+
+  height: 50px;
+  padding: 10px;
+  margin: 5px;
+
+  text-decoration: none;
+}
+
+.NavButton:hover{
+  background: #575757;
+}
+
+.NavButton img{
+  height: 100%;
+}
+
 .app{
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+
+  width: 100%;
+  height: 100%;
+}
+
+.columns{
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -314,6 +364,7 @@ img{
 
 a, a:visited{
   color: purple;
+  text-decoration: none;
 }
 
 /* Scrollbar */
@@ -412,7 +463,7 @@ a, a:visited{
     height: 40vh;
   }
 
-  .app{
+  .columns{
     flex-direction: column;
   }
 

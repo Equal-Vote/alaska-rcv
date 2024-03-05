@@ -154,7 +154,7 @@ export function SimContextProvider({children}){
         setTimeout(() => {
             let camps = new Array(200);
             simState.objects.filter(o => o.className == 'Voter').forEach(v => camps[v.index] = v.campName(simState));
-            console.log(camps);
+            //console.log(camps);
         }, 20000);
 
         return ctx;

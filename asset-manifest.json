@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.9f2a75f2.css",
-    "main.js": "/static/js/main.c631cf8f.js",
+    "main.css": "/static/css/main.cbdbc297.css",
+    "main.js": "/static/js/main.82cd9dc8.js",
     "static/js/787.e8151e8e.chunk.js": "/static/js/787.e8151e8e.chunk.js",
     "static/media/allElections1.mp4": "/static/media/allElections1.0050f81e379cb3c64b92.mp4",
     "static/media/chooseOneBallot.png": "/static/media/chooseOneBallot.ad76f0c73d7ddc0b2528.png",
+    "static/media/equal_logo.png": "/static/media/equal_logo.195846a9266186da2a5f.png",
     "static/media/chooseOne.mkv": "/static/media/chooseOne.f615c0b2632f1c34657c.mkv",
     "static/media/hutchinson.jpg": "/static/media/hutchinson.5bc32c4019a0528553dc.jpg",
     "static/media/parties.mp4": "/static/media/parties.8da4886527e64a2ffb92.mp4",
@@ -25,6 +26,7 @@
     "static/media/fargoQuote.png": "/static/media/fargoQuote.083030c4a6ee5c22124b.png",
     "static/media/worlobah.jpg": "/static/media/worlobah.23b38d37dfcdbe052e5e.jpg",
     "static/media/resnick.jpg": "/static/media/resnick.bd92b2a2d17722eacb9a.jpg",
+    "static/media/equal_logo.jpg": "/static/media/equal_logo.cfb32be00de38184fd60.jpg",
     "static/media/australiaHouse.jpg": "/static/media/australiaHouse.ee35cbcf75fc803f3ce7.jpg",
     "static/media/begichBullet.pdn": "/static/media/begichBullet.568839ab4a3494a1ba17.pdn",
     "static/media/australia.png": "/static/media/australia.a5120a53d463c884032b.png",
@@ -39,6 +41,7 @@
     "static/media/torre.jpg": "/static/media/torre.3ba98cc209483e881c27.jpg",
     "static/media/peltola.jpg": "/static/media/peltola.cb2215421a9949c75752.jpg",
     "static/media/centerBeatsRight.png": "/static/media/centerBeatsRight.2039358373d679cdfa1b.png",
+    "static/media/usa_nav.png": "/static/media/usa_nav.03d9bfd6fd1f9062b317.png",
     "static/media/cnnResults.png": "/static/media/cnnResults.b2ec1da62ac6656e954f.png",
     "static/media/centerBeatsLeft.png": "/static/media/centerBeatsLeft.b3043495cd8c12013450.png",
     "static/media/alaska.png": "/static/media/alaska.0dc593a63a9945f7db65.png",
@@ -65,12 +68,12 @@
     "static/media/wiley.jpg": "/static/media/wiley.7b2cc1f00df44d39a8c3.jpg",
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
-    "main.9f2a75f2.css.map": "/static/css/main.9f2a75f2.css.map",
-    "main.c631cf8f.js.map": "/static/js/main.c631cf8f.js.map",
+    "main.cbdbc297.css.map": "/static/css/main.cbdbc297.css.map",
+    "main.82cd9dc8.js.map": "/static/js/main.82cd9dc8.js.map",
     "787.e8151e8e.chunk.js.map": "/static/js/787.e8151e8e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9f2a75f2.css",
-    "static/js/main.c631cf8f.js"
+    "static/css/main.cbdbc297.css",
+    "static/js/main.82cd9dc8.js"
   ]
 }

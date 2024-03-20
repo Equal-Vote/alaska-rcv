@@ -10,6 +10,13 @@ function App() {
     const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
+        const url = new URLSearchParams(window.location.search);
+        if(!enabled && url.get('enabled')){
+            setEnabled(true)
+            return;
+        }
+
+
         let flags = [{
             key: 'enabled',
             value: false,
@@ -27,6 +34,7 @@ function App() {
             window.registerMyFeatureFlags = (register) => register(flags, setter);
         }
     }, [])
+
 
     // APP
     let [navTop, setNavTop] = useState(0);

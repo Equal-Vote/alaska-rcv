@@ -13,13 +13,13 @@ export default ({navTop}) => {
         navs.push({
             icon: require('../assets/alaska_nav.png'),
             text: 'Alaska Article',
-            href: '/'
+            href: '?enabled=true'
         });
     }else{
         navs.push({
             icon: require('../assets/usa_nav.png'),
             text: 'More Case Studies',
-            href: '?selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
+            href: '?enabled=true&selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
         });
     }
     return <div className={`Nav ${params.get('onlySelector') == 'true'? 'USA' : 'Alaska'}`} style={{top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>

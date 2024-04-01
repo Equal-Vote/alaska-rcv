@@ -86,7 +86,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal],
     },
     'nyc-2021': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, /*FAILURE.bullet_allocation*/],
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation],
     },
     'alameda-2022': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
@@ -642,7 +642,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
-                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay.</p>
+                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay</p>
                     <p>However other voters bullet vote because they're confused about the voting system and
                         likely would have ranked more candidates if they had a better understanding.</p>
                     <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
@@ -655,7 +655,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Let's assume that 4 of the Wiley bullet voters were confused and that their second choice picks were proportional to the second choice picks of the other Wiley voters (3 for Garcia, and 1 for Adams).</p>
-                    <p>This level of voter confusion is reasonable considering that this was the first RCV election held in New York City. There's a learning curve before voter behaviour becomes more ideal.</p>
+                    <p>This level of voter confusion is reasonable considering that this was the first RCV election held in New York City. There's a learning curve before voter behavior becomes more ideal.</p>
                 </>,
                 voterMovements: [
                     new VoterMovement(1, 'centerBullet', 'centerThenLeft'),
@@ -670,7 +670,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
                     <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
                     <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
-                    <p>To learn more here's <a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">a paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a>.</p>
+                    <p>Here's some more links to learn more</p>
+                    <ul>
+                        <li><a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">A paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a></li>
+                        <li><a href="https://medium.com/3streams/assessing-the-promises-of-ranked-choice-voting-in-new-york-city-d46748d5e6af">An article reviewing the general performance of RCV in NYC</a></li>
+                        <li><a href="https://x.com/DCInbox/status/1447916713857613826?s=20">Public matching funds made it harder to measure RCVs performance in isolation</a></li>
+                    </ul>
                 </>,
                 runoffStage: 'right_vs_left'
             }),

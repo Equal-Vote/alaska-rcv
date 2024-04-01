@@ -599,11 +599,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 explainer: 
                 <>
                     <p>
-                        In this election, over 135,000 official looking test ballots were run through the system and were added to the
-                        official preliminary results tally and reported to the public. The error was discovered by a candidate
+                        In this election, over 135,000 official looking test ballots were run through the system, added to the
+                        official preliminary results tally, and reported to the public. The error was discovered by a candidate
                         who had done extensive exit polling and who called the preliminary results into question after finding
                         that the official results were inconsistent with his campaign's internal data.
-                        <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>NYC had to issue an apology and do a recount</a>.
+                        <a href='https://www.nytimes.com/2021/06/29/nyregion/adams-garcia-wiley-mayor-ranked-choice.html'>NYC had to issue an apology and do a recount.</a>.
                     </p>,
                     <p>(unfortunately we don't have the data to show the effect in the simulation)</p>
                     <p>To be clear, this was the first election to use RCV in NYC. Running test ballots through voting software is
@@ -619,7 +619,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         first place, and makes it easier for election officials to check their work as they go.
                     </p>
                     <p>
-                        The test ballots being included in the official count is only half the problem, the other half is that the election board was unable to discover the issue themselves before releasing the results.
+                        The test ballots being included in the official count is only half the problem, the other half is that the
+                        election board was unable to discover the issue themselves before releasing the results.
                     </p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],

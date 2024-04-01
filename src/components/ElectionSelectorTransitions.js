@@ -18,7 +18,8 @@ const FAILURE= {
     'compromise': 'Lesser-Evil Failure',
     'tally': 'Tally Error',
     'repeal': 'Repealed',
-    'bullet_allocation': 'Bullet Vote Allocation'
+    'bullet_allocation': 'Bullet Vote Allocation',
+    'rank_the_red': 'Rank the Red?'
 };
 
 const ELECTIONS = {
@@ -92,7 +93,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
     },
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, /*FAILURE.rank_the_red*/],
     },
     'alaska-general-2022': {
         'failures': [FAILURE.unselected],
@@ -629,6 +630,202 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
+    const bulletVoteDefinition = (def) => {
+        return new SimTransition({
+            ...def,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
+                <p>Some voters who bullet vote genuinely only like one candidate, and that's okay.</p>
+                <p>However other voters bullet vote because they're confused about the voting system and
+                    likely would have ranked more candidates if they had a better understanding.</p>
+            </>,
+            runoffStage: 'undefined'
+        });
+    }
+
+    const alaskaRankTheRed = () => {
+        let def = {
+            electionName: ELECTIONS.alaska_special_2022,
+            electionTag: ELECTIONS.alaska_special_2022,
+            failureTag: FAILURE.rank_the_red,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[def.electionTag];
+
+        return [
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-the-red-to-win-in-november/">a movement to encourage republican voters to "Rank the Red" or "Rank all Republicans"</a>. </p>
+                    <p>This speaks to one of the positives of RCV in that candidates are encouraged to form coalitions rather than strictly limit themselves to negative campaigning, but as we'll see it's not enough to overcome RCV's fundamental flaws.</p>
+                    <p>Let's see if having more voters "Rank the Red" would have been enough to change results in the special election...</p>
+                </>,
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>
+                    There are two halves to this message.
+                    <ol>
+                        <li>It hopes to encourage voters who bullet voted to instead rank another Republican for their second ranking.</li>
+                        <li>It hopes that the more unifying message can encourage the Republicans who voted Peltola second to switch their second choice to the other Republican.</li>
+                    </ol>
+                    Let's dig into the bullet voters first.
+                </p>,
+                runoffStage: 'default'
+            }),
+            bulletVoteDefinition(def),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>There were voters who bullet voted for Begich, as well as voters who bullet voted for Palin.</p>
+                    <p>However Palin voters never got their second choices counted since she was one of the finalists.</p>
+                </>,
+                focused: ['centerBullet', 'rightBullet'],
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>So we'll just focus on the Begich Bullet voters.</p>,
+                focused: ['centerBullet'],
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>What would happen if they had all selected Palin as their second choice?</p>,
+                focused: ['centerBullet', 'centerThenRight'],
+                voterMovements: [
+                    new VoterMovement(12, 'centerBullet', 'centerThenRight'),
+                ],
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>The added Palin support would allow her to easily win in the final runoff round.</p>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>But this isn't realistic, if we assume that the Begich bullet voters had similar feelings to the Begich voters that did express a second choice
+                    then we'd expect roughly one third of them to have ranked Peltola second.</p>
+                    <p>This essentially brings the final runoff round to a tie.</p>
+                </>,
+                voterMovements: [
+                    new VoterMovement(4, 'centerThenRight', 'centerBullet'),
+                    new VoterMovement(4, 'centerBullet', 'centerThenLeft'),
+                ],
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>So far we've also been assuming that the bullet voters had opinions about the other candidates, in reality some of the bullet voters
+                        were probably voters who genuinely only liked Begich.</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Here's what it would look like if just a quarter of the original bullet voters were genuine.</p>
+                    <p>So in reality the bullet voters alone likely wouldn't be enough to swing the election to Palin.</p>
+                </>,
+                voterMovements: [
+                    new VoterMovement(1, 'centerThenLeft', 'centerBullet'),
+                    new VoterMovement(2, 'centerThenRight', 'centerBullet'),
+                ],
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Let's reset and look at the other half of the "Rank the Red" message. Would a more unifying message be enough to move some of the Republicans who voted Peltola second?</p>
+                    <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
+                        Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
+                        so it's hard to say how effective this would be
+                        (<a href="https://www.starvoting.org/star_rcv_pros_cons#:~:text=The%205%20star%20ballot%20is%20highly%20expressive%2C%20showing%20both%20voters%20level%20of%20support%20for%20each%20candidate%20and%20their%20preference%20order.">
+                                but a STAR Voting ballot could help with this
+                        </a>).
+                    </p>
+                </>,
+                focused: ['centerThenLeft'],
+                voterMovements: [
+                    new VoterMovement(3, 'centerThenLeft', 'centerBullet'),
+                    new VoterMovement(6, 'centerThenRight', 'centerBullet'),
+                ],
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>
+                    It wouldn't take very many to swing the election. Let's say just a quarter of 
+                    the "Begich first, Peltola second" voters were convinced to switch their second choice to Palin...
+                </p>,
+                voterMovements: [
+                    new VoterMovement(4, 'centerThenLeft', 'centerThenRight'),
+                ],
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then the win would swing back to Palin.</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>So "Rank the Red" could indeed help to get a Republican elected, and it shows how RCV can serve to incentivise positive campaigns,
+                    but the improved voter education still wouldn't be enough to solve the fundamental problems with RCV.</p>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>Even if we go to the most extreme case and assume that all republican voters "Ranked the Red", then RCV would still fail to elect the most representative winner.</p>,
+                voterMovements: [
+                    new VoterMovement(12, 'centerThenLeft', 'centerThenRight'),
+                    new VoterMovement(12, 'centerBullet', 'centerThenRight'),
+                    new VoterMovement(4, 'rightThenLeft', 'rightThenCenter'),
+                    new VoterMovement(23, 'rightBullet', 'rightThenCenter'),
+                ],
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>Begich would still win in a head to head against both Palin...</p>,
+                runoffStage: 'center_vs_right'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>and Peltola.</p>,
+                runoffStage: 'center_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>This illustrates how RCV tends to swing between 2 polarized extremes (just like Choose-One), and hurts the consensus candidates that best represent the population. </p>,
+                runoffStage: 'center_vs_left'
+            }),
+        ]
+    }
+
     const nycBulletAllocation = () => {
         let def = {
             electionName: ELECTIONS.nyc_2021,
@@ -638,14 +835,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[def.electionTag];
 
         return [
+            bulletVoteDefinition(def),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
-                    <p>Some voters who bullet vote genuinely only like one candidate, and that's okay</p>
-                    <p>However other voters bullet vote because they're confused about the voting system and
-                        likely would have ranked more candidates if they had a better understanding.</p>
                     <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
                         Wiley bullet voters were confused and would have preferred Garcia over Adams then we get a different result.</p>
                 </>,
@@ -1001,6 +1195,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...upwardMonotonicity(ELECTIONS.alaska_special_2022, [new VoterMovement(7, 'rightBullet', 'leftBullet')]),
         ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
         ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
+        ...alaskaRankTheRed(),
 
         // Alaska General
         ...condorcetSuccess(ELECTIONS.alaska_general_2022),

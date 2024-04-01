@@ -56,7 +56,7 @@ class Voter extends GameObject{
         this.prevPos = this.pos.clone();
 
         // randomly leave membership to make sure we can be reassigned (handles edge cases where membership was incorrect)
-        if(Date.now() - simState.startTime > 3 * 60 * 1000 && (Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)
+        if((Date.now() - simState.startTime > 3 * 60 * 1000 || new URLSearchParams(window.location.search).get('onlySelector') )&& (Math.random() * 60 * 5) < 1 ){ // once every 5 seconds(ish)
             if(this.camp != undefined && !this.isDirectMember()){
                 this.camp.members.splice(this.camp.members.indexOf(this), 1);
             }

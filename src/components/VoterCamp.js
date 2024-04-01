@@ -35,7 +35,8 @@ class VoterCamp extends GameObject{
     }
 
     directMembersLocked(){
-        return this.directMembers.length >= 13 || this.directMembers.length == this.members.length
+        // we could fit 13, but that can have an erradic spinning behaviour
+        return this.directMembers.length >= 10 || this.directMembers.length == this.members.length
     }
 
     update(simState){

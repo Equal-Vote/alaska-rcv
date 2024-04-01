@@ -912,7 +912,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             'Harvard Data Verse',
             'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
         ),
-        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.2, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
+        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.1, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
         ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
         ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
             'Analysis of the 2021 Instant Run-Off Elections in Utah',

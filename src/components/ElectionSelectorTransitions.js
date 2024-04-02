@@ -10,7 +10,7 @@ import Bars from "./Bars";
 import { Table, TableRow } from "@mui/material";
 
 const FAILURE= {
-    'unselected': '<pick a failure type>',
+    'unselected': '<pick a scenario>',
     'spoiler': 'Spoiler Effect',
     'condorcet': 'Condorcet Failure',
     'cycle': 'Condorcet Cycle',
@@ -73,34 +73,34 @@ const ELECTIONS = {
 
 const elections = {
     'pierce-2008': {
-        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority, FAILURE.repeal, FAILURE.star_conversion],
     },
     'burlington-2009': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal, FAILURE.star_conversion],
     },
     'aspen-2009': {
         'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
     },
     'san-francisco-2020': {
-        'failures': [FAILURE.unselected, FAILURE.downward_mono],
+        'failures': [FAILURE.unselected, FAILURE.downward_mono, FAILURE.star_conversion],
     },
     'minneapolis-2021': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono, FAILURE.star_conversion],
     },
     'moab-2021': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal, FAILURE.star_conversion],
     },
     'nyc-2021': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation],
+        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation, FAILURE.star_conversion],
     },
     'alameda-2022': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise, FAILURE.star_conversion],
     },
     'alaska-special-2022': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, /*FAILURE.rank_the_red*/],
     },
     'alaska-general-2022': {
-        'failures': [FAILURE.unselected],
+        'failures': [FAILURE.unselected, FAILURE.star_conversion],
     },
 };
 
@@ -150,6 +150,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 });
             }
 
+
             url.set('selectorElection', urlFormat(simState.selectorElection));
             url.set('selectorFailure', urlFormat(simState.selectorFailure));
             window.history.replaceState( {} , '', `${window.location.href.split('?')[0]}?${url.toString()}`);
@@ -193,6 +194,15 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             setRefreshBool(b => !b);
         }
 
+        const disableStarConversion = () => {
+            document.querySelectorAll('.failureOption').forEach((elem) =>{
+                if(elem.textContent == FAILURE.star_conversion){
+                    console.log('click disable star conversion');
+                    elem.style.display = 'none';
+                }
+            });
+        }
+
         return new SimTransition({
             visible: [Candidate, Pie],
             runoffStage: 'default',
@@ -204,6 +214,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         <div className='electionSelector'>
                             <select className='electionSelect' name="election" defaultValue={simState.selectorElection} onChange={(event) => {
                                 switchElection(event.target.value);
+                                disableStarConversion(); 
                             }}>
                                 {Object.entries(ELECTIONS).map(([key, election], i) => {
                                     const url = new URLSearchParams(window.location.search);
@@ -217,13 +228,16 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                         <div className='failureSelector'>
                             <select className='failureSelect' name="failure" defaultValue={simState.selectorFailure} onChange={(event) => {
                                 switchFailure(event.target.value);
+                                disableStarConversion(); 
                             }}>
-
                                 {Object.entries(FAILURE).map(([key, failure], i) => {
                                     const url = new URLSearchParams(window.location.search);
                                     let visible = url.get('primarySelector')=='failure'?
                                         failure != FAILURE.unselected :
                                         elections[simState.selectorElection].failures.includes(failure);
+
+                                    disableStarConversion(); 
+
                                     return <option className='failureOption' key={i} style={{display: visible? 'block' : 'none'}}>{failure}</option>
                                 })}
                             </select>
@@ -242,6 +256,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                                 document.querySelector('.selectors').classList.remove('selectorsSwapped');
                                 switchElection(simState.selectorElection == ELECTIONS.unselected ? ELECTIONS.pierce_2008 : simState.selectorElection);
                             }
+
+                            disableStarConversion(); 
                         }}>⇅</button>
                         <button onClick={(event) => {
                             const url = new URLSearchParams(window.location.search);
@@ -272,7 +288,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         if(elections[electionName].failures.length > 1){
             intro.push(new SimTransition({
-                explainer: <p>This election had the following issues : 
+                explainer: <p>This election had the following scenarios : 
                     <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected).map((f,i) => <li>{f}</li>)}</ul>
                     Pick from the drop down above for more details</p>,
                 electionName: electionName,
@@ -775,7 +791,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
                         Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
                         so it's hard to say how effective this would be
-                        (<a href="https://www.starvoting.org/star_rcv_pros_cons#:~:text=The%205%20star%20ballot%20is%20highly%20expressive%2C%20showing%20both%20voters%20level%20of%20support%20for%20each%20candidate%20and%20their%20preference%20order.">
+                        (<a href="https://rcvchangedalaska.com/?enabled=true&selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true&primarySelector=failure">
                                 but a STAR Voting ballot could help with this
                         </a>).
                     </p>
@@ -887,7 +903,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Wiley would still be eliminated in the first round, but the voters that transferred to Garcia would have been enough to give Garcia the win.</p>
-                    <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
+                    <p>This shows that Wiley and Garcia may have split the vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
                     <p>But again, Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
                     <p>Here's some more links to learn more</p>
                     <ul>
@@ -1128,6 +1144,54 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <td style={{textAlign: 'left'}}>{new Array(stars[i]+1).join('⭐')}</td>
                 </tr>)}
             </table>
+        
+        const c = campCounts[electionTag]
+
+
+        const dotCamp = (ballots) => {
+            let data = [[0, 0], [0, 0], [0, 0]];
+            for(let i = 0; i < ballots.length; i++){
+                for(let c = 0; c < 3; c++){
+                    let score = ballots[i][c];
+                    if(Array.isArray(score)){
+                        data[c][0] += score[0]*campCounts[electionTag][i+1];
+                        data[c][1] += score[1]*campCounts[electionTag][i+1];
+                    }else{
+                        data[c][0] += score*campCounts[electionTag][i+1];
+                        data[c][1] += score*campCounts[electionTag][i+1];
+                    }
+                }
+            }
+            return data;
+        }
+        
+
+        const lowestScoringCandidate = (data) => {
+            if(data[0][0] <= data[1][0] && data[0][0] <= data[2][0]) return 0;
+            if(data[1][0] <= data[0][0] && data[1][0] <= data[2][0]) return 1;
+            if(data[2][0] <= data[0][0] && data[2][0] <= data[1][0]) return 2;
+        }
+
+        const runoffWinner = (excluced) => {
+            if(excluced == 0) return (c[2]+c[3]+c[4]+c[5]) > (c[6]+c[7]+c[8]+c[9])? rightCandidate : leftCandidate;
+            if(excluced == 1) return (c[9]+c[1]+c[2]+c[3]) > (c[5]+c[6]+c[7]+c[8])? centerCandidate : leftCandidate;
+            if(excluced == 2) return (c[8]+c[9]+c[1]+c[2]) > (c[3]+c[4]+c[5]+c[6])? centerCandidate : rightCandidate;
+            return '';
+        }
+        
+        const avgScore = dotCamp([
+            [5,        0,       0       ],
+            [5,        2.5,     0       ],
+            [2.5,      5,       0       ],
+            [0,        5,       0       ],
+            [0,        5,       2.5     ],
+            [0,        2.5,     5       ],
+            [0,        0,       5       ],
+            [2.5,      0,       5       ],
+            [5,        0,       2.5     ],
+        ]);
+
+        const avgLowScoreIndex = lowestScoringCandidate(avgScore);
 
         return [
             new SimTransition({
@@ -1135,12 +1199,128 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['centerBullet'],
                 explainer: <>
-                    <p>Let's convert the {centerCandidate} bullet voters first. We'll assume that they gave 5 stars to {centerCandidate} and then no stars to anyone else</p>
-                    {starBallot([5, 0, 0])}
-                    <p>Since there are {campCounts[electionTag][1]} of those voters then that adds up to {campCounts[electionTag][1]*5} stars for {centerCandidate}</p>
-                    <Bars simState={simState} electionTag={electionTag} step={0}/>
+                    <p>TODO: this will likely be the first time the reader is exposed to STAR, so I should add an intro here explaining the system, and linking them to a video</p>
                 </>,
                 runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: ['centerBullet'],
+                explainer: <>
+                    <p>Let's convert the {centerCandidate} bullet voters first. We'll assume that they gave 5 stars to {centerCandidate} and then no stars to anyone else</p>
+                    {starBallot([5, 0, 0])}
+                    <p>Since there are {c[1]} of those voters then that adds up to {c[1]*5} stars for {centerCandidate}</p>
+                    <Bars simState={simState} electionTag={electionTag} data={dotCamp([
+                        [5, 0, 0]
+                    ])}/>
+                </>,
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: ['centerThenRight'],
+                explainer: <>
+                    <p>Next we'll look at those who voted {centerCandidate} 1st and {rightCandidate} 2nd. We can assume they would have given {centerCandidate} 5 stars,
+                    and {leftCandidate} 0 stars, but their level of support for {rightCandidate} is not as clear.</p>
+                    <p>Depending on how strongly they felt about {rightCandidate} they could have given a score anywhere between 1 and 4 stars and still maintained their relative ranking.</p>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                    {starBallot([5, 1, 0])}
+                    {starBallot([5, 4, 0])}
+                    </div>
+                    <p>Here's what we get if we add the 5,1,0 ballots to the previous data</p>
+                    <Bars simState={simState} electionTag={electionTag} data={dotCamp([
+                        [5, 0, 0],
+                        [5, 1, 0]
+                    ])}/>
+                    <p>And then we'll add a range to get a sense for how much bigger the {rightCandidate} support could have been with the 5,4,0 ballots</p>
+                    <Bars simState={simState} electionTag={electionTag} data={dotCamp([
+                        [5, 0,      0],
+                        [5, [1, 4], 0]
+                    ])}/>
+                </>,
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: ['rightThenCenter'],
+                explainer: <>
+                    <p>And then repeating the same process for those who voted {rightCandidate} 1st and {centerCandidate} 2nd, here's the 2 extremes for those converted ballots</p>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                    {starBallot([1, 5, 0])}
+                    {starBallot([4, 5, 0])}
+                    </div>
+                    <p>And then here's what the updated totals looks like</p>
+                    <Bars simState={simState} electionTag={electionTag} data={dotCamp([
+                        [5,        0,       0],
+                        [5,        [1,4],   0],
+                        [[1,4],    5,       0]
+                    ])}/>
+                </>,
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>After repeating the process for the remaining ballots, here are the final score ranges for STAR</p>
+                    <Bars simState={simState} electionTag={electionTag} data={dotCamp([
+                        [5,        0,       0       ],
+                        [5,        [1,4],   0       ],
+                        [[1,4],    5,       0       ],
+                        [0,        5,       0       ],
+                        [0,        5,       [1,4]   ],
+                        [0,        [1,4],   5       ],
+                        [0,        0,       5       ],
+                        [[1,4],    0,       5       ],
+                        [5,        0,       [1,4]   ],
+                    ])}/>
+
+                </>,
+                runoffStage: 'default'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>There are several possible outcomes depending on where the votes land in those ranges, but for a specific example let's see what would happen if we assume each
+                        total ends up in the center of the ranges</p>
+                    <Bars simState={simState} electionTag={electionTag} data={avgScore}/>
+                    <p>If this happened then 
+                        {avgLowScoreIndex == 0 && ` ${rightCandidate} and ${leftCandidate} `}
+                        {avgLowScoreIndex == 1 && ` ${centerCandidate} and ${leftCandidate} `}
+                        {avgLowScoreIndex == 2 && ` ${rightCandidate} and ${centerCandidate} `}
+                        would proceed to the runoff
+                    </p>
+                </>,
+                runoffStage: 'default'
+            }),
+
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>And then in the runoff round each vote will go to the finalist they most preferred (just like RCV) and then the win would go to {runoffWinner(avgLowScoreIndex)}</p>
+                    <p>So RCV and STAR work similarly in that they both narrow the field down to 2 candidates and end in a runoff, but they're very different in how they reduce the candidates.
+                        RCV only looks at first choice preferences so it ends up with many of the same problems as Choose-One, whereas STAR uses all the data to select the finalists with the most
+                        overall support
+                    </p>
+                    <p>This ballot conversion method referenced <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">a paper by Jeanne N. Clelland simulating the Alaska election with other voting methods</a>.
+                    Check it out for more details</p>
+                </>,
+                runoffStage: avgLowScoreIndex == 0? 'right_vs_left' : (avgLowScoreIndex == 1? 'center_vs_left' : 'center_vs_right')
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: ['centerBullet'],
+                explainer: <>
+                    <p>TODO: I could add a lot more detail here going over the different paths to victory for each candidate. Also I can explain
+                        if there's a condorcet winner then they'll win as long as they're in the top 2.
+                        If the condorcet winner is controversial (ex. 51% 5-star and 49% 0-star), then there's a a possibility that they won't get elected under STAR </p>
+                </>,
             }),
         ]
     }
@@ -1269,6 +1449,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 </li>
             </ul></p>
         </>),
+        ...starConversion(ELECTIONS.alaska_general_2022),
 
         // NYC
         ...majorityFailure({
@@ -1279,6 +1460,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...condorcetSuccess(ELECTIONS.nyc_2021),
         ...nycTallyError(ELECTIONS.nyc_2021),
         ...nycBulletAllocation(ELECTIONS.nyc_2021),
+        ...starConversion(ELECTIONS.nyc_2021),
 
         // Burlington
         ...upwardMonotonicity(ELECTIONS.burlington_2009, [
@@ -1298,6 +1480,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     after having used it in 2 mayoral elections in 2006 and 2009
             </p>
         ),
+        ...starConversion(ELECTIONS.burlington_2009),
 
         // Minneapolis
         ...spoiler(ELECTIONS.minneapolis_2021),
@@ -1313,6 +1496,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]), 
         ...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
         ...condorcetCycle(ELECTIONS.minneapolis_2021),
+        ...starConversion(ELECTIONS.minneapolis_2021),
 
         // Moab
         ...condorcet(ELECTIONS.moab_2021),
@@ -1326,6 +1510,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 out <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a> <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
             </p>
         ),
+        ...starConversion(ELECTIONS.moab_2021),
 
         // Alameda
         ...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
@@ -1348,6 +1533,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
         ),
         ...condorcetCycle(ELECTIONS.alameda_2022),
+        ...starConversion(ELECTIONS.alameda_2022),
 
         // Pierce
         ...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
@@ -1367,6 +1553,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 The rapid rejection of this election model that has been popular in San Francisco, but few other places, was expected, but no one really anticipated how fast the cradle to grave cycle would run.  The voters wanted it. The voters got and tried it.  The voters did not like it.
                 And the voters emphatically rejected it.  All in a very quick three years."</i> <a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
         </>),
+        ...starConversion(ELECTIONS.pierce_2008),
 
         // San Francisco
         ...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
@@ -1378,6 +1565,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             <p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,
                 and could potentially be vulnerable to strategic voting.</p>
         ),
+        ...starConversion(ELECTIONS.san_francisco_2020),
     ]
 }
 

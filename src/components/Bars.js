@@ -2,7 +2,7 @@ import { Box } from "@mui/system"
 import { BarChart } from "@mui/x-charts"
 import { campCounts } from "./ElectionSelectorTransitions";
 
-export default ({simState, electionTag, step}) => {
+export default ({simState, electionTag, data}) => {
     const candidateColor = (i) => `var(--${simState.candidateNames[electionTag][i].toLowerCase()})`
     let colors = {};
     for(let i = 0; i < 6; i++){
@@ -13,12 +13,8 @@ export default ({simState, electionTag, step}) => {
         }
     }
 
-    let starBase = [0, 0, 0];
-    let starRange = [0, 0, 0];
-    if(step == 0){
-        starBase = [campCounts[electionTag][1]*5, 0, 0];
-        starRange = [0, 0, 0];
-    }
+    const starBase = data.map(range => Array.isArray(range)? range[0] : range);
+    const starPadding = data.map(range => Array.isArray(range)? range[1] - range[0] : 0);
 
     return <Box className='bars' sx={{...colors}}>
         <BarChart
@@ -34,14 +30,14 @@ export default ({simState, electionTag, step}) => {
                     data: starBase, stack: 'a'
                 },
                 { // addition stars
-                    data: starRange, stack: 'a'
+                    data: starPadding , stack: 'a'
                 },
             ]}
             width={500}
             height={300}
             tooltip={{ trigger: 'none' }}
             layout='horizontal'
-            margin={{bottom: 30, top: 30, left: 100, right: 30}}
+            margin={{bottom: 30, top: 30, left: 130, right: 30}}
         />
     </Box>
 }

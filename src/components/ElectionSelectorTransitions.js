@@ -654,9 +654,12 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
                 <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
-                <p>Some voters who bullet vote genuinely only like one candidate, and that's okay.</p>
-                <p>However other voters bullet vote because they're confused about the voting system and
-                    likely would have ranked more candidates if they had a better understanding.</p>
+                <p>Some voters who bullet vote genuinely only like one candidate. Others may do so because they aren't
+                    confident in their opinion, and that's okay. </p>
+                <p>However, other voters bullet vote because they aren't confident with the voting system and
+                    likely would have ranked more candidates if they understood that it was safe to do so.
+                    Ranked Choice Voting's tabulation is not transparent, and voters may have a hard time
+                    navigating the incentives.</p>
             </>,
             runoffStage: 'undefined'
         });
@@ -859,7 +862,11 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Eric Adams is the correct winner based on the ballot data we have, however if we assume that some of the
-                        Wiley bullet voters were confused and would have preferred Garcia over Adams then we get a different result.</p>
+                        Wiley bullet voters would have actually preferred Garcia over Adams then we get a different result. </p>
+                    <p>Considering that this was the first RCV election held in New York City, it's understandable that the voter
+                        behavior might not have been ideal. There's a learning curve before voters adapt to any new system, especially
+                        when the incentives in the new system aren't transparent. In RCV, voters may still need to consider strategically
+                        ranking the frontrunner they prefer 1st, but they should always rank as many candidates as possible. </p>
                 </>,
                 runoffStage: 'firstRound'
             }),
@@ -867,8 +874,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Let's assume that 4 of the Wiley bullet voters were confused and that their second choice picks were proportional to the second choice picks of the other Wiley voters (3 for Garcia, and 1 for Adams).</p>
-                    <p>This level of voter confusion is reasonable considering that this was the first RCV election held in New York City. There's a learning curve before voter behavior becomes more ideal.</p>
+                    <p>Let's assume that 4 of the Wiley bullet voter's second choice picks were actually aligned with the second choice picks of the other Wiley voters (3 for Garcia, and 1 for Adams).</p>
                 </>,
                 voterMovements: [
                     new VoterMovement(1, 'centerBullet', 'centerThenLeft'),
@@ -880,9 +886,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Wiley is still eliminated in the first round, but the voters that transferred to Garcia are enough give her the win.</p>
+                    <p>Wiley would still be eliminated in the first round, but the voters that transferred to Garcia would have been enough to give Garcia the win.</p>
                     <p>This shows that Wiley and Garcia may have split the progressive vote in this election. If Wiley hadn't run, and only a few of those who bullet voted came out for Garcia then the results would have been different.</p>
-                    <p>But again Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
+                    <p>But again, Eric Adams was the correct winner based on the data we have. There is no way to prove how bullet voters would have chosen to rank the rest of their ballot.</p>
                     <p>Here's some more links to learn more</p>
                     <ul>
                         <li><a href="https://electionconfidence.org/2024/01/11/ranked-choice-voting-hurts-minorities-study/">A paper exploring the trends of bullet voting and ballot exhaustion among minority voters in the NYC election</a></li>

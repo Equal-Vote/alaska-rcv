@@ -465,6 +465,15 @@ a, a:visited{
   }
 }
 
+/* bar chart */
+.bars line{
+  display: none;
+}
+
+.bars tspan{
+  fill: white !important;
+}
+
 @media(max-width: 900px){
   .Nav{
     gap: 5px;

@@ -5,6 +5,9 @@ import Voter from "./Voter";
 import VoterCamp from "./VoterCamp";
 import Pie from "./Pie";
 import { VoterMovement } from "../VoterMovement";
+import { BarChart } from "@mui/x-charts";
+import Bars from "./Bars";
+import { Table, TableRow } from "@mui/material";
 
 const FAILURE= {
     'unselected': '<pick a failure type>',
@@ -19,7 +22,8 @@ const FAILURE= {
     'tally': 'Tally Error',
     'repeal': 'Repealed',
     'bullet_allocation': 'Bullet Vote Allocation',
-    'rank_the_red': 'Rank the Red?'
+    'rank_the_red': 'Rank the Red?',
+    'star_conversion': 'STAR Conversion',
 };
 
 const ELECTIONS = {
@@ -75,7 +79,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal],
     },
     'aspen-2009': {
-        'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal],
+        'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
     },
     'san-francisco-2020': {
         'failures': [FAILURE.unselected, FAILURE.downward_mono],
@@ -93,11 +97,24 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise],
     },
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, /*FAILURE.rank_the_red*/],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, /*FAILURE.rank_the_red*/],
     },
     'alaska-general-2022': {
         'failures': [FAILURE.unselected],
     },
+};
+
+export const campCounts = {
+    'pierce-2008': [0, 14, 9, 19, 44, 19, 9, 14, 41, 31],
+    'burlington-2009': [0, 10, 18, 34, 29, 11, 9, 13, 46, 30],
+    'aspen-2009': [0, 11, 19, 15, 22, 37, 24, 19, 23, 30],
+    'san-francisco-2020': [0, 9, 12, 18, 31, 29, 22, 10, 31, 38],
+    'minneapolis-2021': [0, 19, 18, 20, 35, 17, 25, 11, 29, 26],
+    'moab-2021': [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+    'nyc-2021': [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
+    'alameda-2022': [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
+    'alaska-special-2022': [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
+    'alaska-general-2022': [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
 };
 
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
@@ -241,7 +258,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const electionInfo = (electionName, description, ratio, camps, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
+    const electionInfo = (electionName, description, ratio, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
+        let camps = campCounts[electionName];
         let intro = [new SimTransition({
             explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
             electionName: electionName,
@@ -1089,40 +1107,72 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         })]
     }
 
+    const starConversion = (electionTag) => {
+        let def = {
+            electionName: electionTag,
+            electionTag: electionTag,
+            failureTag: FAILURE.star_conversion,
+        }
+        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+
+        const starBallot = (stars) => 
+            <table style={{border: 'none', background: '#222222', color: 'white', marginLeft: '20px', width: '300px'}}>
+                {simState.candidateNames[electionTag].map((candidate, i) => <tr>
+                    <td style={{textAlign: 'right'}}>{candidate}</td>
+                    <td style={{textAlign: 'left'}}>{new Array(stars[i]+1).join('⭐')}</td>
+                </tr>)}
+            </table>
+
+        return [
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                focused: ['centerBullet'],
+                explainer: <>
+                    <p>Let's convert the {centerCandidate} bullet voters first. We'll assume that they gave 5 stars to {centerCandidate} and then no stars to anyone else</p>
+                    {starBallot([5, 0, 0])}
+                    <p>Since there are {campCounts[electionTag][1]} of those voters then that adds up to {campCounts[electionTag][1]*5} stars for {centerCandidate}</p>
+                    <Bars simState={simState} electionTag={electionTag} step={0}/>
+                </>,
+                runoffStage: 'default'
+            }),
+        ]
+    }
+
     return [
         selectorTransition(),
         // Election Info
-        ...electionInfo(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9, [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
+        ...electionInfo(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9,
             'A Mathematical Analysis of the 2022 Alaska Special Election for US House',
             'https://arxiv.org/abs/2209.04764'
         ),
         ...electionInfo(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
-            1318.4, [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
+            1318.4,
             'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
             'https://arxiv.org/abs/2303.00108',
         ),
         ...electionInfo(ELECTIONS.nyc_2021, 'New York City 2021 Democratic Mayor Election',
-            4355.9, [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
+            4355.9,
             'Harvard Data Verse',
             'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
         ),
-        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.1, [0, 10, 18, 34, 29, 11, 9, 13, 46, 30]),
-        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5, [0, 19, 18, 20, 35, 17, 25, 11, 29, 26]),
-        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7, [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.1),
+        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5,),
+        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7,
             'Analysis of the 2021 Instant Run-Off Elections in Utah',
             'https://vixra.org/abs/2208.0166',
             <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
                 The first round failed to elect the Condorcet Winner, but they were still elected in the second round so the error didn't have any impact
             </li>
         ),
-        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1, [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
+        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1,
             'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
             'https://arxiv.org/abs/2303.05985',
         ),
-        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6, [0, 14, 9, 19, 44, 19, 9, 14, 41, 31]),
+        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6),
         ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
-            178.1, [0, 9, 12, 18, 31, 29, 22, 10, 31, 38]),
-        ...electionInfo(ELECTIONS.aspen_2009, 'Aspen 2009 Council Election', 11.1, [0, 11, 19, 15, 22, 37, 24, 19, 23, 30],
+            178.1),
+        ...electionInfo(ELECTIONS.aspen_2009, 'Aspen 2009 Council Election', 11.1,
             'RangeVoting.org',
             'https://rangevoting.org/Aspen09.html ',
             <>
@@ -1183,6 +1233,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...electionNote(ELECTIONS.aspen_2009, FAILURE.repeal,
             <p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, <a href='https://rangevoting.org/Aspen09.html'>view details</a></p>
         ),
+        ...starConversion(ELECTIONS.aspen_2009),
 
         // Alaska Special Election
         ...condorcet(ELECTIONS.alaska_special_2022),
@@ -1195,6 +1246,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...upwardMonotonicity(ELECTIONS.alaska_special_2022, [new VoterMovement(7, 'rightBullet', 'leftBullet')]),
         ...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
         ...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
+        ...starConversion(ELECTIONS.alaska_special_2022),
         ...alaskaRankTheRed(),
 
         // Alaska General

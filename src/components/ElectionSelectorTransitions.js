@@ -9,10 +9,11 @@ import { BarChart } from "@mui/x-charts";
 import Bars from "./Bars";
 import { Table, TableRow } from "@mui/material";
 
-const FAILURE= {
+const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a few sucesses and neutral items mixed in. It's been renamed to scenarios in the frontend
     'unselected': '<pick a scenario>',
     'spoiler': 'Spoiler Effect',
     'condorcet': 'Condorcet Failure',
+    'condorcet_success': 'Condorcet Success',
     'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
     'upward_mono': 'Upward Monotonicity Pathology',
@@ -73,16 +74,16 @@ const ELECTIONS = {
 
 const elections = {
     'pierce-2008': {
-        'failures': [FAILURE.unselected, FAILURE.compromise, FAILURE.majority, FAILURE.repeal, FAILURE.star_conversion],
+        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.compromise, FAILURE.majority, FAILURE.repeal, FAILURE.star_conversion],
     },
     'burlington-2009': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal, FAILURE.star_conversion],
     },
     'aspen-2009': {
-        'failures': [FAILURE.unselected, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
+        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
     },
     'san-francisco-2020': {
-        'failures': [FAILURE.unselected, FAILURE.downward_mono, FAILURE.star_conversion],
+        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.downward_mono, FAILURE.star_conversion],
     },
     'minneapolis-2021': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono, FAILURE.star_conversion],
@@ -91,7 +92,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal, FAILURE.star_conversion],
     },
     'nyc-2021': {
-        'failures': [FAILURE.unselected, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation, FAILURE.star_conversion],
+        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation, FAILURE.star_conversion],
     },
     'alameda-2022': {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise, FAILURE.star_conversion],
@@ -100,7 +101,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, /*FAILURE.rank_the_red*/],
     },
     'alaska-general-2022': {
-        'failures': [FAILURE.unselected, FAILURE.star_conversion],
+        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.star_conversion],
     },
 };
 
@@ -196,8 +197,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         const disableStarConversion = () => {
             document.querySelectorAll('.failureOption').forEach((elem) =>{
-                if(elem.textContent == FAILURE.star_conversion){
-                    console.log('click disable star conversion');
+                if(elem.textContent == FAILURE.star_conversion || elem.textContent == FAILURE.rank_the_red){
                     elem.style.display = 'none';
                 }
             });
@@ -289,7 +289,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         if(elections[electionName].failures.length > 1){
             intro.push(new SimTransition({
                 explainer: <p>This election had the following scenarios : 
-                    <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected).map((f,i) => <li>{f}</li>)}</ul>
+                    <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected && f != FAILURE.star_conversion).map((f,i) => <li>{f}</li>)}</ul>
                     Pick from the drop down above for more details</p>,
                 electionName: electionName,
                 electionTag: electionName,
@@ -1023,7 +1023,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         let def = {
             electionName: electionTag,
             electionTag: electionTag,
-            failureTag: FAILURE.unselected,
+            failureTag: FAILURE.condorcet_success,
         }
         const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
         return [
@@ -1437,7 +1437,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         // Alaska General
         ...condorcetSuccess(ELECTIONS.alaska_general_2022),
-        ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.unselected, <>
+        ...electionNote(ELECTIONS.alaska_general_2022, FAILURE.condorcet_success, <>
             <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed.</p>
             <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case.</p>
             <p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time.</p>

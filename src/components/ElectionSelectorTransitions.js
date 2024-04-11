@@ -27,6 +27,20 @@ const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a fe
     'star_conversion': 'STAR Conversion',
 };
 
+const ELECTION_TITLES = {
+    '<pick an election>': '<pick an election>',
+    'alaska-special-2022': 'Alaska 2022 US Representative Special Election',
+    'alaska-general-2022': 'Alaska 2022 US Representative General Election',
+    'burlington-2009': 'Burlington 2009 Mayor Election',
+    'minneapolis-2021': 'Minneapolis 2021 Ward 2 City Council Election',
+    'pierce-2008': 'Pierce County WA 2008 County Executive Election',
+    'san-francisco-2020': 'San Francisco 2020 District 7 Board of Supervisors Election',
+    'alameda-2022': 'Oakland 2022 School Director Election',
+    'moab-2021': 'Moab 2021 City Council Election',
+    'nyc-2021': 'New York City 2021 Democratic Mayor Election',
+    'aspen-2009': 'Aspen 2009 Council Election',
+}
+
 const ELECTIONS = {
     unselected: '<pick an election>',
     alaska_special_2022: 'alaska-special-2022',
@@ -221,7 +235,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                                     let visible = url.get('primarySelector')=='failure'?
                                         election == ELECTIONS.unselected || elections[election].failures.includes(simState.selectorFailure) :
                                         election != ELECTIONS.unselected;
-                                    return <option className='electionOption' key={i} style={{display: visible? 'block' : 'none'}}>{election}</option>
+                                    return <option className='electionOption' key={i} value={election} style={{display: visible? 'block' : 'none'}}>{election.split('-').map(s => s.charAt(0).toUpperCase()+s.slice(1)).join(' ')}</option>
                                 })}
                             </select>
                         </div>
@@ -274,7 +288,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const electionInfo = (electionName, description, ratio, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
+    const electionInfo = (electionName, ratio, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
+        let description = ELECTION_TITLES[electionName];
         let camps = campCounts[electionName];
         let intro = [new SimTransition({
             explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
@@ -1147,7 +1162,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         
         const c = campCounts[electionTag]
 
-
         const dotCamp = (ballots) => {
             let data = [[0, 0], [0, 0], [0, 0]];
             for(let i = 0; i < ballots.length; i++){
@@ -1328,37 +1342,37 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
     return [
         selectorTransition(),
         // Election Info
-        ...electionInfo(ELECTIONS.alaska_special_2022, 'Alaska 2022 US Representative Special Election', 942.9,
+        ...electionInfo(ELECTIONS.alaska_special_2022, 942.9,
             'A Mathematical Analysis of the 2022 Alaska Special Election for US House',
             'https://arxiv.org/abs/2209.04764'
         ),
-        ...electionInfo(ELECTIONS.alaska_general_2022, 'Alaska 2022 US Representative General Election',
+        ...electionInfo(ELECTIONS.alaska_general_2022,
             1318.4,
             'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
             'https://arxiv.org/abs/2303.00108',
         ),
-        ...electionInfo(ELECTIONS.nyc_2021, 'New York City 2021 Democratic Mayor Election',
+        ...electionInfo(ELECTIONS.nyc_2021, 
             4355.9,
             'Harvard Data Verse',
             'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
         ),
-        ...electionInfo(ELECTIONS.burlington_2009, 'Burlington 2009 Mayor Election', 44.1),
-        ...electionInfo(ELECTIONS.minneapolis_2021, 'Minneapolis 2021 Ward 2 City Council Election', 44.5,),
-        ...electionInfo(ELECTIONS.moab_2021, 'Moab 2021 City Council Election', 8.7,
+        ...electionInfo(ELECTIONS.burlington_2009, 44.1),
+        ...electionInfo(ELECTIONS.minneapolis_2021, 44.5,),
+        ...electionInfo(ELECTIONS.moab_2021, 8.7,
             'Analysis of the 2021 Instant Run-Off Elections in Utah',
             'https://vixra.org/abs/2208.0166',
             <li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
                 The first round failed to elect the Condorcet Winner, but they were still elected in the second round so the error didn't have any impact
             </li>
         ),
-        ...electionInfo(ELECTIONS.alameda_2022, 'Alameda 2022 Oakland School Director Election', 132.1,
+        ...electionInfo(ELECTIONS.alameda_2022, 132.1,
             'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
             'https://arxiv.org/abs/2303.05985',
         ),
-        ...electionInfo(ELECTIONS.pierce_2008, 'Pierce County WA 2008 County Executive Election', 1441.6),
-        ...electionInfo(ELECTIONS.san_francisco_2020, 'San Francisco 2020 District 7 Board of Supervisors Election',
+        ...electionInfo(ELECTIONS.pierce_2008, 1441.6),
+        ...electionInfo(ELECTIONS.san_francisco_2020,
             178.1),
-        ...electionInfo(ELECTIONS.aspen_2009, 'Aspen 2009 Council Election', 11.1,
+        ...electionInfo(ELECTIONS.aspen_2009, 11.1,
             'RangeVoting.org',
             'https://rangevoting.org/Aspen09.html ',
             <>

@@ -382,6 +382,12 @@ a, a:visited{
 
 ::-webkit-scrollbar-track {
   opacity: 0;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 70px;
 }
 
 /* Handle */

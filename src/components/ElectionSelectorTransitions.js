@@ -112,7 +112,7 @@ const elections = {
         'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise, FAILURE.star_conversion],
     },
     'alaska-special-2022': {
-        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, /*FAILURE.rank_the_red*/],
+        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, FAILURE.rank_the_red],
     },
     'alaska-general-2022': {
         'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.star_conversion],
@@ -211,7 +211,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
 
         const disableStarConversion = () => {
             document.querySelectorAll('.failureOption').forEach((elem) =>{
-                if(elem.textContent == FAILURE.star_conversion || elem.textContent == FAILURE.rank_the_red){
+                if(elem.textContent == FAILURE.star_conversion){
                     elem.style.display = 'none';
                 }
             });
@@ -710,8 +710,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-the-red-to-win-in-november/">a movement to encourage republican voters to "Rank the Red" or "Rank all Republicans"</a>. </p>
-                    <p>This speaks to one of the positives of RCV in that candidates are encouraged to form coalitions rather than strictly limit themselves to negative campaigning, but as we'll see it's not enough to overcome RCV's fundamental flaws.</p>
-                    <p>Let's see if having more voters "Rank the Red" would have been enough to change results in the special election...</p>
+                    <p>This speaks to one of the positives of RCV in that candidates are encouraged to form coalitions rather than strictly limit themselves to negative campaigning, but is it enough to overcome RCV's fundamental flaws?</p>
+                    <p>It turns out that "Rank the Red" would likely be an effective strategy for electing a Republican, however even with the improved voter education RCV will still fail to select winners that best represent the people.</p>
                 </>,
                 runoffStage: 'default'
             }),
@@ -806,7 +806,8 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
                         Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
                         so it's hard to say how effective this would be
-                        (<a href="https://rcvchangedalaska.com/?enabled=true&selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true&primarySelector=failure">
+                        (<a href="https://www.starvoting.org/star_rcv_pros_cons">
+                        {/*href="https://rcvchangedalaska.com/?enabled=true&selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true&primarySelector=failure">*/}
                                 but a STAR Voting ballot could help with this
                         </a>).
                     </p>

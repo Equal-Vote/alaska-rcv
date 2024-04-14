@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.b4706297.css",
-    "main.js": "/static/js/main.755b2b7e.js",
+    "main.js": "/static/js/main.e8efa1b1.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
     "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
     "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
@@ -13,12 +13,12 @@
     "static/media/chooseOne.mkv": "/static/media/chooseOne.f615c0b2632f1c34657c.mkv",
     "static/media/hutchinson.jpg": "/static/media/hutchinson.5bc32c4019a0528553dc.jpg",
     "static/media/parties.mp4": "/static/media/parties.8da4886527e64a2ffb92.mp4",
-    "static/media/chooseOne.ogg": "/static/media/chooseOne.5f875164ab3a651e021d.ogg",
     "static/media/begichThenPalin.pdn": "/static/media/begichThenPalin.b96bbebd219aa898174d.pdn",
     "static/media/allElections2.mp4": "/static/media/allElections2.ec5fcb18f96e67af7290.mp4",
     "static/media/usa3.png": "/static/media/usa3.4e406675cb2e191d627f.png",
     "static/media/usa2.png": "/static/media/usa2.7d0792179e22b97efb8f.png",
     "static/media/usa1.png": "/static/media/usa1.8b62c5fbd3c91c0f7993.png",
+    "static/media/ChooseOne.ogg": "/static/media/ChooseOne.cc96616104e133bad414.ogg",
     "static/media/montroll.jpg": "/static/media/montroll.cbfcb0dafda4f6aae2cc.jpg",
     "static/media/arab.jpg": "/static/media/arab.59946b52d95730203e50.jpg",
     "static/media/starBallot.png": "/static/media/starBallot.f728efa7e96d123c3ef3.png",
@@ -42,6 +42,7 @@
     "static/media/gordon.jpg": "/static/media/gordon.1990f969b45dc2b81044.jpg",
     "static/media/nguyen.jpg": "/static/media/nguyen.7306d9a0c88be3a3d3f3.jpg",
     "static/media/begichBullet.png": "/static/media/begichBullet.d517becd4cc2a491b855.png",
+    "static/media/chooseOneBallot2.png": "/static/media/chooseOneBallot2.271c1654e84c48db04eb.png",
     "static/media/approvalBallot.png": "/static/media/approvalBallot.429327b3614c3aeda090.png",
     "static/media/torre.jpg": "/static/media/torre.3ba98cc209483e881c27.jpg",
     "static/media/peltola.jpg": "/static/media/peltola.cb2215421a9949c75752.jpg",
@@ -74,11 +75,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.b4706297.css.map": "/static/css/main.b4706297.css.map",
-    "main.755b2b7e.js.map": "/static/js/main.755b2b7e.js.map",
+    "main.e8efa1b1.js.map": "/static/js/main.e8efa1b1.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b4706297.css",
-    "static/js/main.755b2b7e.js"
+    "static/js/main.e8efa1b1.js"
   ]
 }

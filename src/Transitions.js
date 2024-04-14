@@ -213,7 +213,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['spoiler_2000'],
             explainer: <>
                 <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush.</p>
-                <p>So the spoiler effect is not a partisan issue, it can hurt either party. In 2000 it hurt the Democrats, but in Alaska it hurt the republicans.</p>
+                <p>So the spoiler effect is not a partisan issue, it can hurt either party. In 2000 it hurt the Democrats, but in Alaska it hurt the Republicans.</p>
                 <p>In the 2000 race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results.</p>
             </>,
             runoffStage: 'center_vs_left',

@@ -3,26 +3,23 @@ export default ({navTop}) => {
 
     const navs = [
         {
+            icon: require('../assets/alaska_nav.png'),
+            text: 'Alaska Deep Dive',
+            href: 'enabled=true'
+        },
+        {
+            icon: require('../assets/usa_nav.png'),
+            text: 'More Case Studies',
+            href: '?enabled=true&selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
+        },
+        {
             icon: require('../assets/equal_logo.png'),
-            text: 'Return to Equal Vote',
+            text: 'Equal Vote',
             href: 'https://equal.vote'
         },
     ];
 
-    if(params.get('onlySelector') == 'true'){
-        navs.push({
-            icon: require('../assets/alaska_nav.png'),
-            text: 'Alaska Article',
-            href: '?enabled=true'
-        });
-    }else{
-        navs.push({
-            icon: require('../assets/usa_nav.png'),
-            text: 'More Case Studies',
-            href: '?enabled=true&selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
-        });
-    }
-    return <div className={`Nav ${params.get('onlySelector') == 'true'? 'USA' : 'Alaska'}`} style={{top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>
+    return <div className={`Nav ${params.get('onlySelector') == 'true'? 'USA' : 'Alaska'}`} style={{paddingLeft: '20px', top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>
         {navs.map(item => <a href={item.href}><div className='NavButton'>
             <img src={item.icon}/>
             <h4>{item.text}</h4>

@@ -7,33 +7,34 @@ import { useEffect, useState } from 'react';
 
 function App() {
     // FEATURE FLAG
-    const [enabled, setEnabled] = useState(false);
+    // const [enabled, setEnabled] = useState(false);
+    let enabled = true;
 
-    useEffect(() => {
-        const url = new URLSearchParams(window.location.search);
-        if(!enabled && url.get('enabled')){
-            setEnabled(true)
-            return;
-        }
+    //useEffect(() => {
+    //    const url = new URLSearchParams(window.location.search);
+    //    if(!enabled && url.get('enabled')){
+    //        setEnabled(true)
+    //        return;
+    //    }
 
 
-        let flags = [{
-            key: 'enabled',
-            value: false,
-            description: 'Bypasses the blocker and enables the site',
-            title: 'enabled' // This is optional defaulting to name according to the documentation, but that didn't work for me
-        }]
+    //    let flags = [{
+    //        key: 'enabled',
+    //        value: false,
+    //        description: 'Bypasses the blocker and enables the site',
+    //        title: 'enabled' // This is optional defaulting to name according to the documentation, but that didn't work for me
+    //    }]
 
-        const setter = (key, value) => {
-            setEnabled(value);
-        }
+    //    const setter = (key, value) => {
+    //        setEnabled(value);
+    //    }
 
-        if (window.featureFlagsPluginRegister){
-            window.featureFlagsPluginRegister(flags, setter);
-        }else{
-            window.registerMyFeatureFlags = (register) => register(flags, setter);
-        }
-    }, [])
+    //    if (window.featureFlagsPluginRegister){
+    //        window.featureFlagsPluginRegister(flags, setter);
+    //    }else{
+    //        window.registerMyFeatureFlags = (register) => register(flags, setter);
+    //    }
+    //}, [])
 
 
     // APP

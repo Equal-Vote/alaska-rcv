@@ -188,7 +188,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 simState.selectorElection = ELECTIONS.unselected;
 
                 document.querySelectorAll('.electionOption').forEach((elem) =>{
-                    elem.style.display = (elem.textContent == ELECTIONS.unselected || elections[elem.textContent].failures.includes(simState.selectorFailure))? 'block' : 'none';
+                    console.log(elections[elem.textContent], );
+                    let txt = elem.textContent.split(' ').map(s => s.toLowerCase()).join('-');
+                    elem.style.display = (elem.textContent == ELECTIONS.unselected || elections[txt].failures.includes(simState.selectorFailure))? 'block' : 'none';
                 });
 
                 document.querySelectorAll('.failureOption').forEach((elem) =>{

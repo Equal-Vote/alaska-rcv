@@ -26,7 +26,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         // intro
         new SimTransition({
             visible: ['choose_one'],
-            explainer: <p>For centuries, we've been cursed with a voting method where it's not safe to pick your favorite.</p>,
+            explainer: <p>For centuries, we've been cursed with a voting method where it's not necessarily safe to pick your favorite.</p>,
         }),
         new SimTransition({
             visible: ['alaska'],
@@ -435,7 +435,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['australia_house'],
             explainer: <>
-                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses STV instead of RCV and they have more 3rd party representation as a result</p>
+                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses STV instead of RCV and they have more 3rd party representation as a result.</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes.</p>
             </>
         }),
@@ -481,7 +481,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['star_ballot'],
             explainer: <p>
-                STAR Voting let's you score candidates from 0 to 5, and it's the best option we have for voter expression and accuracy.
+                STAR Voting lets you score candidates from 0 to 5, and it's the best option we have for voter expression and accuracy.
             </p>,
         }),
         new SimTransition({

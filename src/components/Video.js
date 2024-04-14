@@ -88,9 +88,10 @@ class Video extends GameObject{
             background: 'black',
             transform: 'scale(1.1)',
         }} >
-            <video id={`video_${this.videoId}`} width='100%' height='100%' muted preload>
+            <video id={`video_${this.videoId}`} width='100%' height='100%' muted preload="true">
                 <source src={this.video} type='video/mp4' />
-                Couldn't load video
+                <source src={this.video.replace('.mkv', '.ogg').replace('.mp4', '.ogg')} type='video/ogg' />
+                <h1 style={{color: 'white'}}>Couldn't load video</h1>
             </video>
         </div>;
     }

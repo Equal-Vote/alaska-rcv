@@ -67,7 +67,7 @@ export function SimContextProvider({children}){
             approval_ballot: new ImageObject(0, 0, 100, 'approvalBallot.png', 'contain'),
             ranked_ballot: new ImageObject(0, 0, 100, 'rankedBallot.png', 'contain'),
             // videos
-            choose_one: new Video(100, 'chooseOne.mkv'),
+            choose_one: new ImageObject(0, 0, 70, 'chooseOneBallot2.png', 'contain'),//new Video(100, 'chooseOne.mkv'),
             spoiler_2000: new Video(100, 'spoiler2000.mp4', 1),
             all_elections_1: new Video(100, 'allElections1.mp4'),
             all_elections_2: new Video(100, 'allElections2.mp4'),

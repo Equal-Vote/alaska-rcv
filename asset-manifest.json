@@ -1,14 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.b4706297.css",
-    "main.js": "/static/js/main.8ebfa54c.js",
+    "main.js": "/static/js/main.755b2b7e.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
+    "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
+    "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
+    "static/media/allElections2.ogg": "/static/media/allElections2.3cc6f43768cbce05008b.ogg",
     "static/media/allElections1.mp4": "/static/media/allElections1.0050f81e379cb3c64b92.mp4",
     "static/media/chooseOneBallot.png": "/static/media/chooseOneBallot.ad76f0c73d7ddc0b2528.png",
+    "static/media/spoiler2000.ogg": "/static/media/spoiler2000.76fd32c51cc468677865.ogg",
     "static/media/equal_logo.png": "/static/media/equal_logo.195846a9266186da2a5f.png",
     "static/media/chooseOne.mkv": "/static/media/chooseOne.f615c0b2632f1c34657c.mkv",
     "static/media/hutchinson.jpg": "/static/media/hutchinson.5bc32c4019a0528553dc.jpg",
     "static/media/parties.mp4": "/static/media/parties.8da4886527e64a2ffb92.mp4",
+    "static/media/chooseOne.ogg": "/static/media/chooseOne.5f875164ab3a651e021d.ogg",
     "static/media/begichThenPalin.pdn": "/static/media/begichThenPalin.b96bbebd219aa898174d.pdn",
     "static/media/allElections2.mp4": "/static/media/allElections2.ec5fcb18f96e67af7290.mp4",
     "static/media/usa3.png": "/static/media/usa3.4e406675cb2e191d627f.png",
@@ -69,11 +74,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.b4706297.css.map": "/static/css/main.b4706297.css.map",
-    "main.8ebfa54c.js.map": "/static/js/main.8ebfa54c.js.map",
+    "main.755b2b7e.js.map": "/static/js/main.755b2b7e.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b4706297.css",
-    "static/js/main.8ebfa54c.js"
+    "static/js/main.755b2b7e.js"
   ]
 }

@@ -213,14 +213,15 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['spoiler_2000'],
             explainer: <>
                 <p>But adding Nader to the race took votes from Gore and as a result the win went to Bush.</p>
-                <p>In that race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results.</p>
+                <p>So the spoiler effect is not a partisan issue, it can hurt either party. In 2000 it hurt the Democrats, but in Alaska it hurt the republicans.</p>
+                <p>In the 2000 race, Nader was the spoiler candidate because he had no chance of winning but still impacted the results.</p>
             </>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
         }),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
-            explainer: <p>Here we see that if the election was just Peltola and Begich, then Begich would have won.</p>,
+            explainer: <p>In Alaska we see that if the election was just Peltola and Begich, then Begich would have won.</p>,
             runoffStage: 'center_vs_left',
             exhaustedCamp: 'rightBullet'
         }),
@@ -472,8 +473,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [],
 			electionName: 'burlington-2009', // presetting burlington so it's ready at the next step
             explainer: <>
-                <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. Instead we should look closer at alternatives such as STAR Voting, Approval Voting, and Ranked Robin.</p>
-                
+                <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. This time it hurt Republicans in Alaska but it could just as easily hurt Democrats in a
+                    blue state like Oregon if two Democrats ran against one Republican.</p>
+                <p>Instead we should look closer at alternatives such as STAR Voting, Approval Voting, and Ranked Robin.</p>
             </>,
         }),
         new SimTransition({

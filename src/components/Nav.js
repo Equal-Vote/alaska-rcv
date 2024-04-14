@@ -5,7 +5,7 @@ export default ({navTop}) => {
         {
             icon: require('../assets/alaska_nav.png'),
             text: 'Alaska Deep Dive',
-            href: 'enabled=true'
+            href: '?enabled=true'
         },
         {
             icon: require('../assets/usa_nav.png'),

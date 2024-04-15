@@ -201,8 +201,8 @@ body, #root{
 }
 
 .explainerTopPadding{
-  height: 50vh;
-  min-height: 50vh;
+  height: 20vh;
+  min-height: 20vh;
 }
 
 .explainerBottomPadding{

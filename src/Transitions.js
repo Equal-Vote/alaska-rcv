@@ -26,6 +26,18 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         // intro
         new SimTransition({
             visible: ['choose_one'],
+            explainer: <>
+                <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
+                <h2 style={{textAlign: 'center', marginBottom: '100px'}}>We've brought the data to life to find out what really happened</h2>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '300px'}}>
+                    <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+                    <p style={{textAlign: 'center'}}>scroll to see more</p>
+                    <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+                </div>
+            </>
+        }),
+        new SimTransition({
+            visible: ['choose_one'],
             explainer: <p>For centuries, we've been cursed with a voting method where it's not necessarily safe to pick your favorite.</p>,
         }),
         new SimTransition({

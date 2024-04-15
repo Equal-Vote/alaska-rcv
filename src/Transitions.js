@@ -21,6 +21,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
     return [
         // start
         new SimTransition({
+            visible: [],
             explainer: <div className='explainerTopPadding'/>
         }),
         // intro
@@ -28,8 +29,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['choose_one'],
             explainer: <>
                 <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
-                <h2 style={{textAlign: 'center', marginBottom: '100px'}}>We've brought the data to life to find out what really happened</h2>
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '300px'}}>
+                <h2 style={{textAlign: 'center', marginBottom: '50px'}}>We've brought the data to life to find out what really happened</h2>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom: '200px'}}>
                     <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
                     <p style={{textAlign: 'center'}}>scroll to see more</p>
                     <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
@@ -66,7 +67,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: [Candidate],
             explainer: 
                 <p>
-                    RCV claims to let more more people run without fear of splitting the vote,
+                    RCV claims to let more people run without fear of splitting the vote,
                     so Republicans figured it was safe to run multiple candidates.
                 </p>
             ,

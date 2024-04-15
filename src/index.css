@@ -529,8 +529,8 @@ a, a:visited{
   }
 
   .explainerTopPadding{
-    height: 120px;
-    min-height: 120px;
+    height: 30px;
+    min-height: 30px;
   }
 
   .explainerBottomPadding{

@@ -113,6 +113,7 @@ export function SimContextProvider({children}){
         ctx = {...ctx,
             startTime: Date.now(),
             activeFrames: 0,
+            threeSecondsPassed: false,
             objects,
             visible: [],
             focused: [],
@@ -124,6 +125,11 @@ export function SimContextProvider({children}){
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
             candidateNames
         };
+
+        // super hacky way of fixing the bug where the candidates are fading out in the beginning
+        setTimeout(() => {
+            ctx.threeSecondsPassed = true
+        }, 3000)
 
         if(ctx.electionName == 'pick an election') ctx.electionName = '<pick an election>';
         if(ctx.selectorElection == 'pick an election') ctx.selectorElection = '<pick an election>';

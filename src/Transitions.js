@@ -448,7 +448,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['australia_house'],
             explainer: <>
-                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses STV instead of RCV and they have more 3rd party representation as a result.</p>
+                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">Single Transferable Vote</a> instead of RCV and they have more 3rd party representation as a result.</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes.</p>
             </>
         }),

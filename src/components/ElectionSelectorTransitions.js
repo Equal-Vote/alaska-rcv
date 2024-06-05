@@ -248,9 +248,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                             }}>
                                 {Object.entries(FAILURE).map(([key, failure], i) => {
                                     const url = new URLSearchParams(window.location.search);
-                                    let visible = url.get('primarySelector')=='failure'?
+                                    let visible = failure != FAILURE.star_conversion && (url.get('primarySelector')=='failure'?
                                         failure != FAILURE.unselected :
-                                        elections[simState.selectorElection].failures.includes(failure);
+                                        elections[simState.selectorElection].failures.includes(failure));
 
                                     disableStarConversion(); 
 
@@ -396,7 +396,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 explainer: <>
-                    <p>but when {rightCandidate} joins the race he pulls voters away from {centerCandidate}.</p>
+                    <p>but when {rightCandidate} joins the race voters are pulled away from {centerCandidate}.</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound'
@@ -405,7 +405,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 explainer: <>
                     <p>Then {centerCandidate} gets eliminated in the first round and {leftCandidate} wins!</p>
-                    <p>So {rightCandidate} was a spoiler. {rightCandidate} would have lost regardless, but their presence in the race still impacted the winner</p>
+                    <p>So {rightCandidate} was a spoiler. {rightCandidate} would have lost regardless, but joining the race still impacted the winner</p>
                 </>,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'right_vs_left'

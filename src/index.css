@@ -172,6 +172,7 @@ body, #root{
   position: relative;
   width: min(90vh, 60vw);
   height: min(90vh, 60vw);
+  margin-top: 60px; /* Keep the nav bar from cutting off the animation */
   background: black;
   border: 0;
 }

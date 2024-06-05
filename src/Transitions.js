@@ -45,7 +45,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['alaska'],
             explainer: <>
                 <p>
-                    But Alaska decided to change that, and in 2022 they ran their first election replacing the Choose One Voting system with Ranked Choice Voting (also called RCV).
+                    But Alaska decided to change that, and in 2022 they ran their first election replacing the current Choose One Voting system with Ranked Choice Voting (also called RCV).
                 </p>
             </>,
         }),
@@ -378,23 +378,23 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <p>
-                Yes and No. There have been over 500 RCV elections in the US, and we have data for 448 of them. We can look at the failure rates to see how rare Alaska was.
+                Yes and No. There have been over 500 RCV elections in the US, and we have data for 463 of them. We can look at the failure rates to see how rare Alaska was.
             </p>,
-            videoStopTime: 3,
+            videoStopTime: 2.3,
         }),
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <p>
                 Half of them had at least one of the failures we discussed.
             </p>,
-            videoStopTime: 6
+            videoStopTime: 4.7
         }),
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <p>
                 However most of them only had Majority Failures, if we just look at Condorcet, Monotonicity, and Lesser-Evil Failures then there are only 11 left.
             </p>,
-            videoStopTime: 8.5
+            videoStopTime: 5.7
         }),
         new SimTransition({
             visible: ['all_elections_1'],
@@ -402,7 +402,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
                 <p>And this goes down to 3 if we only look at Condorcet Failures.</p>
                 <i>So is a 0.6% failure rate really so bad?</i>
             </>,
-            videoStopTime: 10
+            videoStopTime: 6.9
         }),
         new SimTransition({
             visible: ['parties'],
@@ -422,33 +422,34 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>We've seen that RCV has a low failure rate under the status quo, but does it perform well in scenarios with many competitive candidates?</p>
             </>,
-            videoStopTime: 1
+            videoStopTime: 0.2
         }),
         new SimTransition({
             visible: ['all_elections_2'],
             explainer: <>
                 <p>To help answer this, let's remove the elections that only had 2 candidates.</p>
             </>,
-            videoStopTime: 2.6
+            videoStopTime: 1.0
         }),
         new SimTransition({
             visible: ['all_elections_2'],
             explainer: <>
                 <p>...and also the elections where the 3rd candidate was too small to be threatening.</p>
-                <p>Now our failure rate has gone up to 3 out of 88, or 3.5%.
+                <p>Now our failure rate has gone up to 3 out of 89, or 3.4%.
                    That's starting to get a little concerning but this is still a very small sample size.</p>
             </>
         }),
         new SimTransition({
             visible: ['australia'],
             explainer: <>
-                <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, and their condorcet failure rate is close to 7%.</p>
+                <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, and
+                    and <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">their condorcet failure rate is close to 7%</a>.</p>
             </>
         }),
         new SimTransition({
             visible: ['australia_house'],
             explainer: <>
-                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">Single Transferable Vote</a> instead of RCV and they have more 3rd party representation as a result.</p>
+                <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses a different method, <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">Single Transferable Vote</a>, and they have more 3rd party representation as a result.</p>
                 <p>These failure rates are extra devastating when you consider the damage that each of these causes.</p>
             </>
         }),
@@ -476,7 +477,9 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['usa_3'],
             explainer: <>
-                <p>Many states have been considering legislation to limit RCV, and 5 have gone so far as to ban it entirely (Tennessee, Florida, Idaho, South Dakota, and Montana).</p>
+                <p>Many states have been considering legislation to limit RCV, and 10 have gone so far as to ban it entirely. The number of bans is growing rapidly
+                    but <a href="https://ballotpedia.org/Ranked-choice_voting_(RCV)">the latest numbers are available on ballotpedia</a>.
+                </p>
                 <p>You can browse some of these failures and repeals in the tool below.</p>
             </>,
             voterMovements: [new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16])] // reset to handle cases where you scroll back from the election selector
@@ -488,6 +491,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             explainer: <>
                 <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. This time it hurt Republicans in Alaska but it could just as easily hurt Democrats in a
                     blue state like Oregon if two Democrats ran against one Republican.</p>
+                <p>RCV improves on Choose One in some ways (a more expressive ballot, the option to eliminate the primary, etc), however in competitive elections we still see the same spoiler
+                    issues as Choose One. For this election both RCV and Choose One would have elected Peltola as a result of the spoiler effect.</p>
                 <p>Instead we should look closer at alternatives such as STAR Voting, Approval Voting, and Ranked Robin.</p>
             </>,
         }),

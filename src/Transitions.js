@@ -145,9 +145,10 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>Then Peltola Wins! Congratulations to Peltola for running a great campaign. She won fair square by the rules of RCV.</p>
+                <p>Then Peltola Wins! Congratulations to Peltola for running a great campaign. She won fair and square by the rules of RCV.</p>
                 <br/>
-                <p>But did RCV pick the best winner?</p>
+                <p>But did Ranked Choice Voting do a good job here? Peltola would have won under either Choose One or RCV, and RCV was able to reveal more Peltola support from Republican voters, but was she truly the best winner for the Alaskan voters?</p>
+
                 <p>This election exposed many of the common RCV misconceptions. Let's take a closer look...</p>
             </>,
             runoffStage: 'right_vs_left',
@@ -442,8 +443,8 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['australia'],
             explainer: <>
-                <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, and
-                    and <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">their condorcet failure rate is close to 7%</a>.</p>
+                <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, 
+                    and <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">their Condorcet Failure rate is close to 7%</a>.</p>
             </>
         }),
         new SimTransition({

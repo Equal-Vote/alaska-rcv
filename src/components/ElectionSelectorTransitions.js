@@ -23,7 +23,7 @@ const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a fe
     'tally': 'Tally Error',
     'repeal': 'Repealed',
     'bullet_allocation': 'Bullet Vote Allocation',
-    'rank_the_red': 'Rank the Red?',
+    'rank_the_red': 'Rank all Republicans?',
     'star_conversion': 'STAR Conversion',
 };
 
@@ -711,9 +711,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-the-red-to-win-in-november/">a movement to encourage republican voters to "Rank the Red" or "Rank all Republicans"</a>. </p>
+                    <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-the-red-to-win-in-november/">a movement to encourage republican voters to "Rank all Republicans" or "Rank the Red"</a>. </p>
                     <p>This speaks to one of the positives of RCV in that candidates are encouraged to form coalitions rather than strictly limit themselves to negative campaigning, but is it enough to overcome RCV's fundamental flaws?</p>
-                    <p>It turns out that "Rank the Red" would likely be an effective strategy for electing a Republican, however even with the improved voter education RCV will still fail to select winners that best represent the people.</p>
+                    <p>It turns out that "Rank all Republicans" would likely be an effective strategy for electing a Republican, however even with the improved voter education RCV will still fail to select winners that best represent the people.</p>
                 </>,
                 runoffStage: 'default'
             }),
@@ -768,8 +768,17 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>But this isn't realistic, if we assume that the Begich bullet voters had similar feelings to the Begich voters that did express a second choice
-                    then we'd expect roughly one third of them to have ranked Peltola second.</p>
+                    <p>But this isn't realistic, if we assume that the Begich bullet voters had similar feelings to the Begich voters that did express a second choice...</p>
+                </>,
+                voterMovements: [
+                ],
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then we'd expect roughly one third of them to have ranked Peltola second.</p>
                     <p>This essentially brings the final runoff round to a tie.</p>
                 </>,
                 voterMovements: [
@@ -804,7 +813,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>Let's reset and look at the other half of the "Rank the Red" message. Would a more unifying message be enough to move some of the Republicans who voted Peltola second?</p>
+                    <p>Let's reset and look at the other half of the "Rank all Republicans" message. Would a more unifying message be enough to move some of the Republicans who voted Peltola second?</p>
                     <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
                         Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
                         so it's hard to say how effective this would be
@@ -844,14 +853,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <p>So "Rank the Red" could indeed help to get a Republican elected, and it shows how RCV can serve to incentivise positive campaigns,
+                explainer: <p>So "Rank all Republicans" could indeed help to get a Republican elected, and it shows how RCV can serve to incentivise positive campaigns,
                     but the improved voter education still wouldn't be enough to solve the fundamental problems with RCV.</p>,
                 runoffStage: 'right_vs_left'
             }),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <p>Even if we go to the most extreme case and assume that all republican voters "Ranked the Red", then RCV would still fail to elect the most representative winner.</p>,
+                explainer: <p>Even if we go to the most extreme case and assume that all republican voters "Ranked all Republicans", then RCV would still fail to elect the most representative winner.</p>,
                 voterMovements: [
                     new VoterMovement(12, 'centerThenLeft', 'centerThenRight'),
                     new VoterMovement(12, 'centerBullet', 'centerThenRight'),
@@ -875,8 +884,14 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <p>But he'd also be the first to be eliminated during the tabulation</p>,
+                runoffStage: 'firstRound'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <p>This illustrates how RCV tends to swing between 2 polarized extremes (just like Choose-One), and hurts the consensus candidates that best represent the population. </p>,
-                runoffStage: 'center_vs_left'
+                runoffStage: 'right_vs_left'
             }),
         ]
     }

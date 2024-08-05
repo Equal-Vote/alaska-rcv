@@ -444,7 +444,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
             visible: ['australia'],
             explainer: <>
                 <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, 
-                    and <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">their Condorcet Failure rate is close to 7%</a>.</p>
+                    and their overall Condorcet Failure rate could range from <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4763372">1%</a> up to <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">7%</a>!</p>
             </>
         }),
         new SimTransition({

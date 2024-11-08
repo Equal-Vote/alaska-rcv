@@ -5,6 +5,7 @@
   --brand-orange: #E69F00FF;
   --brand-yellow: #FFE156;
   --brand-green: #C4E44C;
+  --brand-green2: #60B33C;
   --brand-ltblue: #2AA2B3;
   --brand-dkblue: #02627C;
   --brand-purple: #552A99;/*#4D2586*/;
@@ -371,7 +372,7 @@ img{
 }
 
 a, a:visited{
-  color: var(--brand-green);
+  color: var(--brand-green2);
   text-decoration: none;
 }
 

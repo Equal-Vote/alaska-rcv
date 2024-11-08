@@ -371,7 +371,7 @@ img{
 }
 
 a, a:visited{
-  color: purple;
+  color: var(--brand-green);
   text-decoration: none;
 }
 

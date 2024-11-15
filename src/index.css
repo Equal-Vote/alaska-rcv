@@ -376,6 +376,10 @@ a, a:visited{
   text-decoration: none;
 }
 
+a:hover{
+  text-decoration: "underline";
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {

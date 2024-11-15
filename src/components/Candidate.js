@@ -14,7 +14,6 @@ class Candidate extends GameObject{
         if(this.candidateName == 'placeholder') return <div/>
         let img = require(`../assets/${this.candidateName.toLowerCase()}.jpg`);
         let isMobile = (window.innerWidth < 900);
-        console.log(simState)
         return <div className={this.getClassNames(simState)} style={{
             display: simState.threeSecondsPassed? 'block' : 'none',
             width: `${this.size.x}%`,

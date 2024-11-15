@@ -188,7 +188,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 simState.selectorElection = ELECTIONS.unselected;
 
                 document.querySelectorAll('.electionOption').forEach((elem) =>{
-                    console.log(elections[elem.textContent], );
                     let txt = elem.textContent.split(' ').map(s => s.toLowerCase()).join('-');
                     elem.style.display = (elem.textContent == ELECTIONS.unselected || elections[txt].failures.includes(simState.selectorFailure))? 'block' : 'none';
                 });

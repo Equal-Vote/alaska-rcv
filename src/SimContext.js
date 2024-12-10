@@ -46,7 +46,7 @@ export function SimContextProvider({children}){
 
         let ctx = {
             // embed (must be on top so that it's interactable)
-            star_vs_rcv_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/Nu4eTUafuSc?si=W5a3y5rQ4ZJ50CmS', 25, 90),
+            star_vs_rcv_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/JDCQQEeSQlo?si=n2RdL4rsHo3Dj40m', 25, 90),
             approval_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/m8VXIIaC9Zw?si=cTyOSt1pMmkCQAtv', 25, 270),
             // images
             alaska: new ImageObject(0, 0, 70, 'alaska.png'),

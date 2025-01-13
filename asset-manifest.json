@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.8f59c0ec.css",
-    "main.js": "/static/js/main.4721a1cf.js",
+    "main.js": "/static/js/main.2e3a76f4.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
     "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
     "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
@@ -75,11 +75,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.8f59c0ec.css.map": "/static/css/main.8f59c0ec.css.map",
-    "main.4721a1cf.js.map": "/static/js/main.4721a1cf.js.map",
+    "main.2e3a76f4.js.map": "/static/js/main.2e3a76f4.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8f59c0ec.css",
-    "static/js/main.4721a1cf.js"
+    "static/js/main.2e3a76f4.js"
   ]
 }

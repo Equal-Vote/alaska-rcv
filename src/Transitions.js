@@ -386,7 +386,7 @@ const transitions = (simState, setRefreshBool, refreshVoters) => {
         new SimTransition({
             visible: ['all_elections_1'],
             explainer: <p>
-                Half of them had at least one of the failures we discussed.
+                A third of them had at least one of the failures we discussed.
             </p>,
             videoStopTime: 4.7
         }),

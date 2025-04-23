@@ -27,7 +27,7 @@ const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a fe
     'star_conversion': 'STAR Conversion',
 };
 
-const ELECTION_TITLES = {
+export const ELECTION_TITLES = {
     '<pick an election>': '<pick an election>',
     'alaska-special-2022': 'Alaska 2022 US Representative Special Election',
     'alaska-general-2022': 'Alaska 2022 US Representative General Election',
@@ -816,8 +816,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                     <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
                         Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
                         so it's hard to say how effective this would be
-                        (<a href="https://www.starvoting.org/star_rcv_pros_cons">
-                        {/*href="https://rcvchangedalaska.com/?enabled=true&selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true&primarySelector=failure">*/}
+                        (<a href="https://rcvchangedalaska.com/?selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true">
                                 but a STAR Voting ballot could help with this
                         </a>).
                     </p>

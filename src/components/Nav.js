@@ -1,29 +1,36 @@
+import { ELECTION_TITLES } from './ElectionSelectorTransitions';
+
 export default ({navTop}) => {
     let params = new URLSearchParams(window.location.search)
 
-    const navs = [
-        {
-            icon: require('../assets/alaska_nav.png'),
-            text: 'Alaska Deep Dive',
-            href: '?enabled=true'
-        },
-        {
-            icon: require('../assets/usa_nav.png'),
-            text: 'More Case Studies',
-            href: '?enabled=true&selectorElection=burlington-2009&selectorFailure=pick+a+failure+type&onlySelector=true'
-        },
-        {
-            icon: require('../assets/equal_logo.png'),
-            text: 'Equal Vote',
-            href: 'https://equal.vote'
-        },
-    ];
+    let icon = undefined;
 
-    return <div className={`Nav ${params.get('onlySelector') == 'true'? 'USA' : 'Alaska'}`} style={{paddingLeft: '20px', top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>
-        {navs.map(item => <a href={item.href}><div className='NavButton'>
-            <img src={item.icon}/>
-            <h4>{item.text}</h4>
-        </div></a>
-        )}
+    try{
+        icon = require(`../assets/nav/${params.get('selectorElection')}.png`)
+    }catch(e){
+        icon = undefined;
+    }
+
+    return <div className='Nav' style={{paddingLeft: '20px', top: `${params.get('onlySelector') == 'true'? 0 : navTop}px`}}>
+        <a href='https://equal.vote'>
+            <div className='NavButton' style={{paddingTop:'0px', paddingBottom:'0px'}}>
+                <img src={require('../assets/equal_logo_transparent.png')}/>
+            </div>
+        </a>
+        <span className='NavArrow'>{">"}</span>
+        <a href='?onlySelector=true'>
+            <div className='NavButton'>
+            <img src={require('../assets/usa_nav.png')}/>
+            <h4>RCV Case Studies</h4>
+            </div>
+        </a>
+        {params.get('selectorElection') && <><span className='NavArrow'>{">"}</span>
+            <a href=''>
+                <div className='NavButton'>
+                {icon && <img src={icon}/>}
+                <h4>{ELECTION_TITLES[params.get('selectorElection')]}</h4>
+                </div>
+            </a>
+        </>}
     </div>
 }

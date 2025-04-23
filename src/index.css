@@ -110,10 +110,6 @@ body, #root{
   overflow: hidden;
 }
 
-.Nav.USA{
-  position: relative;
-}
-
 .NavButton{
   display: flex;
   flex-direction: row;
@@ -128,6 +124,10 @@ body, #root{
   margin: 5px;
 
   text-decoration: none;
+}
+
+.NavArrow{
+  color: white;
 }
 
 .NavButton h4{

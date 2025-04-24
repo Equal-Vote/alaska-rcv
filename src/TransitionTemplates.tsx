@@ -1,13 +1,19 @@
+// @ts-nocheck
+// Added no checks since the following line was being annoying
+// visible: [Candidate, Voter, VoterCamp, Pie],
+// I don't know how to fix it without updating SimTransition to typescript
+
 import { Fragment, useState } from "react";
-import { SimTransition } from "../SimTransition";
-import Candidate from "./Candidate";
-import Voter from "./Voter";
-import VoterCamp from "./VoterCamp";
-import Pie from "./Pie";
-import { VoterMovement } from "../VoterMovement";
+import { SimTransition } from "./SimTransition";
+import Candidate from "./components/Candidate";
+import Voter from "./components/Voter";
+import VoterCamp from "./components/VoterCamp";
+import Pie from "./components/Pie";
+import { VoterMovement } from "./VoterMovement";
 import { BarChart } from "@mui/x-charts";
-import Bars from "./Bars";
+import Bars from "./components/Bars";
 import { Table, TableRow } from "@mui/material";
+import { DimensionTag, ElectionTag, TransitionGetter } from "./Transitions";
 
 const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a few sucesses and neutral items mixed in. It's been renamed to scenarios in the frontend
     'unselected': '<pick a scenario>',
@@ -131,6 +137,55 @@ export const campCounts = {
     'alaska-special-2022': [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
     'alaska-general-2022': [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
 };
+
+export const upwardMonotonicity = (election: ElectionTag, movements: VoterMovement[], candidateNames: String[]): TransitionGetter => {
+    let def = {
+        electionName: election,
+        electionTag: election,
+        failureTag: FAILURE.upward_mono,
+    }
+    //const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
+    const [centerCandidate, rightCandidate, leftCandidate] = candidateNames;
+    return {
+        election: election,
+        dimension: 'upward_mono',
+        get: () => [
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>{leftCandidate} won in the runoff.</p>
+                </>,
+                runoffStage: 'right_vs_left'
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>But if we restart the election.</p>
+                </>,
+                runoffStage: 'firstRound',
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>And pretend {leftCandidate} gained {movements.reduce((p, m) => p + m.count, 0)} voters from {rightCandidate}.</p>
+                </>,
+                runoffStage: 'firstRound',
+                voterMovements: movements
+            }),
+            new SimTransition({
+                ...def,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                explainer: <>
+                    <p>Then {leftCandidate} would have lost to {centerCandidate} in the runoff.</p>
+                </>,
+                runoffStage: 'center_vs_left'
+            })
+        ]
+    }
+}
 
 const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) => {
     const urlFormat = (txt) => {
@@ -500,50 +555,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ]
     }
 
-    const upwardMonotonicity = (electionTag, movements) => {
-        let def = {
-            electionName: electionTag,
-            electionTag: electionTag,
-            failureTag: FAILURE.upward_mono,
-        }
-        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
-        return [
-            
-            new SimTransition({
-                ...def,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <>
-                    <p>{leftCandidate} won in the runoff.</p>
-                </>,
-                runoffStage: 'right_vs_left'
-            }),
-            new SimTransition({
-                ...def,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <>
-                    <p>But if we restart the election.</p>
-                </>,
-                runoffStage: 'firstRound',
-            }),
-            new SimTransition({
-                ...def,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <>
-                    <p>And pretend {leftCandidate} gained {movements.reduce((p, m) => p + m.count, 0)} voters from {rightCandidate}.</p>
-                </>,
-                runoffStage: 'firstRound',
-                voterMovements: movements
-            }),
-            new SimTransition({
-                ...def,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                explainer: <>
-                    <p>Then {leftCandidate} would have lost to {centerCandidate} in the runoff.</p>
-                </>,
-                runoffStage: 'center_vs_left'
-            })
-        ]
-    }
+    
 
     const compromise = (electionTag, movement, alternateRound='center_vs_left') => {
         let def = {
@@ -574,7 +586,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And pretend {movement.count} "{rightCandidate} > {centerCandidate}" voters were to compromise and rank {centerCandidate} above {rightCandidate}...</p>
+                    <p>And pretend {movement.count} "{rightCandidate} {'>'} {centerCandidate}" voters were to compromise and rank {centerCandidate} above {rightCandidate}...</p>
                 </>,
                 runoffStage: 'firstRound',
                 voterMovements: [movement]
@@ -584,7 +596,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>Then {centerCandidate} would have won instead of {leftCandidate}.</p>
-                    <p>Therefore it was not safe for the "{rightCandidate} > {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario.</p>
+                    <p>Therefore it was not safe for the "{rightCandidate} {'>'} {centerCandidate}" voters to give their honest first choice. Doing so gave them their worst scenario.</p>
                 </>,
                 runoffStage: alternateRound
             })
@@ -1493,24 +1505,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ...starConversion(ELECTIONS.nyc_2021),
 
         // Burlington
-        ...upwardMonotonicity(ELECTIONS.burlington_2009, [
-            new VoterMovement(11, 'rightBullet', 'leftBullet'),
-            new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
-        ]),
-        ...condorcet(ELECTIONS.burlington_2009),
-        ...spoiler(ELECTIONS.burlington_2009),
-        ...majorityFailure({
-            electionTag: ELECTIONS.burlington_2009,
-            winnerVoteCount: 98,
-            bulletVoteCount: 10
-        }),
-        ...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
-        ...electionNote(ELECTIONS.burlington_2009, FAILURE.repeal,
-            <p><a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">Burlington repealed RCV</a>
-                    after having used it in 2 mayoral elections in 2006 and 2009
-            </p>
-        ),
-        ...starConversion(ELECTIONS.burlington_2009),
 
         // Minneapolis
         ...spoiler(ELECTIONS.minneapolis_2021),

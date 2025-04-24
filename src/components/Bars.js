@@ -1,6 +1,5 @@
 import { Box } from "@mui/system"
 import { BarChart } from "@mui/x-charts"
-import { campCounts } from "./ElectionSelectorTransitions";
 
 export default ({simState, electionTag, data}) => {
     const candidateColor = (i) => `var(--${simState.candidateNames[electionTag][i].toLowerCase()})`

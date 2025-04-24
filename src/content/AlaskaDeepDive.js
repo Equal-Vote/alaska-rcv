@@ -1,11 +1,11 @@
-import { SimTransition } from './SimTransition';
-import { VoterMovement } from './VoterMovement';
-import Candidate from './components/Candidate';
-import Voter from './components/Voter';
-import VoterCamp from './components/VoterCamp';
-import Pie from './components/Pie';
-import electionSelectorTransitions from './components/ElectionSelectorTransitions';
-import VideoEmbed from './components/VideoEmbed';
+import { SimTransition } from '../SimTransition';
+import { VoterMovement } from '../VoterMovement';
+import Candidate from '../components/Candidate';
+import Voter from '../components/Voter';
+import VoterCamp from '../components/VoterCamp';
+import Pie from '../components/Pie';
+import electionSelectorTransitions from '../TransitionTemplates';
+import VideoEmbed from '../components/VideoEmbed';
 
 const transitions = (simState, setRefreshBool, refreshVoters) => {
     if(new URLSearchParams(window.location.search).get('onlySelector')) return [

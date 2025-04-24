@@ -1,13 +1,23 @@
+// @ts-nocheck
+// @ts-ignore
 import Voter from './components/Voter';
 
-const campIds = [
+const campNames = [
     'home', 'centerBullet', 'centerThenRight', 'rightThenCenter',
     'rightBullet', 'rightThenLeft', 'leftThenRight',
     'leftBullet', 'leftThenCenter', 'centerThenLeft'
 ];
 
+type CampName = typeof campNames[number] | undefined;
+
 export class VoterMovement {
-    constructor(count, from=undefined, to=undefined) {
+    count: number;
+    counts: number[] = [];
+    from: CampName;
+    to: CampName;
+    prevCounts: Object;
+
+    constructor(count: number, from?: CampName, to?: CampName) {
         // to undefined means starting position
         // from undefined means anywhere
         this.count = count;
@@ -16,7 +26,7 @@ export class VoterMovement {
         this.prevCounts = {};
     }
 
-    move(n, from, to, simState, updateFinalCamp=false) {
+    move(n: any, from: CampName, to: CampName, simState: any, updateFinalCamp=false) {
         simState.activeFrames = Math.max(simState.activeFrames, 20);
 
         if(Array.isArray(n)){
@@ -24,7 +34,7 @@ export class VoterMovement {
             n = [...n];
 
             // first release the camps that have excess
-            campIds.forEach((c, i) => {
+            campNames.forEach((c, i) => {
                 let votersInCamp = simState.objects
                     .filter(o => o instanceof Voter)
                     .filter(o => o.camp == simState[c])
@@ -54,7 +64,7 @@ export class VoterMovement {
             new VoterMovement(200, undefined, 'home').apply(simState);
 
             // then have everything else grab from home
-            campIds.forEach((c, i) => {
+            campNames.forEach((c, i) => {
                 if(n[i] == 0) return;
                 new VoterMovement(n[i], 'home', c).apply(simState, true);
             });
@@ -66,7 +76,7 @@ export class VoterMovement {
                     o.finalCamp = o.camp;
                 })
 
-            campIds.forEach(c => simState[c].refreshMembers());
+            campNames.forEach(c => simState[c].refreshMembers());
             return;
         }
 
@@ -79,7 +89,7 @@ export class VoterMovement {
                     o.camp = undefined
                 });
             if(from == 'anywhere'){
-                campIds.forEach(c => simState[c].refreshMembers());
+                campNames.forEach(c => simState[c].refreshMembers());
             }else if(from != undefined){
                 simState[from].refreshMembers();
             }
@@ -93,7 +103,7 @@ export class VoterMovement {
                 return from == undefined? o.camp == undefined : o.camp == simState[from]
             })
             .sort((l, r) => {
-                let campScore = (o) => o.finalCamp != simState[to];
+                let campScore = (o) => (o.finalCamp != simState[to]) ? 1 : 0;
                 //let campScore = () => 0; // set to 0 if you're trying to print camp mappings
                 let dist = (o) => {
                     return o.pos.subtract(simState[to].pos).magnitude();
@@ -109,7 +119,7 @@ export class VoterMovement {
             });
 
         if(from == 'anywhere'){
-            campIds.forEach(c => simState[c].refreshMembers());
+            campNames.forEach(c => simState[c].refreshMembers());
         }else if(from != undefined){
             simState[from].refreshMembers();
         }
@@ -118,7 +128,7 @@ export class VoterMovement {
     apply(simState, updateFinalCamp=false) {
         if(this.from == 'anywhere'){
             // only recording this for reverting
-            this.counts = campIds.map(c => 
+            this.counts = campNames.map(c => 
                 simState.objects
                 .filter(o => o instanceof Voter)
                 .filter(o => o.camp == c || o.camp == simState[c]).length
@@ -131,7 +141,7 @@ export class VoterMovement {
     revert(simState) {
         if(this.from == 'anywhere'){
             this.move(200, 'anywhere', 'home', simState);
-            campIds.forEach((c, i) => this.move(this.counts[i], 'home', c, simState));
+            campNames.forEach((c, i) => this.move(this.counts[i], 'home', c, simState));
         }else{
             this.move(this.count, this.to, this.from, simState);
         }

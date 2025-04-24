@@ -1,4 +1,4 @@
-import { ELECTION_TITLES } from './ElectionSelectorTransitions';
+import { ELECTION_TITLES } from '../TransitionTemplates';
 
 export default ({navTop}) => {
     let params = new URLSearchParams(window.location.search)

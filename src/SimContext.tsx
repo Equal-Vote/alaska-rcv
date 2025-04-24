@@ -1,18 +1,19 @@
+// @ts-nocheck
+
 import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
 import ImageObject from './components/ImageObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
-import transitions from './Transitions';
+//import transitions from './content/AlaskaDeepDive';
 import Candidate from './components/Candidate';
 import Pie from './components/Pie';
 import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
-import { VoterMovement } from './VoterMovement';
 import Video from './components/Video';
+import { getTransitions } from './Transitions';
 
 export const SimContext = createContext({});
-
 
 export function SimContextProvider({children}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
@@ -34,7 +35,7 @@ export function SimContextProvider({children}){
             '<pick an election>': ['Begich', 'Palin', 'Peltola'], // HACK: this doesn't matter but it stops a crash
             'alaska-special-2022': ['Begich', 'Palin', 'Peltola'],
             'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
-            'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
+            //'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
             'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
             'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
             'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar'],
@@ -137,9 +138,10 @@ export function SimContextProvider({children}){
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = transitions(ctx, setRefreshBool, () => {
-            updateSimIndex(i => i, true);
-        });
+        ctx.transitions = getTransitions({election: 'burlington-2009'})
+        //ctx.transitions = transitions(ctx, setRefreshBool, () => {
+        //    updateSimIndex(i => i, true);
+        //});
         ctx.transitions.forEach((t, i) => {
             if(i == 0) return;
             if(ctx.transitions[i-1].videoStopTime == 999999 || ctx.transitions[i-1].videoStopTime > t.videoStopTime){

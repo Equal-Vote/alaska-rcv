@@ -450,14 +450,6 @@ a:hover{
   justify-content: left;
 }
 
-.selectorContainer{
-  background: #111111;
-  border-radius: 20px;
-  width: 110%;
-  padding: 10%;
-  transform: translate(-10%,0);
-}
-
 .Candidate.winner .CandidateInner{
   animation-name: win;
   animation-duration: 1.5s;

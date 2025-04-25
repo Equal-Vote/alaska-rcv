@@ -1,7 +1,10 @@
+// @ts-nocheck
 import { useContext, useEffect, useRef, useState } from "react";
 import { SimContext } from '../SimContext';
 import Nav from "./Nav";
 import Voter from "./Voter";
+import { Box } from "@mui/material";
+import GameObject from "./GameObject";
 
 const Simulation = () => {
     let [bool, setBool] = useState(false);
@@ -68,7 +71,9 @@ const Simulation = () => {
     return (
         <div className="simPanel">
             <div ref={simRef} className='simulation'>
-                {simState.objects.map(o => o.asComponent(simState, simRef.current == null ? 800 : simRef.current.clientHeight))}
+                {simState.objects.map((o, i) => <Box key={i}>{o.asComponent(
+                    simState, simRef.current == null ? 800 : simRef.current.clientHeight
+                )}</Box>)}
             </div>
         </div>
     )

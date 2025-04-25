@@ -7,24 +7,22 @@ const Explainer = ({setNavTop}) => {
     const containerRef = useRef(null);
 
     let explainers = simState.allExplainers.map((explainer, i) => {
-        if(!simIndexIsVisible(i)) return undefined;
-        if(i == 0 || i == simState.allExplainers.length-1) return <>{explainer}</>;
+        if(i == 0 || i == simState.allExplainers.length-1) return <div key={i}>{explainer}</div>;
 
         return <div className="explainerItem" ref={el => explainerRefs.current[i] = el} key={`explainer-${i}`}>
             <div className="explainerInner">{explainer}</div>
         </div>
-    }).filter(explainer => explainer != undefined);
+    })
 
-    let selectorRange = simState.transitions.reduce((range, t, i) => {
-        if(t.electionTag != undefined || t.failureTag != undefined){
-            if(range.start == undefined) range.start = i;
-            if(simIndexIsVisible(i)) range.size++; // I can't set end directly since explainers is only a subset of simState.transitions
-        }
-        return range;
-    }, {start: undefined, size: 0})
-    selectorRange.end = selectorRange.start + selectorRange.size
-    selectorRange.start--; // include the selector panel
-
+    //let selectorRange = simState.transitions.reduce((range, t, i) => {
+    //    if(t.electionTag != undefined || t.failureTag != undefined){
+    //        if(range.start == undefined) range.start = i;
+    //        if(simIndexIsVisible(i)) range.size++; // I can't set end directly since explainers is only a subset of simState.transitions
+    //    }
+    //    return range;
+    //}, {start: undefined, size: 0})
+    //selectorRange.end = selectorRange.start + selectorRange.size
+    //selectorRange.start--; // include the selector panel
 
     let prevScrollY = 0;
     let refreshExplainers = (event) => {
@@ -64,7 +62,6 @@ const Explainer = ({setNavTop}) => {
     //}
 
     useEffect(() => {
-
         explainerRefs.current.forEach((e, i) => {
             e.classList.remove('explainerFocused');
             e.classList.remove('explainerUnfocused');
@@ -79,11 +76,7 @@ const Explainer = ({setNavTop}) => {
 
     return (
         <div className="explainer" ref={containerRef} onScroll={refreshExplainers}>
-            {explainers.slice(0, selectorRange.start)}
-            <div className='selectorContainer'>
-                {explainers.slice(selectorRange.start, selectorRange.end)}
-            </div>
-            {explainers.slice(selectorRange.end)}
+            {explainers}
         </div>
     )
 }

@@ -11,8 +11,10 @@ import CaseStudySelector from './components/CaseStudySelector';
 export default () => {
     // APP
     let [navTop, setNavTop] = useState(0);
-    return <div className="app">
-        <Nav navTop={navTop}/>
+    let parts = window.location.pathname.split('/');
+    let election = parts?.[1];
+    return <div className="app" onScroll={() => console.log('hi')}>
+        <Nav navTop={navTop} election={election}/>
 
         {window.location.pathname == '/' &&
             <CaseStudySelector/>
@@ -20,7 +22,7 @@ export default () => {
 
         {window.location.pathname != '/' &&
             <div className="columns">
-                <SimContextProvider>
+                <SimContextProvider election={election}>
                     <Simulation/>
                     <Explainer setNavTop={setNavTop}/>
                 </SimContextProvider>

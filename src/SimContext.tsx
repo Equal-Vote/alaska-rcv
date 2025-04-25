@@ -1,8 +1,8 @@
 // @ts-nocheck
-
 import Voter from './components/Voter';
 import VoterCamp from './components/VoterCamp';
 import ImageObject from './components/ImageObject';
+import GameObject from './components/GameObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
 //import transitions from './content/AlaskaDeepDive';
 import Candidate from './components/Candidate';
@@ -15,7 +15,7 @@ import { getTransitions } from './Transitions';
 
 export const SimContext = createContext({});
 
-export function SimContextProvider({children}){
+export function SimContextProvider({election, children}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
     let isMobile = (window.innerWidth < 900);
     const campMappings = (isMobile)?
@@ -35,7 +35,7 @@ export function SimContextProvider({children}){
             '<pick an election>': ['Begich', 'Palin', 'Peltola'], // HACK: this doesn't matter but it stops a crash
             'alaska-special-2022': ['Begich', 'Palin', 'Peltola'],
             'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
-            //'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
+            'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
             'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
             'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
             'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar'],
@@ -96,11 +96,13 @@ export function SimContextProvider({children}){
             leftBullet: new VoterCamp(voterRadius, 210, 2, 2),
             leftThenCenter: new VoterCamp(voterRadius, 180, 2, 0),
             centerThenLeft: new VoterCamp(voterRadius, 120, 0, 2),
+            objects: undefined as GameObject[],
         };
 
-        let objects = [];
+        let objects: GameObject[] = [];
         
-        Object.entries(ctx).forEach(([_, o]) => {
+        Object.entries(ctx).forEach(([key, o]) => {
+            if(key == 'objects') return;
             objects.push(o);
         });
         let r = 5;
@@ -121,8 +123,8 @@ export function SimContextProvider({children}){
             exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
-            electionName: params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
-            selectorElection: params.get('selectorElection') ?? 'burlington-2009',
+            electionName: election, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
+            selectorElection: election, // params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
             candidateNames
         };
@@ -138,7 +140,8 @@ export function SimContextProvider({children}){
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: 'burlington-2009'})
+        ctx.transitions = getTransitions({election: election})
+
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);
         //});
@@ -151,6 +154,7 @@ export function SimContextProvider({children}){
             }
         });
 
+
         ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });
 
         ctx.visibleObjects = function(){
@@ -161,14 +165,13 @@ export function SimContextProvider({children}){
 
         setTimeout(() => {
             let camps = new Array(200);
-            simState.objects.filter(o => o.className == 'Voter').forEach(v => camps[v.index] = v.campName(simState));
-            //console.log(camps);
+            simState.objects.filter((o:any) => o.className == 'Voter').forEach((v: Voter) => camps[v.index] = v.campName(simState));
+            console.log(camps);
         }, 20000);
 
         return ctx;
     }
     
-
     const updateSimIndex = (nextIndex, fullReset=false) => {
         let i = simIndex.current;
 
@@ -206,11 +209,12 @@ export function SimContextProvider({children}){
 
 
     const simIndexIsVisible = (index) => {
-        let t = simState.transitions[index];
-        return ( 
-            (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
-            (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
-        );
+        return true;
+        //let t = simState.transitions[index];
+        //return ( 
+        //    (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
+        //    (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
+        //);
     }
 
 

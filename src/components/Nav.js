@@ -1,6 +1,6 @@
 import { ELECTION_TITLES } from '../TransitionTemplates';
 
-export default ({navTop}) => {
+export default ({election, navTop}) => {
     let params = new URLSearchParams(window.location.search)
 
     let icon = undefined;
@@ -18,17 +18,17 @@ export default ({navTop}) => {
             </div>
         </a>
         <span className='NavArrow'>{">"}</span>
-        <a href='?onlySelector=true'>
+        <a href='/'>
             <div className='NavButton'>
             <img src={require('../assets/usa_nav.png')}/>
             <h4>RCV Case Studies</h4>
             </div>
         </a>
-        {params.get('selectorElection') && <><span className='NavArrow'>{">"}</span>
+        {election && <><span className='NavArrow'>{">"}</span>
             <a href=''>
                 <div className='NavButton'>
                 {icon && <img src={icon}/>}
-                <h4>{ELECTION_TITLES[params.get('selectorElection')]}</h4>
+                <h4>{ELECTION_TITLES[election]}</h4>
                 </div>
             </a>
         </>}

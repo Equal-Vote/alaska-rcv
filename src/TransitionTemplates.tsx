@@ -13,7 +13,7 @@ import { VoterMovement } from "./VoterMovement";
 import { BarChart } from "@mui/x-charts";
 import Bars from "./components/Bars";
 import { Table, TableRow } from "@mui/material";
-import { DimensionTag, ElectionTag, TransitionGetter } from "./Transitions";
+import { DimensionTag, ElectionTag, makeTransitionGetter, TransitionGetter } from "./Transitions";
 
 const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a few sucesses and neutral items mixed in. It's been renamed to scenarios in the frontend
     'unselected': '<pick a scenario>',
@@ -32,6 +32,10 @@ const FAILURE= { // NOTE: I originally called this FAILURE, but now there's a fe
     'rank_the_red': 'Rank all Republicans?',
     'star_conversion': 'STAR Conversion',
 };
+
+const failureNameToKey = (name): DimensionTag | undefined => {
+    return Object.entries(FAILURE).filter(([key, v]) => v == name)?.[0][0] ?? undefined
+}
 
 export const ELECTION_TITLES = {
     '<pick an election>': '<pick an election>',
@@ -138,6 +142,118 @@ export const campCounts = {
     'alaska-general-2022': [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
 };
 
+const failureInfo = (failureTag, content) => {
+    let intro = [new SimTransition({
+        explainer: <div style={{position: 'relative'}}>
+            <div id={failureNameToKey(failureTag)} style={{position: 'absolute', top: '-30vh'}}/>
+            <a href='#toc'>️↑back to top️↑</a>
+            <hr/>
+            {content}
+        </div>,
+        electionName: 'undefined',
+        visible: 'undefined',
+        runoffStage: 'firstRound',
+        electionTag: undefined,
+        failureTag: failureTag,
+
+    })];
+
+    //let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
+    //    election != ELECTIONS.unselected && elections[election].failures.includes(failureTag)
+    //);
+    //if(electionsWithFailure.length  > 1){
+    //    intro.push(new SimTransition({
+    //        explainer: <p>{failureTag} occurred in the following elections : 
+    //            <ul>{electionsWithFailure.map((f,i) => <li>{f}</li>)}</ul>
+    //            Pick from the drop down above for more details</p>,
+    //        electionName: 'undefined',
+    //        visible: 'undefined',
+    //        runoffStage: 'undefined',
+    //        electionTag: ELECTIONS.unselected,
+    //        failureTag: failureTag,
+    //    }));
+    //}
+
+    return intro;
+}
+
+export const electionInfo = (election: ElectionTag, ratio, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>): TransitionGetter => {
+    return {
+        election,
+        dimension: undefined,
+        get: () => {
+            let description = ELECTION_TITLES[election];
+            let camps = campCounts[election];
+            let intro = [new SimTransition({
+                explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
+                electionName: election,
+                electionTag: election,
+                failureTag: undefined,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+                voterMovements: [ new VoterMovement(camps) ] 
+            })];
+
+            if(elections[election].failures.length > 1){
+                intro.push(new SimTransition({
+                    explainer: <div style={{position: 'relative'}}>
+                        <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
+                        <p>This election had the following scenarios : 
+                        <ul>{elections[election].failures.filter(f => f != FAILURE.unselected && f != FAILURE.star_conversion).map((f,i) => <li><a href={`#${failureNameToKey(f)}`}>{f}</a></li>)}</ul>
+                        Pick from the drop down above for more details</p>
+                    </div>,
+                    electionName: election,
+                    electionTag: election,
+                    failureTag: FAILURE.unselected,
+                    visible: [Candidate, Voter, VoterCamp, Pie],
+                    runoffStage: 'firstRound',
+                }));
+            }
+
+            return intro;
+        }
+    }
+}
+
+export const spoiler = (election: ElectionTag, candidateNames) => {
+    return makeTransitionGetter(election, 'spoiler', () => {
+    let def = {
+        electionName: election,
+        electionTag: election,
+        failureTag: FAILURE.spoiler,
+    }
+    const [centerCandidate, rightCandidate, leftCandidate] = candidateNames;
+    return [
+        ...failureInfo(FAILURE.spoiler, <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
+        new SimTransition({
+            ...def,
+            explainer: <>
+                <p>If the election was between {leftCandidate} and {centerCandidate} then {centerCandidate} would have won</p>
+            </>,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'center_vs_left'
+        }),
+        new SimTransition({
+            ...def,
+            explainer: <>
+                <p>but when {rightCandidate} joins the race voters are pulled away from {centerCandidate}.</p>
+            </>,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'firstRound'
+        }),
+        new SimTransition({
+            ...def,
+            explainer: <>
+                <p>Then {centerCandidate} gets eliminated in the first round and {leftCandidate} wins!</p>
+                <p>So {rightCandidate} was a spoiler. {rightCandidate} would have lost regardless, but joining the race still impacted the winner</p>
+            </>,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'right_vs_left'
+        }),
+    ]
+    });
+}
+
 export const upwardMonotonicity = (election: ElectionTag, movements: VoterMovement[], candidateNames: String[]): TransitionGetter => {
     let def = {
         electionName: election,
@@ -150,6 +266,8 @@ export const upwardMonotonicity = (election: ElectionTag, movements: VoterMoveme
         election: election,
         dimension: 'upward_mono',
         get: () => [
+            ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Pathology<br/>
+            <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
             new SimTransition({
                 ...def,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -344,63 +462,9 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         });
     }
 
-    const electionInfo = (electionName, ratio, srcTitle='An Examination of Ranked-Choice Voting in the United States, 2004–2022', srcUrl='https://arxiv.org/abs/2301.12075', moreBullets=<></>) => {
-        let description = ELECTION_TITLES[electionName];
-        let camps = campCounts[electionName];
-        let intro = [new SimTransition({
-            explainer: <p>{description}<ul><li>1 voter = {ratio} real voters</li><li>Source: <a href={srcUrl}>{srcTitle}</a></li>{moreBullets}</ul></p>,
-            electionName: electionName,
-            electionTag: electionName,
-            failureTag: undefined,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'firstRound',
-            voterMovements: [ new VoterMovement(camps) ] 
-        })];
+    
 
-        if(elections[electionName].failures.length > 1){
-            intro.push(new SimTransition({
-                explainer: <p>This election had the following scenarios : 
-                    <ul>{elections[electionName].failures.filter(f => f != FAILURE.unselected && f != FAILURE.star_conversion).map((f,i) => <li>{f}</li>)}</ul>
-                    Pick from the drop down above for more details</p>,
-                electionName: electionName,
-                electionTag: electionName,
-                failureTag: FAILURE.unselected,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound',
-            }));
-        }
-
-        return intro;
-    }
-
-    const failureInfo = (failureTag, content) => {
-        let intro = [new SimTransition({
-            explainer: content,
-            electionName: 'undefined',
-            visible: 'undefined',
-            runoffStage: 'undefined',
-            electionTag: undefined,
-            failureTag: failureTag,
-        })];
-
-        let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
-            election != ELECTIONS.unselected && elections[election].failures.includes(failureTag)
-        );
-        if(electionsWithFailure.length  > 1){
-            intro.push(new SimTransition({
-                explainer: <p>{failureTag} occurred in the following elections : 
-                    <ul>{electionsWithFailure.map((f,i) => <li>{f}</li>)}</ul>
-                    Pick from the drop down above for more details</p>,
-                electionName: 'undefined',
-                visible: 'undefined',
-                runoffStage: 'undefined',
-                electionTag: ELECTIONS.unselected,
-                failureTag: failureTag,
-            }));
-        }
-
-        return intro;
-    }
+    
 
     const majorityFailure = ({electionTag, winnerVoteCount, bulletVoteCount}) => {
         let def = {
@@ -431,41 +495,7 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         ];
     }
 
-    const spoiler = (electionTag) => {
-        let def = {
-            electionName: electionTag,
-            electionTag: electionTag,
-            failureTag: FAILURE.spoiler,
-        }
-        const [centerCandidate, rightCandidate, leftCandidate] = simState.candidateNames[electionTag];
-        return [
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>If the election was between {leftCandidate} and {centerCandidate} then {centerCandidate} would have won</p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'center_vs_left'
-            }),
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>but when {rightCandidate} joins the race voters are pulled away from {centerCandidate}.</p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'firstRound'
-            }),
-            new SimTransition({
-                ...def,
-                explainer: <>
-                    <p>Then {centerCandidate} gets eliminated in the first round and {leftCandidate} wins!</p>
-                    <p>So {rightCandidate} was a spoiler. {rightCandidate} would have lost regardless, but joining the race still impacted the winner</p>
-                </>,
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                runoffStage: 'right_vs_left'
-            }),
-        ]
-    }
+    
 
     const noShow = (electionTag, movement) => {
         let def = {
@@ -1423,7 +1453,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
         </>),
         ...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
         ...failureInfo(FAILURE.repeal, <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>),
-        ...failureInfo(FAILURE.spoiler, <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
         ...failureInfo(FAILURE.majority, <>
             <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
             <p>
@@ -1432,8 +1461,6 @@ const electionSelectorTransitions = (simState, setRefreshBool, refreshVoters) =>
                 had Majoritarian Failures 52% of the time</a>
             </p>
         </>),
-        ...failureInfo(FAILURE.upward_mono, <p>Upward Monotonicity Pathology<br/>
-        <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         ...failureInfo(FAILURE.compromise, <>
             <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
                 elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>

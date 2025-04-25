@@ -1,5 +1,5 @@
 import {TransitionGetter} from '../Transitions';
-import { upwardMonotonicity } from '../TransitionTemplates';
+import { electionInfo, spoiler, upwardMonotonicity } from '../TransitionTemplates';
 import { VoterMovement } from '../VoterMovement';
 
 
@@ -8,13 +8,14 @@ const candidateNames = ['Montroll', 'Wright', 'Kiss'];
 
 export default (): TransitionGetter[] => {
     return [
+        electionInfo('burlington-2009', 44.1),
+        spoiler('burlington-2009', candidateNames),
         upwardMonotonicity('burlington-2009', [
             new VoterMovement(11, 'rightBullet', 'leftBullet'),
             new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
         ], candidateNames)
     ];
     //...condorcet(ELECTIONS.burlington_2009),
-    //...spoiler(ELECTIONS.burlington_2009),
     //...majorityFailure({
     //    electionTag: ELECTIONS.burlington_2009,
     //    winnerVoteCount: 98,

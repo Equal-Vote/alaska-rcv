@@ -15,7 +15,7 @@ class Candidate extends GameObject{
         let img = require(`../assets/${this.candidateName.toLowerCase()}.jpg`);
         let isMobile = (window.innerWidth < 900);
         return <div className={this.getClassNames(simState)} style={{
-            display: simState.threeSecondsPassed? 'block' : 'none',
+            display: 'block', //simState.threeSecondsPassed? 'block' : 'none',
             width: `${this.size.x}%`,
             height: `${this.size.y}%`,
             transform: new Vector(50)

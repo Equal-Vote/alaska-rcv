@@ -1,41 +1,43 @@
 import Burlington2009 from "./content/Burlington2009";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
+import { dimensionTemplates, electionInfo } from "./TransitionTemplates";
 
-export const electionTags = [
-    'alaska-special-2022',
-    'alaska-general-2022', 
-    'burlington-2009',
-    'minneapolis-2021',
-    'pierce-2008',
-    'san-francisco-2020',
-    'alameda-2022', 
-    'moab-2021',
-    'nyc-2021',
-    'aspen-2009',
+const elections = [
+    Burlington2009,
 ];
 
-export const dimensionTags = [
-    'overview',
-    'spoiler',
-    'condorcet',
-    'condorcet_success',
-    'cycle', 
-    'majority',
-    'upward_mono',
-    'downward_mono',
-    'no_show',
-    'compromise',
-    'tally',
-    'repeal',
-    'bullet_allocation',
-    'rank_the_red',
-    'star_conversion'
-];
+export type ElectionTag = 
+    'alaska-special-2022' |
+    'alaska-general-2022' | 
+    'burlington-2009' |
+    'minneapolis-2021' |
+    'pierce-2008' |
+    'san-francisco-2020' |
+    'alameda-2022' |
+    'moab-2021' |
+    'nyc-2021' |
+    'aspen-2009';
 
-export type ElectionTag = typeof electionTags[number];
+export const dimensionNames = {
+    'overview': 'Overview',
+    'spoiler': 'Spoiler Effect',
+    'condorcet': 'Condorcet Failure',
+    'condorcet_success': 'Condorcet Success',
+    'cycle': 'Condorcet Cycle',
+    'majority': 'Majoritarian Failure',
+    'upward_mono': 'Upward Monotonicity Pathology',
+    'downward_mono': 'Downward Monotonicity Pathology',
+    'no_show': 'No Show Failure',
+    'compromise': 'Lesser-Evil Failure',
+    'tally': 'Tally Error',
+    'repeal': 'Repealed',
+    'bullet_allocation': 'Bullet Vote Allocation',
+    'rank_the_red': 'Rank all Republicans?',
+    'star_conversion': 'STAR Conversion',
+} as const;
 
-export type DimensionTag = typeof dimensionTags[number];
+export type DimensionTag = keyof typeof dimensionNames;
 
 const OVERVIEW_DIMENSIONS: DimensionTag[] = [
     'spoiler',
@@ -54,11 +56,31 @@ export interface TransitionGetter {
     dimension: DimensionTag;
     get: () => SimTransition[];
 }
+export const makeTransitionGetter = (election: ElectionDetails | undefined, dimension: DimensionTag, get: () => SimTransition[]): TransitionGetter => ({election: election?.tag, dimension, get});
 
-export const makeTransitionGetter = (election: ElectionTag | undefined, dimension: DimensionTag, get: () => SimTransition[]): TransitionGetter => ({election, dimension, get});
+export interface ElectionDetails {
+    tag: ElectionTag,
+    title: string;
+    candidateNames: [string, string, string];
+    dimensions: DimensionTag[];
+    camps: [
+        number, number, number, number, number,
+        number, number, number, number, number
+    ];
+    ratio: number;
+    sourceTitle: string;
+    sourceURL: string;
+    extraContext: Object;
+}
 
 const allGetters = (): TransitionGetter[] => ([
-    ...Burlington2009(),
+    ...elections.map(election => ([
+        electionInfo(election),
+        ...election.dimensions
+            .filter((dim:DimensionTag) => dimensionTemplates[dim] != undefined)
+            .map((dim:DimensionTag) => dimensionTemplates[dim](election))
+    ])
+    ).flat()
 ])
 
 export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => {

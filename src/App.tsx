@@ -13,7 +13,7 @@ export default () => {
     let [navTop, setNavTop] = useState(0);
     let parts = window.location.pathname.split('/');
     let election = parts?.[1];
-    return <div className="app" onScroll={() => console.log('hi')}>
+    return <div className="app">
         <Nav navTop={navTop} election={election}/>
 
         {window.location.pathname == '/' &&

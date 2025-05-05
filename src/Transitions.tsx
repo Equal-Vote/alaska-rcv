@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
 import Burlington2009 from "./content/Burlington2009";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
-import { dimensionTemplates, electionInfo } from "./TransitionTemplates";
+import { dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
+import { VoterMovement } from "./VoterMovement";
 
 const elections = [
     Burlington2009,
@@ -53,15 +55,31 @@ const OVERVIEW_DIMENSIONS: DimensionTag[] = [
 
 export interface TransitionGetter {
     election?: ElectionTag;
-    dimension: DimensionTag;
+    dimension?: DimensionTag;
     get: () => SimTransition[];
 }
-export const makeTransitionGetter = (election: ElectionDetails | undefined, dimension: DimensionTag, get: () => SimTransition[]): TransitionGetter => ({election: election?.tag, dimension, get});
+export const makeTransitionGetter = (election: ElectionDetails | undefined, dimension: DimensionTag | undefined, get: () => SimTransition[]): TransitionGetter => ({
+    election: election?.tag,
+    dimension,
+    get: () => {
+        // adding election tag here since it's tedious to add it in election templates
+        let transitions = get();
+        get().forEach(transition =>
+            transition.electionTag = election?.tag
+        )
+        return transitions;
+    }
+});
+
 
 export interface ElectionDetails {
     tag: ElectionTag,
     title: string;
-    candidateNames: [string, string, string];
+    names: {
+        left: string,
+        center: string,
+        right: string
+    };
     dimensions: DimensionTag[];
     camps: [
         number, number, number, number, number,
@@ -70,16 +88,23 @@ export interface ElectionDetails {
     ratio: number;
     sourceTitle: string;
     sourceURL: string;
-    extraContext: Object;
+    extraContext: ReactNode | undefined;
+    upwardMonoMovements?: VoterMovement[];
+    downwardMonoMovement?: VoterMovement;
+    noShowMovement?: VoterMovement;
+    compromiseMovement?: VoterMovement;
+    compromiseRunoffStage?: string;
+    centerBeatsRight?: boolean
 }
 
 const allGetters = (): TransitionGetter[] => ([
-    ...elections.map(election => ([
+    ...elections.map(election => {
+    return [
         electionInfo(election),
         ...election.dimensions
-            .filter((dim:DimensionTag) => dimensionTemplates[dim] != undefined)
-            .map((dim:DimensionTag) => dimensionTemplates[dim](election))
-    ])
+            .filter((dim:DimensionTag) => dim in dimensionTemplates)
+            .map((dim:DimensionTag) => dimensionTemplates[dim]!(election))
+    ]}
     ).flat()
 ])
 

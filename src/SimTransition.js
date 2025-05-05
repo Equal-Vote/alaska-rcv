@@ -3,7 +3,7 @@ import Pie from "./components/Pie";
 import VoterCount from "./components/VoterCount";
 
 export class SimTransition {
-    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', electionName='alaska-special-2022', electionTag=undefined, failureTag=undefined, resetVoters=false, exhaustedCamp=undefined, videoStopTime=999999}) {
+    constructor({ visible = [], focused = [], explainer = <></>, voterMovements = [], runoffStage='default', resetVoters=false, exhaustedCamp=undefined, videoStopTime=999999}) {
         this.visible = visible;
         if(visible == 'undefined') this.visible = undefined;
 
@@ -16,13 +16,13 @@ export class SimTransition {
         this.explainer = explainer;
         this.runoffStage = runoffStage;
         if(runoffStage == 'undefined') this.runoffStage = undefined;
-        this.electionName = electionName;
-        // I can't pass electionName undefined without the default kicking in, so I pass it as a string
-        if(visible != undefined && (!visible.includes(Candidate) || electionName == 'undefined')) this.electionName = undefined;
-
-        this.electionTag = electionTag;
-        this.failureTag = failureTag;
     }
+
+    //setElectionTag(electionTag){
+    //    this.electionTag = electionTag;
+    //    // I can't pass electionName undefined without the default kicking in, so I pass it as a string
+    //    //if(visible != undefined && (!visible.includes(Candidate) || electionTag == 'undefined')) this.electionName = undefined;
+    //}
 
     moveVoters(simState){
         this.voterMovements.forEach(m => m.apply(simState));

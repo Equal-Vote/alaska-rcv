@@ -1,12 +1,16 @@
-import {ElectionDetails, TransitionGetter} from '../Transitions';
-import { electionInfo, upwardMonotonicity } from '../TransitionTemplates';
+import {ElectionDetails} from '../Transitions';
+import { LEFT_BULLET, LEFT_THEN_RIGHT, RIGHT_BULLET, RIGHT_THEN_LEFT } from '../TransitionTemplates';
 import { VoterMovement } from '../VoterMovement';
 
 
 export default {
     tag: 'burlington-2009',
     title: 'Burlington 2009 Mayor Election',
-    candidateNames: ['Montroll', 'Wright', 'Kiss'],
+    names: {
+        left: 'Kiss',
+        center: 'Montroll',
+        right: 'Wright',
+    },
     dimensions: [
         'spoiler',
         'condorcet',
@@ -20,29 +24,18 @@ export default {
     ratio: 44.1,
     sourceTitle: 'An Examination of Ranked-Choice Voting in the United States, 2004–2022',
     sourceURL: 'https://arxiv.org/abs/2301.12075',
-    extraContext: <></>
+    extraContext: <></>,
+    upwardMonoMovements: [
+        new VoterMovement(11, 'rightBullet', 'leftBullet'),
+        new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
+    ],
+    compromiseMovement: new VoterMovement(9, 'rightThenCenter', 'centerThenRight'),
 } satisfies ElectionDetails;
 
 //export default (): TransitionGetter[] => {
-//    return [
-//        electionInfo(election),
-//        spoiler('burlington-2009', candidateNames),
-//        //upwardMonotonicity('burlington-2009', [
-//        //    new VoterMovement(11, 'rightBullet', 'leftBullet'),
-//        //    new VoterMovement(7, 'rightThenLeft', 'leftThenRight')
-//        //], candidateNames)
-//    ];
-//    //...condorcet(ELECTIONS.burlington_2009),
-//    //...majorityFailure({
-//    //    electionTag: ELECTIONS.burlington_2009,
-//    //    winnerVoteCount: 98,
-//    //    bulletVoteCount: 10
-//    //}),
-//    //...compromise(ELECTIONS.burlington_2009, new VoterMovement(9, 'rightThenCenter', 'centerThenRight')),
 //    //...electionNote(ELECTIONS.burlington_2009, FAILURE.repeal,
 //    //    <p><a href="https://alaskapolicyforum.org/2020/10/failed-experiment-rcv/#_ftn46:~:text=choice%20voting%20system.-,Burlington%2C%20Vermont,-The%20City%20of">Burlington repealed RCV</a>
 //    //            after having used it in 2 mayoral elections in 2006 and 2009
 //    //    </p>
 //    //),
-//    //...starConversion(ELECTIONS.burlington_2009),
 //}

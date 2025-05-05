@@ -1,5 +1,4 @@
 import { Box } from "@mui/material"
-import { electionTags } from "../Transitions"
 
 export default () => {
     const ListBox = ({title, items}) => <Box sx={{background: '#111111', maxWidth: '400px', width: '100%', p: 2, borderRadius: 2}}>

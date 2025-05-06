@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Divider } from "@mui/material"
 import {dimensionNames, elections} from '../Transitions'
 
 export default () => {
@@ -15,8 +15,8 @@ export default () => {
             featuredItem = 'alaska-special-2022';
             items = items.slice(1)
         }
-        return <Box sx={{background: '#111111', width: '100%', p: 2, borderRadius: 2}}>
-            <h2>{title}</h2>
+        return <Box sx={{width: '100%', p: 2, }}>
+            <h2 style={{margin: 'auto', textAlign: 'center'}}>{title}</h2>
             <ul >
                 {featuredItem && <fieldset style={
                     {width: '600px', margin: 'auto', marginBottom: '80px', border: '3px solid white', borderRadius: '5px'}
@@ -46,16 +46,19 @@ export default () => {
         </Box>
     }
 
-    return <Box display='flex' flexDirection='column' flexWrap='wrap' gap={5} justifyContent='center' sx={{p: 5, mx: 'auto', width: '100%', maxWidth: '1500px', mt: 10}}>
+    return <Box display='flex' flexDirection='column' flexWrap='wrap' justifyContent='center'
+        sx={{mb: 5, p: 5, mx: 'auto', width: '100%', maxWidth: '1500px', mt: 10, background: '#111111', borderRadius: 2}}
+    >
         <ListBox title='Elections' items={[
             'alaska-special-2022', ...elections.map(e => e.tag).filter(t => t != 'alaska-special-2022')
         ]} mapper={(key) => elections.filter(e => e.tag == key)[0]?.title ?? ''}/>
+        <Box sx={{width: '100%', height: '8px', mb: 3, background: 'black'}}/>
         <ListBox title='Areas of Interest' items={[
             // We don't use dimensionTags here because we only want a subset
-            'spoiler',
-            'condorcet',
             'condorcet_success',
+            'condorcet',
             'cycle', 
+            'spoiler',
             'majority',
             'upward_mono',
             'downward_mono',

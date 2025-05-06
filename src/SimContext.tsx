@@ -11,7 +11,7 @@ import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
 import Video from './components/Video';
-import { getTransitions } from './Transitions';
+import { getTransitions, elections } from './Transitions';
 import Burlington2009 from './content/Burlington2009';
 
 export const SimContext = createContext({});
@@ -112,10 +112,10 @@ export function SimContextProvider({election, children}){
             exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
-            electionName: election, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
-            selectorElection: election, // params.get('selectorElection') ?? 'burlington-2009',
+            electionName: election.tag, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
+            selectorElection: election.tag, // params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
-            election: Burlington2009,
+            election: election
         };
 
         // super hacky way of fixing the bug where the candidates are fading out in the beginning
@@ -129,7 +129,7 @@ export function SimContextProvider({election, children}){
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: election})
+        ctx.transitions = getTransitions({electionTag: election.tag})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);
@@ -142,7 +142,6 @@ export function SimContextProvider({election, children}){
                 t.videoStartTime = ctx.transitions[i-1].videoStopTime;
             }
         });
-
 
         ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });
 

@@ -3,14 +3,28 @@ import { ReactNode } from "react";
 import { SimTransition } from "./SimTransition";
 import { dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
 import { VoterMovement } from "./VoterMovement";
-import Burlington2009 from "./content/Burlington2009";
-import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
 import AlaskaGeneral2022 from "./content/AlaskaGeneral2022";
+import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
+import Aspen2009 from "./content/Aspen2009";
+import Burlington2009 from "./content/Burlington2009";
+import Minneapolis2021 from "./content/Minneapolis2021";
+import Moab2021 from "./content/Moab2021";
+import NYC2021 from "./content/NYC2021";
+import Oakland2022 from "./content/Oakland2022";
+import Pierce2008 from "./content/Pierce2008";
+import SanFrancisco2020 from "./content/SanFrancisco2020";
 
-const elections: ElectionDetails[] = [
-    Burlington2009,
-    AlaskaSpecial2022,
+export const elections: ElectionDetails[] = [
     AlaskaGeneral2022,
+    AlaskaSpecial2022,
+    Aspen2009,
+    Burlington2009,
+    Minneapolis2021,
+    Moab2021,
+    NYC2021,
+    Oakland2022,
+    Pierce2008,
+    SanFrancisco2020,
 ];
 
 export type ElectionTag = 
@@ -20,7 +34,7 @@ export type ElectionTag =
     'minneapolis-2021' |
     'pierce-2008' |
     'san-francisco-2020' |
-    'alameda-2022' |
+    'oakland-2022' |
     'moab-2021' |
     'nyc-2021' |
     'aspen-2009';
@@ -59,17 +73,16 @@ export const OVERVIEW_DIMENSIONS: DimensionTag[] = [
 ];
 
 export interface TransitionGetter {
-    election?: ElectionTag;
+    electionTag?: ElectionTag;
     dimension?: DimensionTag;
     get: () => SimTransition[];
 }
 export const makeTransitionGetter = (election: ElectionDetails | undefined, dimension: DimensionTag | undefined, get: () => SimTransition[]): TransitionGetter => ({
-    election: election?.tag,
+    electionTag: election?.tag,
     dimension,
     // adding election tag here since it's tedious to add it in election templates
     get: () => get().map(t => t.setElection(election))
 });
-
 
 export interface ElectionDetails {
     tag: ElectionTag,
@@ -109,12 +122,12 @@ const allGetters = (): TransitionGetter[] => ([
     ).flat()
 ])
 
-export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => ([
+export const getTransitions = ({electionTag=undefined, dimension='overview'}: {electionTag?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => ([
     new SimTransition({
         explainer: <div className='explainerTopPadding'/>
     }),
     ...allGetters()
-        .filter(getter => election === undefined ? true : getter.election === election)
+        .filter(getter => electionTag === undefined ? true : getter.electionTag === electionTag)
         .filter(getter => getter.dimension === undefined || (dimension == 'overview' ? OVERVIEW_DIMENSIONS.includes(getter.dimension) : getter.dimension === dimension))
         .map(getter => getter.get())
         .flat(),

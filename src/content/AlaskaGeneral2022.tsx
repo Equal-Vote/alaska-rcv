@@ -1,19 +1,8 @@
 import {ElectionDetails} from '../Transitions';
-import { VoterMovement } from '../VoterMovement';
 
 export default {
     tag: 'alaska-general-2022',
     title: 'Alaska 2022 US Representative General Election',
-    names: {
-        left: 'Peltola',
-        center: 'Begich',
-        right: 'Palin',
-    },
-    dimensions: [
-        'condorcet_success',
-        'star_conversion',
-    ],
-    camps: [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
     ratio: 1318.4,
     sourceTitle: 'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
     sourceURL: 'https://arxiv.org/abs/2303.00108',
@@ -29,4 +18,15 @@ export default {
             </li>
         </ul></p>
     </>,
+    camps: [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
+    names: {
+        left: 'Peltola',
+        center: 'Begich',
+        right: 'Palin',
+    },
+    dimensions: [
+        'condorcet_success',
+        'star_conversion',
+    ],
+    centerBeatsRight: true,
 } satisfies ElectionDetails;

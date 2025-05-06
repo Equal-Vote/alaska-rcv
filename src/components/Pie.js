@@ -14,11 +14,11 @@ class Pie extends GameObject{
         super('Pie', 0, 0, size);
         this.conicPairs = [];
         this.allPieColors = {
-            'default': [0, 1, 2],
-            'firstRound': [0, 1, 2],
-            'center_vs_right': [0, 1, -1],
-            'center_vs_left': [0, -1, 2],
-            'right_vs_left': [-1, 1, 2],
+            'default': ['center', 'right', 'left'],
+            'firstRound': ['center', 'right', 'left'],
+            'center_vs_right': ['center', 'right', -1],
+            'center_vs_left': ['center', -1, 'left'],
+            'right_vs_left': [-1, 'right', 'left'],
         }
         this.points = [...piePoints['default']];
         this.colors = [...this.allPieColors['default']];
@@ -30,7 +30,7 @@ class Pie extends GameObject{
     indexToColor(simState, index){
         if(index == -1) return 'var(--pieGray)';
         //return ['#999999', '#666666', '#444444'][index];
-        return `var(--${simState.candidateNames[simState.electionName][index].toLowerCase()})`;
+        return `var(--${simState.election.names[index].toLowerCase()})`;
     }
 
     update(simState){

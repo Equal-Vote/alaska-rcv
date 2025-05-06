@@ -1,12 +1,16 @@
 import { ReactNode } from "react";
-import Burlington2009 from "./content/Burlington2009";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
 import { dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
 import { VoterMovement } from "./VoterMovement";
+import Burlington2009 from "./content/Burlington2009";
+import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
+import AlaskaGeneral2022 from "./content/AlaskaGeneral2022";
 
-const elections = [
+const elections: ElectionDetails[] = [
     Burlington2009,
+    AlaskaSpecial2022,
+    AlaskaGeneral2022,
 ];
 
 export type ElectionTag = 
@@ -23,9 +27,9 @@ export type ElectionTag =
 
 export const dimensionNames = {
     'overview': 'Overview',
-    'spoiler': 'Spoiler Effect',
     'condorcet': 'Condorcet Failure',
     'condorcet_success': 'Condorcet Success',
+    'spoiler': 'Spoiler Effect',
     'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
     'upward_mono': 'Upward Monotonicity Pathology',
@@ -41,16 +45,17 @@ export const dimensionNames = {
 
 export type DimensionTag = keyof typeof dimensionNames;
 
-const OVERVIEW_DIMENSIONS: DimensionTag[] = [
-    'spoiler',
+export const OVERVIEW_DIMENSIONS: DimensionTag[] = [
     'condorcet',
     'condorcet_success',
+    'spoiler',
     'cycle',
     'majority',
     'upward_mono',
     'downward_mono',
     'no_show',
     'compromise',
+    'repeal',
 ];
 
 export interface TransitionGetter {
@@ -61,14 +66,8 @@ export interface TransitionGetter {
 export const makeTransitionGetter = (election: ElectionDetails | undefined, dimension: DimensionTag | undefined, get: () => SimTransition[]): TransitionGetter => ({
     election: election?.tag,
     dimension,
-    get: () => {
-        // adding election tag here since it's tedious to add it in election templates
-        let transitions = get();
-        get().forEach(transition =>
-            transition.electionTag = election?.tag
-        )
-        return transitions;
-    }
+    // adding election tag here since it's tedious to add it in election templates
+    get: () => get().map(t => t.setElection(election))
 });
 
 
@@ -88,38 +87,38 @@ export interface ElectionDetails {
     ratio: number;
     sourceTitle: string;
     sourceURL: string;
-    extraContext: ReactNode | undefined;
+    extraBullets?: ReactNode;
+    extraContext?: ReactNode;
     upwardMonoMovements?: VoterMovement[];
     downwardMonoMovement?: VoterMovement;
     noShowMovement?: VoterMovement;
     compromiseMovement?: VoterMovement;
     compromiseRunoffStage?: string;
-    centerBeatsRight?: boolean
+    centerBeatsRight?: boolean;
+    repealDetails?: ReactNode;
 }
 
 const allGetters = (): TransitionGetter[] => ([
-    ...elections.map(election => {
-    return [
+    ...elections.map(election => ([
         electionInfo(election),
-        ...election.dimensions
+        ...election.dimensions 
             .filter((dim:DimensionTag) => dim in dimensionTemplates)
+            .sort((a, b) => OVERVIEW_DIMENSIONS.findIndex(d => d == a) - OVERVIEW_DIMENSIONS.findIndex(d => d == b))
             .map((dim:DimensionTag) => dimensionTemplates[dim]!(election))
-    ]}
+    ])
     ).flat()
 ])
 
-export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => {
-    return [
-        new SimTransition({
-            explainer: <div className='explainerTopPadding'/>
-        }),
-        ...allGetters()
-            .filter(getter => election === undefined ? true : getter.election === election)
-            .filter(getter => getter.dimension === undefined || (dimension == 'overview' ? OVERVIEW_DIMENSIONS.includes(getter.dimension) : getter.dimension === dimension))
-            .map(getter => getter.get())
-            .flat(),
-        new SimTransition({
-            explainer: <div className='explainerBottomPadding'/>
-        }),
-    ];
-}
+export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => ([
+    new SimTransition({
+        explainer: <div className='explainerTopPadding'/>
+    }),
+    ...allGetters()
+        .filter(getter => election === undefined ? true : getter.election === election)
+        .filter(getter => getter.dimension === undefined || (dimension == 'overview' ? OVERVIEW_DIMENSIONS.includes(getter.dimension) : getter.dimension === dimension))
+        .map(getter => getter.get())
+        .flat(),
+    new SimTransition({
+        explainer: <div className='explainerBottomPadding'/>
+    }),
+]);

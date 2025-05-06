@@ -12,6 +12,7 @@ import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
 import Video from './components/Video';
 import { getTransitions } from './Transitions';
+import Burlington2009 from './content/Burlington2009';
 
 export const SimContext = createContext({});
 
@@ -31,19 +32,6 @@ export function SimContextProvider({election, children}){
         let countRadius = 14;
         let voterRadius = 28;
         let candidateRadius = 43;
-        let candidateNames = {
-            '<pick an election>': ['Begich', 'Palin', 'Peltola'], // HACK: this doesn't matter but it stops a crash
-            'alaska-special-2022': ['Begich', 'Palin', 'Peltola'],
-            'alaska-general-2022': ['Begich', 'Palin', 'Peltola'],
-            'burlington-2009': ['Montroll', 'Wright', 'Kiss'],
-            'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
-            'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
-            'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar'],
-            'alameda-2022': ['Manigo', 'Resnick', 'Hutchinson'],
-            'moab-2021': ['Wojciechowski', 'Kovash', 'Taylor'],
-            'nyc-2021': ['Wiley', 'Garcia', 'Adams'],
-            'aspen-2009': ['Johnson', 'Behrendt', 'Torre'],
-        };
 
         let ctx = {
             // embed (must be on top so that it's interactable)
@@ -78,24 +66,25 @@ export function SimContextProvider({election, children}){
             // voter ring
             pie: new Pie(candidateRadius*2),
             // candidates
-            centerCandidate: new Candidate(candidateRadius, 90, 0),
-            rightCandidate: new Candidate(candidateRadius, 330, 1),
-            leftCandidate: new Candidate(candidateRadius, 210, 2),
+            centerCandidate: new Candidate(candidateRadius, 90, 'center'),
+            rightCandidate: new Candidate(candidateRadius, 330, 'right'),
+            leftCandidate: new Candidate(candidateRadius, 210, 'left'),
             // counts
-            centerCount: new VoterCount(countRadius, 90, 0),
-            rightCount: new VoterCount(countRadius, 330, 1),
-            leftCount: new VoterCount(countRadius, 210, 2),
+            centerCount: new VoterCount(countRadius, 90, 'center'),
+            rightCount: new VoterCount(countRadius, 330, 'right'),
+            leftCount: new VoterCount(countRadius, 210, 'left'),
             // camps
             home: new VoterCamp(0, 0),
-            centerBullet: new VoterCamp(voterRadius, 90, 0, 0),
-            centerThenRight: new VoterCamp(voterRadius, 60, 0, 1),
-            rightThenCenter: new VoterCamp(voterRadius, 0, 1, 0),
-            rightBullet: new VoterCamp(voterRadius, 330, 1, 1),
-            rightThenLeft: new VoterCamp(voterRadius, 300, 1, 2),
-            leftThenRight: new VoterCamp(voterRadius, 240, 2, 1),
-            leftBullet: new VoterCamp(voterRadius, 210, 2, 2),
-            leftThenCenter: new VoterCamp(voterRadius, 180, 2, 0),
-            centerThenLeft: new VoterCamp(voterRadius, 120, 0, 2),
+            centerBullet: new VoterCamp(voterRadius, 90, 'center', 'center'),
+            centerThenRight: new VoterCamp(voterRadius, 60, 'center', 'right'),
+            rightThenCenter: new VoterCamp(voterRadius, 0, 'right', 'center'),
+            rightBullet: new VoterCamp(voterRadius, 330, 'right', 'right'),
+            rightThenLeft: new VoterCamp(voterRadius, 300, 'right', 'left'),
+            leftThenRight: new VoterCamp(voterRadius, 240, 'left', 'right'),
+            leftBullet: new VoterCamp(voterRadius, 210, 'left', 'left'),
+            leftThenCenter: new VoterCamp(voterRadius, 180, 'left', 'center'),
+            centerThenLeft: new VoterCamp(voterRadius, 120, 'center', 'left'),
+            // other
             objects: undefined as GameObject[],
         };
 
@@ -126,7 +115,7 @@ export function SimContextProvider({election, children}){
             electionName: election, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
             selectorElection: election, // params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
-            candidateNames
+            election: Burlington2009,
         };
 
         // super hacky way of fixing the bug where the candidates are fading out in the beginning

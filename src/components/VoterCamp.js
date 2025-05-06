@@ -31,7 +31,8 @@ class VoterCamp extends GameObject{
     // copied fro Pie.js
     indexToColor(simState, index){
         if(index == -1) return 'var(--pieGray)';
-        return `var(--${simState.candidateNames[simState.electionName][index].toLowerCase()})`;
+        //return ['#999999', '#666666', '#444444'][index];
+        return `var(--${simState.election.names[index].toLowerCase()})`;
     }
 
     directMembersLocked(){

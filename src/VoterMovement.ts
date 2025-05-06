@@ -17,13 +17,17 @@ export class VoterMovement {
     to: CampName;
     prevCounts: Object;
 
-    constructor(count: number, from?: CampName, to?: CampName) {
+    constructor(count: number | number[], from?: CampName, to?: CampName) {
         // to undefined means starting position
         // from undefined means anywhere
         this.count = count;
         this.from = from;
         this.to = to;
         this.prevCounts = {};
+    }
+
+    getReversed(){
+        return new VoterMovement(this.count, this.to, this.from);
     }
 
     move(n: any, from: CampName, to: CampName, simState: any, updateFinalCamp=false) {

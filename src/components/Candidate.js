@@ -46,7 +46,7 @@ class Candidate extends GameObject{
     }
 
     update(simState){
-        this.candidateName = simState.candidateNames[simState.electionName][this.candidateIndex];
+        this.candidateName = simState.election.names[this.candidateIndex];
     }
 
     win(){

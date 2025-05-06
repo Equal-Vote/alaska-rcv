@@ -16,16 +16,20 @@ export class SimTransition {
         this.explainer = explainer;
         this.runoffStage = runoffStage;
         if(runoffStage == 'undefined') this.runoffStage = undefined;
-    }
 
-    //setElectionTag(electionTag){
-    //    this.electionTag = electionTag;
-    //    // I can't pass electionName undefined without the default kicking in, so I pass it as a string
-    //    //if(visible != undefined && (!visible.includes(Candidate) || electionTag == 'undefined')) this.electionName = undefined;
-    //}
+        this.electionTag = undefined;
+        this.election = undefined;
+        this.id = Math.round(Math.random()*10000);
+    }
 
     moveVoters(simState){
         this.voterMovements.forEach(m => m.apply(simState));
+    }
+
+    setElection(election){
+        this.electionTag = election?.tag;
+        this.election = election;
+        return this;
     }
 
     apply(simState) {
@@ -34,6 +38,9 @@ export class SimTransition {
         simState.exhaustedCamp = this.exhaustedCamp;
         simState.videoStartTime = this.videoStartTime;
         simState.videoStopTime = this.videoStopTime;
+        if(this.election != undefined){
+            simState.election = this.election;
+        }
         if(this.runoffStage != undefined){
             if(simState.runoffTimeout != undefined){
                 clearTimeout(simState.runoffTimeout)

@@ -18,7 +18,7 @@ import { VoterMovement } from "./VoterMovement";
 // @ts-ignore
 import Bars from "./components/Bars";
 import { Table, TableRow } from "@mui/material";
-import { dimensionNames, DimensionTag, ElectionDetails, ElectionTag, makeTransitionGetter, TransitionGetter } from "./Transitions";
+import { dimensionNames, DimensionTag, ElectionDetails, ElectionTag, makeTransitionGetter, OVERVIEW_DIMENSIONS, TransitionGetter } from "./Transitions";
 
 export const [
     HOME,
@@ -33,33 +33,8 @@ export const [
     CENTER_THEN_LEFT
 ] = Array(10).fill(0).map((_, i) => i)
 
+
 export const ELECTION_TITLES = {
-    '<pick an election>': '<pick an election>',
-    'alaska-special-2022': 'Alaska 2022 US Representative Special Election',
-    'alaska-general-2022': 'Alaska 2022 US Representative General Election',
-    'burlington-2009': 'Burlington 2009 Mayor Election',
-    'minneapolis-2021': 'Minneapolis 2021 Ward 2 City Council Election',
-    'pierce-2008': 'Pierce County WA 2008 County Executive Election',
-    'san-francisco-2020': 'San Francisco 2020 District 7 Board of Supervisors Election',
-    'alameda-2022': 'Oakland 2022 School Director Election',
-    'moab-2021': 'Moab 2021 City Council Election',
-    'nyc-2021': 'New York City 2021 Democratic Mayor Election',
-    'aspen-2009': 'Aspen 2009 Council Election',
-}
-
-const ELECTIONS = {
-    unselected: '<pick an election>',
-    alaska_special_2022: 'alaska-special-2022',
-    alaska_general_2022: 'alaska-general-2022',
-    burlington_2009: 'burlington-2009',
-    minneapolis_2021: 'minneapolis-2021',
-    pierce_2008: 'pierce-2008',
-    san_francisco_2020: 'san-francisco-2020',
-    alameda_2022: 'alameda-2022',
-    moab_2021: 'moab-2021',
-    nyc_2021: 'nyc-2021',
-    aspen_2009: 'aspen-2009',
-
     // "Voters in alaska are organizing a campaign for repeal" I need to find the source on this
     // https://youtu.be/2aNdceVMyrM?t=162
 
@@ -90,65 +65,195 @@ const ELECTIONS = {
 
     // Google slides case studies; https://docs.google.com/presentation/d/1G40n79tcUPdVkZWr-tNXSz7q9ddbwOUw4Ev0G_jKq6I/edit#slide=id.g1e29c24f2cf_0_7
     // There's a bunch more examples there, I'll need to research them
-}
 
-//const elections = {
-//    'pierce-2008': {
-//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.compromise, FAILURE.majority, FAILURE.repeal, FAILURE.star_conversion],
-//    },
-//    'burlington-2009': {
-//        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.repeal, FAILURE.star_conversion],
-//    },
-//    'aspen-2009': {
-//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
-//    },
-//    'san-francisco-2020': {
-//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.downward_mono, FAILURE.star_conversion],
-//    },
+    'minneapolis-2021': 'Minneapolis 2021 Ward 2 City Council Election',
+            // 'minneapolis-2021': ['Gordon', 'Arab', 'Worlobah'],
 //    'minneapolis-2021': {
 //        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.majority, FAILURE.compromise, FAILURE.upward_mono, FAILURE.downward_mono, FAILURE.star_conversion],
 //    },
-//    'moab-2021': {
-//        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal, FAILURE.star_conversion],
+//    'minneapolis-2021': [0, 19, 18, 20, 35, 17, 25, 11, 29, 26],
+//...electionInfo(ELECTIONS.minneapolis_2021, 44.5,),
+//...spoiler(ELECTIONS.minneapolis_2021),
+        //...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
+            //<p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
+        //),
+        //...majorityFailure({
+            //electionTag: ELECTIONS.minneapolis_2021,
+            //winnerVoteCount: 91,
+            //bulletVoteCount: 19
+        //}),
+        //...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),        
+        //...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]), 
+        //...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
+        //...condorcetCycle(ELECTIONS.minneapolis_2021),
+        //...starConversion(ELECTIONS.minneapolis_2021),
+
+    'pierce-2008': 'Pierce County WA 2008 County Executive Election',
+            // 'pierce-2008': ['Goings', 'Bunney', 'McCarthy'],
+//    'pierce-2008': {
+//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.compromise, FAILURE.majority, FAILURE.repeal, FAILURE.star_conversion],
+//    'pierce-2008': [0, 14, 9, 19, 44, 19, 9, 14, 41, 31],
+        //...electionInfo(ELECTIONS.pierce_2008, 1441.6),
+//...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
+        //...majorityFailure({
+            //electionTag: ELECTIONS.pierce_2008,
+            //winnerVoteCount: 95,
+            //bulletVoteCount: 14
+        //}),
+        //...condorcetSuccess(ELECTIONS.pierce_2008),
+        //...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
+            //<p>Despite picking this correct winner, the Lesser-Evil Failure is still concerning because it shows that the result isn't stable,
+                //and could potentially be vulnerable to strategic voting.</p>
+        //),
+        //...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
+            //<p>RCV was only used for one election cycle, here's a quote from Elections Direcector Nick Handy:</p>
+            //<p><i>"Just three years ago, Pierce County voters enthusiastically embraced this new idea as a replacement for the then highly unpopular Pick-a-Party primary.”   Pierce County did a terrific job implementing ranked choice voting, but voters flat out did not like it.
+                //The rapid rejection of this election model that has been popular in San Francisco, but few other places, was expected, but no one really anticipated how fast the cradle to grave cycle would run.  The voters wanted it. The voters got and tried it.  The voters did not like it.
+                //And the voters emphatically rejected it.  All in a very quick three years."</i> <a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
+        //</>),
+        //...starConversion(ELECTIONS.pierce_2008),
+
+    'san-francisco-2020': 'San Francisco 2020 District 7 Board of Supervisors Election',
+            // 'san-francisco-2020': ['Nguyen', 'Engardio', 'Melgar'],
+//    'san-francisco-2020': {
+//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.downward_mono, FAILURE.star_conversion],
 //    },
-//    'nyc-2021': {
-//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation, FAILURE.star_conversion],
-//    },
+//    'san-francisco-2020': [0, 9, 12, 18, 31, 29, 22, 10, 31, 38],
+        //...electionInfo(ELECTIONS.san_francisco_2020,
+            //178.1),
+//...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
+        //...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
+            //<p>(It shows as a tie here because they only won by a fraction of a vote).</p>
+        //),
+        //...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
+        //...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
+            //<p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,
+                //and could potentially be vulnerable to strategic voting.</p>
+        //),
+        //...starConversion(ELECTIONS.san_francisco_2020),
+
+    'alameda-2022': 'Oakland 2022 School Director Election',
+            // 'alameda-2022': ['Manigo', 'Resnick', 'Hutchinson'],
 //    'alameda-2022': {
 //        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.cycle, FAILURE.tally, FAILURE.majority, FAILURE.downward_mono, FAILURE.upward_mono, FAILURE.compromise, FAILURE.star_conversion],
 //    },
-//    'alaska-special-2022': {
-//        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono, FAILURE.compromise, FAILURE.no_show, FAILURE.star_conversion, FAILURE.rank_the_red],
-//    },
-//    'alaska-general-2022': {
-//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.star_conversion],
-//    },
-//};
-
-//export const campCounts = {
-//    'pierce-2008': [0, 14, 9, 19, 44, 19, 9, 14, 41, 31],
-//    'burlington-2009': [0, 10, 18, 34, 29, 11, 9, 13, 46, 30],
-//    'aspen-2009': [0, 11, 19, 15, 22, 37, 24, 19, 23, 30],
-//    'san-francisco-2020': [0, 9, 12, 18, 31, 29, 22, 10, 31, 38],
-//    'minneapolis-2021': [0, 19, 18, 20, 35, 17, 25, 11, 29, 26],
-//    'moab-2021': [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
-//    'nyc-2021': [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
 //    'alameda-2022': [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
-//    'alaska-special-2022': [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
-//    'alaska-general-2022': [0, 11, 33, 32, 17, 3, 6, 50, 42, 6],
-//};
+//...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
+            //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
+        //</>),
+        //...spoiler(ELECTIONS.alameda_2022),
+        //...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
+            //<p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
+        //</>),
+        //...majorityFailure({
+            //electionTag: ELECTIONS.alameda_2022,
+            //winnerVoteCount: 95,
+            //bulletVoteCount: 14
+        //}),
+        //...alamedaTallyError(),
+        //...downwardMonotonicity(ELECTIONS.alameda_2022, new VoterMovement(1, 'rightThenCenter', 'centerThenRight')),
+        //...upwardMonotonicity(ELECTIONS.alameda_2022, [new VoterMovement(16, 'rightThenLeft', 'leftThenRight')]),
+        //...compromise(ELECTIONS.alameda_2022, new VoterMovement(13, 'rightThenCenter', 'centerThenRight')),
+        //...electionNote(ELECTIONS.alameda_2022, FAILURE.cycle,
+            //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
+        //),
+        //...condorcetCycle(ELECTIONS.alameda_2022),
+        //...starConversion(ELECTIONS.alameda_2022),
 
-const dimensionInfo = (dimensionTag: DimensionTag, content: any) => {
+    'moab-2021': 'Moab 2021 City Council Election',
+            // 'moab-2021': ['Wojciechowski', 'Kovash', 'Taylor'],
+//    'moab-2021': {
+//        'failures': [FAILURE.unselected, FAILURE.spoiler, FAILURE.condorcet, FAILURE.majority, FAILURE.upward_mono,  FAILURE.no_show, FAILURE.repeal, FAILURE.star_conversion],
+//    },
+//    'moab-2021': [0, 3, 41, 50, 1, 4, 13, 38, 41, 10],
+//...electionInfo(ELECTIONS.moab_2021, 8.7,
+            //'Analysis of the 2021 Instant Run-Off Elections in Utah',
+            //'https://vixra.org/abs/2208.0166',
+            //<li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
+                //The first round failed to elect the Condorcet Winner, but they were still elected in the second round so the error didn't have any impact
+            //</li>
+        //),
+//...condorcet(ELECTIONS.moab_2021),
+        //...spoiler(ELECTIONS.moab_2021),
+        //...upwardMonotonicity(ELECTIONS.moab_2021, [
+            //new VoterMovement(3, 'rightThenLeft', 'leftThenRight')
+        //]),
+        //...noShow(ELECTIONS.moab_2021, new VoterMovement(3, 'rightThenCenter', 'home')),
+        //...electionNote(ELECTIONS.moab_2021, FAILURE.repeal,
+            //<p>Moab used RCV under Utah's pilot program for testing the system. In 2021, 23 cities signed up, but then only 12 of those cities stayed, and moab was one of the ones that opted
+                //out <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a> <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
+            //</p>
+        //),
+        //...starConversion(ELECTIONS.moab_2021),
+
+    'nyc-2021': 'New York City 2021 Democratic Mayor Election',
+            // 'nyc-2021': ['Wiley', 'Garcia', 'Adams'],
+//    'nyc-2021': {
+//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.tally, FAILURE.majority, FAILURE.bullet_allocation, FAILURE.star_conversion],
+//    },
+//    'nyc-2021': [0, 17, 30, 24, 19, 18, 21, 35, 25, 11],
+//...electionInfo(ELECTIONS.nyc_2021, 
+            //4355.9,
+            //'Harvard Data Verse',
+            //'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
+        //),
+//...majorityFailure({
+            //electionTag: ELECTIONS.nyc_2021,
+            //winnerVoteCount: 92,
+            //bulletVoteCount: 17
+        //}),
+        //...condorcetSuccess(ELECTIONS.nyc_2021),
+        //...nycTallyError(ELECTIONS.nyc_2021),
+        //...nycBulletAllocation(ELECTIONS.nyc_2021),
+        //...starConversion(ELECTIONS.nyc_2021),
+
+    'aspen-2009': 'Aspen 2009 Council Election',
+            // 'aspen-2009': ['Johnson', 'Behrendt', 'Torre'],
+//    'aspen-2009': {
+//        'failures': [FAILURE.unselected, FAILURE.condorcet_success, FAILURE.majority, FAILURE.downward_mono, FAILURE.repeal, FAILURE.star_conversion],
+//    },
+//    'aspen-2009': [0, 11, 19, 15, 22, 37, 24, 19, 23, 30],
+        //...electionInfo(ELECTIONS.alameda_2022, 132.1,
+            //'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
+            //'https://arxiv.org/abs/2303.05985',
+        //),
+        //...electionInfo(ELECTIONS.aspen_2009, 11.1,
+            //'RangeVoting.org',
+            //'https://rangevoting.org/Aspen09.html ',
+            //<>
+                //<li>Dataset: <a href='https://www.preflib.org/dataset/00016'>Preflib</a></li>
+                //<li>NOTE: This was a 2 seat election using a heavily modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
+                    //The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the Monotonicity occured when determining the second seat.
+                    //The computation for the second seat is identical to standard IRV.
+                //</li>
+            //</>
+        //),
+        //...condorcetSuccess(ELECTIONS.aspen_2009, false),
+        //...majorityFailure({
+            //electionTag: ELECTIONS.aspen_2009,
+            //winnerVoteCount: 96,
+            //bulletVoteCount: 11
+        //}),
+        //...downwardMonotonicity(ELECTIONS.aspen_2009, new VoterMovement(7, 'rightBullet', 'centerBullet')),
+        //...electionNote(ELECTIONS.aspen_2009, FAILURE.repeal,
+            //<p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, <a href='https://rangevoting.org/Aspen09.html'>view details</a></p>
+        //),
+        //...starConversion(ELECTIONS.aspen_2009),
+}
+
+const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, content: any) => {
     let intro = [new SimTransition({
         explainer: <div style={{position: 'relative'}}>
             <div id={dimensionTag} style={{position: 'absolute', top: '-30vh'}}/>
             <a href='#toc'>️↑back to top️↑</a>
             <hr/>
+            <h1>{dimensionNames[dimensionTag]}</h1>
             {content}
         </div>,
         electionName: 'undefined',
         visible: 'undefined',
         runoffStage: 'firstRound',
+        voterMovements: [ new VoterMovement(election.camps) ] 
     })];
 
     //let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
@@ -168,36 +273,32 @@ const dimensionInfo = (dimensionTag: DimensionTag, content: any) => {
     return intro;
 }
 
-export const electionInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => {
-    let intro = [new SimTransition({
-        explainer: <p>{election.title}<ul>
-            <li>1 voter = {election.ratio} real voters</li>
-            <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
-            {election.extraContext}
-        </ul></p>,
+export const electionInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => ([
+    new SimTransition({
+        explainer: <>
+        <h1>{election.title}</h1>
+        <p>
+            <ul>
+                <li>1 voter = {election.ratio} real voters</li>
+                <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
+                {election?.extraBullets}
+            </ul>
+        </p>
+        {election?.extraContext}
+        {election.dimensions.length > 1 && <div style={{position: 'relative'}}>
+            <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
+            <p>This election had the following scenarios : 
+            <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
+            </p>
+        </div>}
+        </>,
         electionName: election.tag,
         visible: [Candidate, Voter, VoterCamp, Pie],
         runoffStage: 'firstRound',
         // @ts-ignore
         voterMovements: [ new VoterMovement(election.camps) ] 
-    })];
-
-    if(election.dimensions.length > 1){
-        intro.push(new SimTransition({
-            explainer: <div style={{position: 'relative'}}>
-                <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
-                <p>This election had the following scenarios : 
-                <ul>{election.dimensions.map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
-                Pick from the drop down above for more details</p>
-            </div>,
-            electionName: election.tag,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'firstRound',
-        }));
-    }
-
-    return intro;
-}))
+    })
+])));
 
 export type TransitionGetterGen = ((election: ElectionDetails) => TransitionGetter)
 type GetterMap = Partial<{
@@ -205,7 +306,7 @@ type GetterMap = Partial<{
 }>
 export const dimensionTemplates: GetterMap = {
     'spoiler': (election: ElectionDetails) => makeTransitionGetter(election, 'spoiler', () => ([
-        ...dimensionInfo('spoiler', <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
+        ...dimensionInfo(election, 'spoiler', <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
         new SimTransition({
             explainer: <>
                 <p>If the election was between {election.names.left} and {election.names.center} then {election.names.center} would have won</p>
@@ -230,7 +331,7 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'upward_mono': (election: ElectionDetails) => makeTransitionGetter(election, 'upward_mono', () => ([
-        ...dimensionInfo('upward_mono', <p>Upward Monotonicity Pathology<br/>
+        ...dimensionInfo(election, 'upward_mono', <p>Upward Monotonicity Pathology<br/>
         <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -260,10 +361,19 @@ export const dimensionTemplates: GetterMap = {
                 <p>Then {election.names.left} would have lost to {election.names.center} in the runoff.</p>
             </>,
             runoffStage: 'center_vs_left'
-        })
+        }),
+        new SimTransition({
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            explainer: <>
+                <p>(reset)</p>
+            </>,
+            runoffStage: 'center_vs_left',
+            voterMovements: election.upwardMonoMovements?.map(v => v.getReversed()) ?? []
+        }),
+
     ])),
     'condorcet': (election: ElectionDetails) => makeTransitionGetter(election, 'condorcet', () => ([
-        ...dimensionInfo('condorcet', <>
+        ...dimensionInfo(election, 'condorcet', <>
             <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
             <p>Condorcet Failure<br/><i>A scenario where the voting method doesn't elect the candidate who was preferred over all others.</i></p>
             <p>Condorcet Failures are especially problematic for ranked methods like RCV that only look at voter preferences.
@@ -302,14 +412,10 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'condorcet_success': (election: ElectionDetails) => makeTransitionGetter(election, 'condorcet_success', () => ([
-        new SimTransition({
-            explainer: <>
-                <p>For this election RCV did successfully elect the Condorcet Winner.</p>
-                <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-            </>,
-            visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'firstRound',
-        }),
+        ...dimensionInfo(election, 'condorcet_success', <>
+            <p>For this election RCV did successfully elect the Condorcet Winner.</p>
+            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -341,7 +447,7 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'cycle': (election: ElectionDetails) => makeTransitionGetter(election, 'cycle', () => ([
-        ...dimensionInfo('cycle', <>
+        ...dimensionInfo(election, 'cycle', <>
             <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
             <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
             <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list).
@@ -383,7 +489,7 @@ export const dimensionTemplates: GetterMap = {
             election.camps[LEFT_THEN_CENTER] +
             election.camps[CENTER_THEN_LEFT];
         return [
-            ...dimensionInfo('majority', <>
+            ...dimensionInfo(election, 'majority', <>
                 <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
                 <p>
                     Majoritarian Failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
@@ -410,7 +516,7 @@ export const dimensionTemplates: GetterMap = {
         ]
     }),
     'downward_mono': (election: ElectionDetails) => makeTransitionGetter(election, 'downward_mono', () => ([
-        ...dimensionInfo('downward_mono', <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
+        ...dimensionInfo(election, 'downward_mono', <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -442,7 +548,7 @@ export const dimensionTemplates: GetterMap = {
         })
     ])),
     'no_show': (election: ElectionDetails) => makeTransitionGetter(election, 'no_show', () => ([
-        ...dimensionInfo('no_show', <>
+        ...dimensionInfo(election, 'no_show', <>
             <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
         </>),
         new SimTransition({
@@ -476,7 +582,7 @@ export const dimensionTemplates: GetterMap = {
         })
     ])),
     'compromise': (election: ElectionDetails) => makeTransitionGetter(election, 'compromise', () => ([
-        ...dimensionInfo('compromise', <>
+        ...dimensionInfo(election, 'compromise', <>
             <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
                 elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
             <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite.</p>
@@ -697,10 +803,19 @@ export const dimensionTemplates: GetterMap = {
             }),
         ]
     }),
+    'repeal': (election: ElectionDetails) => makeTransitionGetter(election, 'repeal', () => ([
+        ...dimensionInfo(election, 'repeal', <>
+            <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>
+        </>),
+        new SimTransition({
+            explainer: election.repealDetails,
+            runoffstage: 'undefined',
+            visible: 'undefined',
+        })
+    ]))
 }
         
 //...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
-//...failureInfo(FAILURE.repeal, <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>),
 
 //const bulletVoteDefinition = (def) => {
 //    return new SimTransition({
@@ -721,203 +836,14 @@ export const dimensionTemplates: GetterMap = {
 
 //const electionNote = (electionTag, failureTag, explainer) => {
 //    // this doesn't need to be an array, but I figured this will keep the functions more consistent
-//    return [new SimTransition({
-//        electionName: electionTag,
-//        electionTag: electionTag,
-//        failureTag: failureTag,
+//    return [new simtransition({
+//        electionname: electiontag,
+//        electiontag: electiontag,
+//        failuretag: failuretag,
 //        explainer: explainer,
-//        runoffStage: 'undefined',
+//        runoffstage: 'undefined',
 //        visible: 'undefined',
 //    })]
 //}
 //
 
-//    return [
-        //selectorTransition(),
-        //// Election Info
-        //...electionInfo(ELECTIONS.alaska_special_2022, 942.9,
-            //'A Mathematical Analysis of the 2022 Alaska Special Election for US House',
-            //'https://arxiv.org/abs/2209.04764'
-        //),
-        //...electionInfo(ELECTIONS.alaska_general_2022,
-            //1318.4,
-            //'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',
-            //'https://arxiv.org/abs/2303.00108',
-        //),
-        //...electionInfo(ELECTIONS.nyc_2021, 
-            //4355.9,
-            //'Harvard Data Verse',
-            //'https://dataverse.harvard.edu/file.xhtml?fileId=6707224&version=7.0'
-        //),
-        //...electionInfo(ELECTIONS.burlington_2009, 44.1),
-        //...electionInfo(ELECTIONS.minneapolis_2021, 44.5,),
-        //...electionInfo(ELECTIONS.moab_2021, 8.7,
-            //'Analysis of the 2021 Instant Run-Off Elections in Utah',
-            //'https://vixra.org/abs/2208.0166',
-            //<li>Moab was actually a multi winner election where they ran RCV multiple times to pick the winners.
-                //The first round failed to elect the Condorcet Winner, but they were still elected in the second round so the error didn't have any impact
-            //</li>
-        //),
-        //...electionInfo(ELECTIONS.alameda_2022, 132.1,
-            //'Ranked Choice Bedlam in a 2022 Oakland School Director Election',
-            //'https://arxiv.org/abs/2303.05985',
-        //),
-        //...electionInfo(ELECTIONS.pierce_2008, 1441.6),
-        //...electionInfo(ELECTIONS.san_francisco_2020,
-            //178.1),
-        //...electionInfo(ELECTIONS.aspen_2009, 11.1,
-            //'RangeVoting.org',
-            //'https://rangevoting.org/Aspen09.html ',
-            //<>
-                //<li>Dataset: <a href='https://www.preflib.org/dataset/00016'>Preflib</a></li>
-                //<li>NOTE: This was a 2 seat election using a heavily modified version of STV (it's misleading to even call it STV, read the details <a href='https://rangevoting.org/cc.ord.003-09sec.pdf'>here</a>).
-                    //The first seat was given to Derek Johnson (not to be confused with Jack Johnson), and the Monotonicity occured when determining the second seat.
-                    //The computation for the second seat is identical to standard IRV.
-                //</li>
-            //</>
-        //),
-
-        //// Failure Info
-        
-
-        //// Aspen
-        //...condorcetSuccess(ELECTIONS.aspen_2009, false),
-        //...majorityFailure({
-            //electionTag: ELECTIONS.aspen_2009,
-            //winnerVoteCount: 96,
-            //bulletVoteCount: 11
-        //}),
-        //...downwardMonotonicity(ELECTIONS.aspen_2009, new VoterMovement(7, 'rightBullet', 'centerBullet')),
-        //...electionNote(ELECTIONS.aspen_2009, FAILURE.repeal,
-            //<p> Aspen did not enjoy their experience with IRV and repealed it shortly after this election, <a href='https://rangevoting.org/Aspen09.html'>view details</a></p>
-        //),
-        //...starConversion(ELECTIONS.aspen_2009),
-
-        //// Alaska Special Election
-        //...condorcet(ELECTIONS.alaska_special_2022),
-        //...spoiler(ELECTIONS.alaska_special_2022),
-        //...majorityFailure({
-            //electionTag: ELECTIONS.alaska_special_2022,
-            //winnerVoteCount: 96,
-            //bulletVoteCount: 12
-        //}),
-        //...upwardMonotonicity(ELECTIONS.alaska_special_2022, [new VoterMovement(7, 'rightBullet', 'leftBullet')]),
-        //...compromise(ELECTIONS.alaska_special_2022, new VoterMovement(6, 'rightThenCenter', 'centerThenRight')),
-        //...noShow(ELECTIONS.alaska_special_2022, new VoterMovement(7, 'rightThenCenter', 'home')),
-        //...starConversion(ELECTIONS.alaska_special_2022),
-        //...alaskaRankTheRed(),
-
-        //// Alaska General
-        //...condorcetSuccess(ELECTIONS.alaska_general_2022),
-        //...electionNote(ELECTIONS.alaska_general_2022, FAILURE.condorcet_success, <>
-            //<p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed.</p>
-            //<p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case.</p>
-            //<p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time.</p>
-            //<p>There are 2 primary explanations for this <ul>
-                //<li>The general election had much more voters, and voters in general elections tend to be more left leaning.</li>
-                //<li>Sarah Palin had the most name recognition going into the special election, and this likely created an electability bias in her favor.
-                    //Going into the general Peltola was the incumbant, so this shifted the electability bias to her. This implies that one unrepresentative
-                    //outcome can create a domino effect and give the that candidate an edge in future elections.
-                //</li>
-            //</ul></p>
-        //</>),
-        //...starConversion(ELECTIONS.alaska_general_2022),
-
-        //// NYC
-        //...majorityFailure({
-            //electionTag: ELECTIONS.nyc_2021,
-            //winnerVoteCount: 92,
-            //bulletVoteCount: 17
-        //}),
-        //...condorcetSuccess(ELECTIONS.nyc_2021),
-        //...nycTallyError(ELECTIONS.nyc_2021),
-        //...nycBulletAllocation(ELECTIONS.nyc_2021),
-        //...starConversion(ELECTIONS.nyc_2021),
-
-        //// Burlington
-
-        //// Minneapolis
-        //...spoiler(ELECTIONS.minneapolis_2021),
-        //...electionNote(ELECTIONS.minneapolis_2021, FAILURE.spoiler,
-            //<p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
-        //),
-        //...majorityFailure({
-            //electionTag: ELECTIONS.minneapolis_2021,
-            //winnerVoteCount: 91,
-            //bulletVoteCount: 19
-        //}),
-        //...compromise(ELECTIONS.minneapolis_2021, new VoterMovement(8, 'rightThenCenter', 'centerThenRight')),        
-        //...upwardMonotonicity(ELECTIONS.minneapolis_2021, [new VoterMovement(11, 'rightThenLeft', 'leftThenRight')]), 
-        //...downwardMonotonicity(ELECTIONS.minneapolis_2021, new VoterMovement(2, 'rightThenCenter', 'centerThenRight')),
-        //...condorcetCycle(ELECTIONS.minneapolis_2021),
-        //...starConversion(ELECTIONS.minneapolis_2021),
-
-        //// Moab
-        //...condorcet(ELECTIONS.moab_2021),
-        //...spoiler(ELECTIONS.moab_2021),
-        //...upwardMonotonicity(ELECTIONS.moab_2021, [
-            //new VoterMovement(3, 'rightThenLeft', 'leftThenRight')
-        //]),
-        //...noShow(ELECTIONS.moab_2021, new VoterMovement(3, 'rightThenCenter', 'home')),
-        //...electionNote(ELECTIONS.moab_2021, FAILURE.repeal,
-            //<p>Moab used RCV under Utah's pilot program for testing the system. In 2021, 23 cities signed up, but then only 12 of those cities stayed, and moab was one of the ones that opted
-                //out <a href="https://www.moabtimes.com/articles/city-returns-to-traditional-election-method/">source1</a> <a href="https://kslnewsradio.com/2003994/draper-city-bows-out-of-ranked-choice-voting-as-pilot-program-proceeds/">source2</a>
-            //</p>
-        //),
-        //...starConversion(ELECTIONS.moab_2021),
-
-        //// Alameda
-        //...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
-            //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
-        //</>),
-        //...spoiler(ELECTIONS.alameda_2022),
-        //...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
-            //<p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>
-        //</>),
-        //...majorityFailure({
-            //electionTag: ELECTIONS.alameda_2022,
-            //winnerVoteCount: 95,
-            //bulletVoteCount: 14
-        //}),
-        //...alamedaTallyError(),
-        //...downwardMonotonicity(ELECTIONS.alameda_2022, new VoterMovement(1, 'rightThenCenter', 'centerThenRight')),
-        //...upwardMonotonicity(ELECTIONS.alameda_2022, [new VoterMovement(16, 'rightThenLeft', 'leftThenRight')]),
-        //...compromise(ELECTIONS.alameda_2022, new VoterMovement(13, 'rightThenCenter', 'centerThenRight')),
-        //...electionNote(ELECTIONS.alameda_2022, FAILURE.cycle,
-            //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
-        //),
-        //...condorcetCycle(ELECTIONS.alameda_2022),
-        //...starConversion(ELECTIONS.alameda_2022),
-
-        //// Pierce
-        //...compromise(ELECTIONS.pierce_2008, new VoterMovement(11, 'rightThenCenter', 'centerThenRight'), 'center_vs_right'),
-        //...majorityFailure({
-            //electionTag: ELECTIONS.pierce_2008,
-            //winnerVoteCount: 95,
-            //bulletVoteCount: 14
-        //}),
-        //...condorcetSuccess(ELECTIONS.pierce_2008),
-        //...electionNote(ELECTIONS.pierce_2008, FAILURE.unselected,
-            //<p>Despite picking this correct winner, the Lesser-Evil Failure is still concerning because it shows that the result isn't stable,
-                //and could potentially be vulnerable to strategic voting.</p>
-        //),
-        //...electionNote(ELECTIONS.pierce_2008, FAILURE.repeal, <>
-            //<p>RCV was only used for one election cycle, here's a quote from Elections Direcector Nick Handy:</p>
-            //<p><i>"Just three years ago, Pierce County voters enthusiastically embraced this new idea as a replacement for the then highly unpopular Pick-a-Party primary.”   Pierce County did a terrific job implementing ranked choice voting, but voters flat out did not like it.
-                //The rapid rejection of this election model that has been popular in San Francisco, but few other places, was expected, but no one really anticipated how fast the cradle to grave cycle would run.  The voters wanted it. The voters got and tried it.  The voters did not like it.
-                //And the voters emphatically rejected it.  All in a very quick three years."</i> <a href="https://blogs.sos.wa.gov/FromOurCorner/index.php/2009/11/pierce-voters-nix-ranked-choice-voting/">source</a></p>
-        //</>),
-        //...starConversion(ELECTIONS.pierce_2008),
-
-        //// San Francisco
-        //...downwardMonotonicity(ELECTIONS.san_francisco_2020, new VoterMovement(5, 'rightThenCenter', 'centerThenRight')),
-        //...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
-            //<p>(It shows as a tie here because they only won by a fraction of a vote).</p>
-        //),
-        //...condorcetSuccess(ELECTIONS.san_francisco_2020, false),
-        //...electionNote(ELECTIONS.san_francisco_2020, FAILURE.unselected,
-            //<p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,
-                //and could potentially be vulnerable to strategic voting.</p>
-        //),
-        //...starConversion(ELECTIONS.san_francisco_2020),
-    //]

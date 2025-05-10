@@ -22,7 +22,7 @@ export default {
         'compromise',
         'majority',
         'repeal',
-        'star_conversion',
+        'star-conversion',
     ],
     compromiseMovement: new VoterMovement(11, 'rightThenCenter', 'centerThenRight'),
     compromiseRunoffStage: 'center_vs_right',

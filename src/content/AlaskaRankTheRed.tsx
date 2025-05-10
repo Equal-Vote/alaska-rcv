@@ -2,7 +2,7 @@
 //    let def = {
 //        electionName: ELECTIONS.alaska_special_2022,
 //        electionTag: ELECTIONS.alaska_special_2022,
-//        failureTag: FAILURE.rank_the_red,
+//        failureTag: FAILURE.rank-the-red,
 //    }
 //    const [election.names.center, election.names.right, election.names.left] = simState.candidateNames[def.electionTag];
 //

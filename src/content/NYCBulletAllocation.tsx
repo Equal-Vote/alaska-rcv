@@ -2,7 +2,7 @@
 //    let def = {
 //        electionName: ELECTIONS.nyc_2021,
 //        electionTag: ELECTIONS.nyc_2021,
-//        failureTag: FAILURE.bullet_allocation,
+//        failureTag: FAILURE.bullet-allocation,
 //    }
 //    const [election.names.center, election.names.right, election.names.left] = simState.candidateNames[def.electionTag];
 //

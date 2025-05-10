@@ -18,8 +18,8 @@ export default {
         'condorcet_success',
         'tally',
         'majority',
-        'bullet_allocation',
-        'star_conversion',
+        'bullet-allocation',
+        'star-conversion',
     ],
     centerBeatsRight: true,
 } satisfies ElectionDetails;

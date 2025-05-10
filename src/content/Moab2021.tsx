@@ -21,10 +21,10 @@ export default {
         'spoiler',
         'condorcet',
         'majority',
-        'upward_mono', 
-        'no_show',
+        'upward-mono', 
+        'no-show',
         'repeal',
-        'star_conversion'
+        'star-conversion'
     ],
     upwardMonoMovements: [new VoterMovement(3, 'rightThenLeft', 'leftThenRight')],
     noShowMovement: new VoterMovement(3, 'rightThenCenter', 'home'),

@@ -26,7 +26,7 @@ export default {
     },
     dimensions: [
         'condorcet_success',
-        'star_conversion',
+        'star-conversion',
     ],
     centerBeatsRight: true,
 } satisfies ElectionDetails;

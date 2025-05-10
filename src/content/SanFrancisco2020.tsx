@@ -1,7 +1,7 @@
 import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 
-//...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward_mono,
+//...electionNote(ELECTIONS.san_francisco_2020, FAILURE.downward-mono,
     //<p>(It shows as a tie here because they only won by a fraction of a vote).</p>
 //),
 export default {
@@ -17,8 +17,8 @@ export default {
     },
     dimensions: [
         'condorcet_success',
-        'downward_mono',
-        'star_conversion'
+        'downward-mono',
+        'star-conversion'
     ],
     camps: [0, 9, 12, 18, 31, 29, 22, 10, 31, 38],
     ratio: 178.1,

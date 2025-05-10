@@ -23,9 +23,9 @@ export default {
     dimensions: [
         'condorcet_success',
         'majority',
-        'downward_mono',
+        'downward-mono',
         'repeal',
-        'star_conversion'
+        'star-conversion'
     ],
     centerBeatsRight: false,
     downwardMonoMovement: new VoterMovement(7, 'rightBullet', 'centerBullet'),

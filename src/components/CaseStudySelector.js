@@ -21,7 +21,7 @@ export default () => {
                 {featuredItem && <fieldset style={
                     {width: '600px', margin: 'auto', marginBottom: '80px', border: '3px solid white', borderRadius: '5px'}
                 }>
-                    <legend>Start Here</legend>
+                    <legend style={{fontSize: '1.2rem'}}>Start Here</legend>
                     <li style={{listStyleType: 'none'}}>
                         <a href={`/${featuredItem}`}><Box display='flex' flexDirection='row' gap={2} alignItems='center' sx={{maxWidth: '800px'}}>
                             {getIcon(featuredItem)}
@@ -60,9 +60,9 @@ export default () => {
             'cycle', 
             'spoiler',
             'majority',
-            'upward_mono',
-            'downward_mono',
-            'no_show',
+            'upward-mono',
+            'downward-mono',
+            'no-show',
             'compromise',
             'repeal',
         ]} mapper={(key) => dimensionNames[key]}/>

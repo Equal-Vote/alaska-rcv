@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
-import { dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
+import { DimensionButtons, dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
 import { VoterMovement } from "./VoterMovement";
 import AlaskaGeneral2022 from "./content/AlaskaGeneral2022";
 import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
@@ -13,6 +13,7 @@ import NYC2021 from "./content/NYC2021";
 import Oakland2022 from "./content/Oakland2022";
 import Pierce2008 from "./content/Pierce2008";
 import SanFrancisco2020 from "./content/SanFrancisco2020";
+import { Box } from "@mui/material";
 
 export const elections: ElectionDetails[] = [
     AlaskaGeneral2022,
@@ -46,15 +47,16 @@ export const dimensionNames = {
     'spoiler': 'Spoiler Effect',
     'cycle': 'Condorcet Cycle',
     'majority': 'Majoritarian Failure',
-    'upward_mono': 'Upward Monotonicity Pathology',
-    'downward_mono': 'Downward Monotonicity Pathology',
-    'no_show': 'No Show Failure',
+    'upward-mono': 'Upward Monotonicity Pathology',
+    'downward-mono': 'Downward Monotonicity Pathology',
+    'no-show': 'No Show Failure',
     'compromise': 'Lesser-Evil Failure',
     'tally': 'Tally Error',
     'repeal': 'Repealed',
-    'bullet_allocation': 'Bullet Vote Allocation',
-    'rank_the_red': 'Rank all Republicans?',
-    'star_conversion': 'STAR Conversion',
+    'bullet-allocation': 'Bullet Vote Allocation',
+    'rank-the-red': 'What if Republican voters ranked all Republicans?',
+    'star-conversion': 'What if we used STAR Voting?',
+    'deep-dive': '🔍The Full Story🔍',
 } as const;
 
 export type DimensionTag = keyof typeof dimensionNames;
@@ -65,9 +67,9 @@ export const OVERVIEW_DIMENSIONS: DimensionTag[] = [
     'spoiler',
     'cycle',
     'majority',
-    'upward_mono',
-    'downward_mono',
-    'no_show',
+    'upward-mono',
+    'downward-mono',
+    'no-show',
     'compromise',
     'repeal',
 ];
@@ -93,6 +95,7 @@ export interface ElectionDetails {
         right: string
     };
     dimensions: DimensionTag[];
+    customArticles?: Partial<Record<DimensionTag, () => SimTransition[]>>;
     camps: [
         number, number, number, number, number,
         number, number, number, number, number
@@ -115,9 +118,17 @@ const allGetters = (): TransitionGetter[] => ([
     ...elections.map(election => ([
         electionInfo(election),
         ...election.dimensions 
-            .filter((dim:DimensionTag) => dim in dimensionTemplates)
-            .sort((a, b) => OVERVIEW_DIMENSIONS.findIndex(d => d == a) - OVERVIEW_DIMENSIONS.findIndex(d => d == b))
-            .map((dim:DimensionTag) => dimensionTemplates[dim]!(election))
+            .filter((dim:DimensionTag) => dim in dimensionTemplates && !(dim in (election?.customArticles ?? {})))
+            .sort((a, b) => {
+                const evalItem = (item: DimensionTag) => {
+                    if(item == 'overview') return -2;
+                    if(item in OVERVIEW_DIMENSIONS) return OVERVIEW_DIMENSIONS.findIndex(d => d == item);
+                    return -1;
+                }
+                return evalItem(a) - evalItem(a);
+            })
+            .map((dim:DimensionTag) => dimensionTemplates[dim]!(election)),
+        ...Object.entries(election?.customArticles ?? {}).map(([k, v]) => makeTransitionGetter(election, k as DimensionTag, v)),
     ])
     ).flat()
 ])
@@ -131,6 +142,19 @@ export const getTransitions = ({electionTag=undefined, dimension='overview'}: {e
         .filter(getter => getter.dimension === undefined || (dimension == 'overview' ? OVERVIEW_DIMENSIONS.includes(getter.dimension) : getter.dimension === dimension))
         .map(getter => getter.get())
         .flat(),
+    new SimTransition({
+        explainer: <Box>
+            <a href='#toc'>️↑back to top️↑</a>
+            <hr/>
+            <p>Read more about this election:</p>
+            {electionTag &&
+                <DimensionButtons
+                    election={elections.filter(e => e.tag == electionTag)[0]}
+                    excludeSelected
+                />
+            }
+        </Box>
+    }),
     new SimTransition({
         explainer: <div className='explainerBottomPadding'/>
     }),

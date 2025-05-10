@@ -11,12 +11,13 @@ import VoterCount from './components/VoterCount';
 import DarkenLayer from './components/DarkenLayer';
 import VideoEmbed from './components/VideoEmbed';
 import Video from './components/Video';
-import { getTransitions, elections } from './Transitions';
+import { getTransitions, elections, ElectionDetails, DimensionTag } from './Transitions';
 import Burlington2009 from './content/Burlington2009';
+import { getPrimaryDimension } from './TransitionTemplates';
 
 export const SimContext = createContext({});
 
-export function SimContextProvider({election, children}){
+export function SimContextProvider({election, children}: {election: ElectionDetails, children: ReactNode[]}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
     let isMobile = (window.innerWidth < 900);
     const campMappings = (isMobile)?
@@ -129,7 +130,7 @@ export function SimContextProvider({election, children}){
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({electionTag: election.tag})
+        ctx.transitions = getTransitions({electionTag: election.tag, dimension: getPrimaryDimension()})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);

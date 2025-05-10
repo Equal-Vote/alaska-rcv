@@ -15,9 +15,9 @@ export default {
         'cycle',
         'majority',
         'compromise',
-        'upward_mono',
-        'downward_mono',
-        'star_conversion'
+        'upward-mono',
+        'downward-mono',
+        'star-conversion'
     ],
     camps: [0, 19, 18, 20, 35, 17, 25, 11, 29, 26],
     ratio: 44.5,

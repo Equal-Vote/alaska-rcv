@@ -1,7 +1,3 @@
-// Added no checks since the following line was being annoying
-// visible: [Candidate, Voter, VoterCamp, Pie],
-// I don't know how to fix it without updating SimTransition to typescript
-
 import { Fragment, useState } from "react";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
@@ -17,7 +13,7 @@ import Pie from "./components/Pie";
 import { VoterMovement } from "./VoterMovement";
 // @ts-ignore
 import Bars from "./components/Bars";
-import { Table, TableRow } from "@mui/material";
+import { Box, Button, Table, TableRow } from "@mui/material";
 import { dimensionNames, DimensionTag, ElectionDetails, ElectionTag, makeTransitionGetter, OVERVIEW_DIMENSIONS, TransitionGetter } from "./Transitions";
 
 export const [
@@ -97,10 +93,50 @@ const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, co
     return intro;
 }
 
+export const getPrimaryDimension = () => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[1] ?? 'overview'
+
+export const DimensionButtons = ({election, excludeSelected=false}: {election: ElectionDetails, excludeSelected?: boolean}) => {
+    const DimensionButton = ({title, href, selected=false}: {title: string, href: string, selected?: boolean}) =>
+        <Button disabled={selected} href={href} sx={{
+            background: selected? 'black': 'white',
+            border: selected? '2px solid white' : 'none',
+            //height: '30px',
+            borderRadius: '20px',
+            textTransform: 'none',
+            ':visited': {
+                color: selected? 'white' : 'black',
+            },
+            ':hover': {
+                backgroundColor: 'gray'
+            }
+        }}>
+            <Box sx={{
+                color: selected? 'white' : 'black',
+            }}>
+                <b>{title}</b>
+            </Box>
+        </Button>
+
+    const host = window.location.href.split('/')[0]
+
+    let dims: DimensionTag[] = ['overview', ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim))]
+
+    return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
+        {dims.filter(dim => excludeSelected? (dim != getPrimaryDimension()) : true).map(dim => 
+            <DimensionButton
+                title={dimensionNames[dim]}
+                href={`${host}/${election.tag}/${dim == 'overview' ? '' : dim}`}
+                selected={dim == getPrimaryDimension()}
+            />
+        )}
+    </Box>
+}
+
 export const electionInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => ([
     new SimTransition({
         explainer: <>
-        <h1>{election.title}</h1>
+        <DimensionButtons election={election}/>
+        <h1>{election.title}: <br/> {dimensionNames[getPrimaryDimension() as DimensionTag]}</h1>
         <p>
             <ul>
                 <li>1 voter = {election.ratio} real voters</li>
@@ -109,8 +145,14 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
             </ul>
         </p>
         {election?.extraContext}
-        {election.dimensions.length > 1 && <div style={{position: 'relative'}}>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', margin: 'auto', marginBottom: '200px'}}>
+            <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+            <p style={{textAlign: 'center'}}>scroll to see more</p>
+            <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+        </div>
+        {election.dimensions.length > 1 && getPrimaryDimension() == 'overview' && <div style={{position: 'relative'}}>
             <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
+            <h1>Overview</h1>
             <p>This election had the following scenarios : 
             <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
             </p>
@@ -120,7 +162,12 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
         visible: [Candidate, Voter, VoterCamp, Pie],
         runoffStage: 'firstRound',
         // @ts-ignore
-        voterMovements: [ new VoterMovement(election.camps) ] 
+        voterMovements: [ new VoterMovement(election.camps) ] ,
+        // HACK to keep the alaska deep dive working
+        ...((getPrimaryDimension() == 'deep-dive') ? {
+            visible: [Candidate],
+            voterMovements: [],
+        }: {})
     })
 ])));
 
@@ -154,8 +201,8 @@ export const dimensionTemplates: GetterMap = {
             runoffStage: 'right_vs_left'
         }),
     ])),
-    'upward_mono': (election: ElectionDetails) => makeTransitionGetter(election, 'upward_mono', () => ([
-        ...dimensionInfo(election, 'upward_mono', <p>Upward Monotonicity Pathology<br/>
+    'upward-mono': (election: ElectionDetails) => makeTransitionGetter(election, 'upward-mono', () => ([
+        ...dimensionInfo(election, 'upward-mono', <p>Upward Monotonicity Pathology<br/>
         <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
@@ -339,8 +386,8 @@ export const dimensionTemplates: GetterMap = {
             }),
         ]
     }),
-    'downward_mono': (election: ElectionDetails) => makeTransitionGetter(election, 'downward_mono', () => ([
-        ...dimensionInfo(election, 'downward_mono', <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
+    'downward-mono': (election: ElectionDetails) => makeTransitionGetter(election, 'downward-mono', () => ([
+        ...dimensionInfo(election, 'downward-mono', <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -371,8 +418,8 @@ export const dimensionTemplates: GetterMap = {
             runoffStage: 'center_vs_right'
         })
     ])),
-    'no_show': (election: ElectionDetails) => makeTransitionGetter(election, 'no_show', () => ([
-        ...dimensionInfo(election, 'no_show', <>
+    'no-show': (election: ElectionDetails) => makeTransitionGetter(election, 'no-show', () => ([
+        ...dimensionInfo(election, 'no-show', <>
             <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
         </>),
         new SimTransition({
@@ -442,7 +489,7 @@ export const dimensionTemplates: GetterMap = {
             runoffStage: election.compromiseRunoffStage ?? 'center_vs_left'
         })
     ])),
-    'star_conversion': (election: ElectionDetails) => makeTransitionGetter(election, 'star_conversion', () => {
+    'star-conversion': (election: ElectionDetails) => makeTransitionGetter(election, 'star-conversion', () => {
         const c: number[] = election.camps;
 
         // @ts-ignore
@@ -507,9 +554,13 @@ export const dimensionTemplates: GetterMap = {
         return [
             new SimTransition({
                 visible: [Candidate, Voter, VoterCamp, Pie],
-                focused: ['centerBullet'],
                 explainer: <>
-                    <p>TODO: this will likely be the first time the reader is exposed to STAR, so I should add an intro here explaining the system, and linking them to a video</p>
+                    <h1>What if this election was rerun with STAR Voting?</h1>
+                    <p>STAR Voting is another alternative voting system that was designed to improve on the issues with Ranked Choice Voting.</p>
+                    <img src={require(`./assets/exampleStarBallot.png`)} style={{maxWidth: '400px', width: '100%', marginLeft: '20px'}}/>
+                    <p>Once voters have cast their ballots in a STAR Voting election, a winner is determined by adding up all the stars and then performing an automatic runoff between the top 2 score getters.</p>
+                    <p>How would this election be different if the voters had used the STAR Voting system?</p>
+                    <p>Converting between voting methods is always tricky since we can't say for sure how voters would have changed their vote, but we can still get an estimate.</p>
                 </>,
                 runoffStage: 'default'
             }),
@@ -517,9 +568,9 @@ export const dimensionTemplates: GetterMap = {
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['centerBullet'],
                 explainer: <>
-                    <p>Let's convert the {election.names.center} bullet voters first. We'll assume that they gave 5 stars to {election.names.center} and then no stars to anyone else</p>
+                    <p>Let's start with converting the {election.names.center} bullet voters. We'll assume that they would give 5 stars to {election.names.center} and then no stars to anyone else:</p>
                     {starBallot([5, 0, 0])}
-                    <p>Since there are {c[1]} of those voters then that adds up to {c[1]*5} stars for {election.names.center}</p>
+                    <p>Since there are {c[1]} of those voters then that adds up to {c[1]*5} stars for {election.names.center}.</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0, 0]
                     ])}/>
@@ -533,7 +584,7 @@ export const dimensionTemplates: GetterMap = {
                     <p>Next we'll look at those who voted {election.names.center} 1st and {election.names.right} 2nd. We can assume they would have given {election.names.center} 5 stars,
                     and {election.names.left} 0 stars, but their level of support for {election.names.right} is not as clear.</p>
                     <p>Depending on how strongly they felt about {election.names.right} they could have given a score anywhere between 1 and 4 stars and still maintained their relative ranking.</p>
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
                     {starBallot([5, 1, 0])}
                     {starBallot([5, 4, 0])}
                     </div>
@@ -555,7 +606,7 @@ export const dimensionTemplates: GetterMap = {
                 focused: ['rightThenCenter'],
                 explainer: <>
                     <p>And then repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots</p>
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
                     {starBallot([1, 5, 0])}
                     {starBallot([4, 5, 0])}
                     </div>
@@ -670,4 +721,3 @@ export const dimensionTemplates: GetterMap = {
 //    })]
 //}
 //
-

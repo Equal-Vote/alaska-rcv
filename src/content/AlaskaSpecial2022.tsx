@@ -1,5 +1,6 @@
-import {ElectionDetails} from '../Transitions';
+import {ElectionDetails, makeTransitionGetter} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
+import AlaskaDeepDive from './AlaskaDeepDive';
 
 export default {
     tag: 'alaska-special-2022',
@@ -13,12 +14,16 @@ export default {
         'condorcet',
         'spoiler',
         'majority',
-        'upward_mono',
+        'upward-mono',
         'compromise',
-        'no_show',
-        'star_conversion',
-        'rank_the_red',
+        'no-show',
+        'star-conversion',
+        'rank-the-red',
+        'deep-dive',
     ],
+    customArticles: {
+        'deep-dive': AlaskaDeepDive,
+    },
     camps: [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
     ratio: 942.9,
     sourceTitle: 'A Mathematical Analysis of the 2022 Alaska Special Election for US House',

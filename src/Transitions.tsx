@@ -57,6 +57,7 @@ export const dimensionNames = {
     'rank-the-red': 'What if Republican voters ranked all Republicans?',
     'star-conversion': 'What if we used STAR Voting?',
     'deep-dive': '🔍The Full Story🔍',
+    'bettervoting': 'Full BetterVoting Results'
 } as const;
 
 export type DimensionTag = keyof typeof dimensionNames;
@@ -95,7 +96,7 @@ export interface ElectionDetails {
         right: string
     };
     dimensions: DimensionTag[];
-    customArticles?: Partial<Record<DimensionTag, () => SimTransition[]>>;
+    customDimensions?: Partial<Record<DimensionTag, string | (() => SimTransition[])>>;
     camps: [
         number, number, number, number, number,
         number, number, number, number, number
@@ -118,7 +119,7 @@ const allGetters = (): TransitionGetter[] => ([
     ...elections.map(election => ([
         electionInfo(election),
         ...election.dimensions 
-            .filter((dim:DimensionTag) => dim in dimensionTemplates && !(dim in (election?.customArticles ?? {})))
+            .filter((dim:DimensionTag) => dim in dimensionTemplates && !(dim in (election?.customDimensions ?? {})))
             .sort((a, b) => {
                 const evalItem = (item: DimensionTag) => {
                     if(item == 'overview') return -2;
@@ -128,7 +129,9 @@ const allGetters = (): TransitionGetter[] => ([
                 return evalItem(a) - evalItem(a);
             })
             .map((dim:DimensionTag) => dimensionTemplates[dim]!(election)),
-        ...Object.entries(election?.customArticles ?? {}).map(([k, v]) => makeTransitionGetter(election, k as DimensionTag, v)),
+        ...Object.entries(election?.customDimensions ?? {})
+            .filter(([k, v]) => typeof v !== 'string')
+            .map(([k, v]) => makeTransitionGetter(election, k as DimensionTag, v as (() => SimTransition[]))),
     ])
     ).flat()
 ])

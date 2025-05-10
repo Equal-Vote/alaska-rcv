@@ -27,6 +27,9 @@ export default {
         'compromise',
         'star-conversion',
     ],
+    customDimensions: {
+        'bettervoting': 'https://bettervoting.com/bpqkqm/results',
+    },
     camps: [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
     ratio: 132.1,
     sourceTitle: 'Ranked Choice Bedlam in a 2022 Oakland School Director Election',

@@ -15,6 +15,7 @@ import { VoterMovement } from "./VoterMovement";
 import Bars from "./components/Bars";
 import { Box, Button, Table, TableRow } from "@mui/material";
 import { dimensionNames, DimensionTag, ElectionDetails, ElectionTag, makeTransitionGetter, OVERVIEW_DIMENSIONS, TransitionGetter } from "./Transitions";
+import LinkIcon from '@mui/icons-material/Link';
 
 export const [
     HOME,
@@ -96,7 +97,7 @@ const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, co
 export const getPrimaryDimension = () => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[1] ?? 'overview'
 
 export const DimensionButtons = ({election, excludeSelected=false}: {election: ElectionDetails, excludeSelected?: boolean}) => {
-    const DimensionButton = ({title, href, selected=false}: {title: string, href: string, selected?: boolean}) =>
+    const DimensionButton = ({title, href, selected, isExternal}: {title: string, href: string, selected: boolean, isExternal: boolean}) =>
         <Button disabled={selected} href={href} sx={{
             background: selected? 'black': 'white',
             border: selected? '2px solid white' : 'none',
@@ -110,30 +111,34 @@ export const DimensionButtons = ({election, excludeSelected=false}: {election: E
                 backgroundColor: 'gray'
             }
         }}>
-            <Box sx={{
+            <Box display='flex' sx={{
                 color: selected? 'white' : 'black',
+                justifyContent: 'center',
+                gap: 1
             }}>
                 <b>{title}</b>
+                {isExternal && <LinkIcon sx={{margin: 'auto'}}/>}
             </Box>
         </Button>
 
     const host = window.location.href.split('/')[0]
 
-    let dims: DimensionTag[] = ['overview', ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim)).sort((a, b) => {
-        const sortEval = (item: string) => {
-            // TODO: make this less hacky
-            if(item == 'deep-dive') return -2;
-            if(item in OVERVIEW_DIMENSIONS) return 1;
-            return -1;
-        }
-        return sortEval(a) - sortEval(b)
-    })]
+    let dims: DimensionTag[] = [
+        'overview',
+        ...(Object.keys(election.customDimensions ?? {}) as DimensionTag[]),
+        ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim) && !(dim in (election.customDimensions ?? {})))
+    ]
 
     return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
         {dims.filter(dim => excludeSelected? (dim != getPrimaryDimension()) : true).map(dim => 
             <DimensionButton
                 title={dimensionNames[dim]}
-                href={`${host}/${election.tag}/${dim == 'overview' ? '' : dim}`}
+                href={
+                    typeof election.customDimensions?.[dim] === 'string' ?
+                    election.customDimensions[dim] as string :
+                    `${host}/${election.tag}/${dim == 'overview' ? '' : dim
+                }`}
+                isExternal={typeof election.customDimensions?.[dim] === 'string'}
                 selected={dim == getPrimaryDimension()}
             />
         )}

@@ -19,9 +19,8 @@ export default {
         'no-show',
         'star-conversion',
         'rank-the-red',
-        'deep-dive',
     ],
-    customArticles: {
+    customDimensions: {
         'deep-dive': AlaskaDeepDive,
     },
     camps: [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],

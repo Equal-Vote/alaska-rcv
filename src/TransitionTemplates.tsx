@@ -119,7 +119,15 @@ export const DimensionButtons = ({election, excludeSelected=false}: {election: E
 
     const host = window.location.href.split('/')[0]
 
-    let dims: DimensionTag[] = ['overview', ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim))]
+    let dims: DimensionTag[] = ['overview', ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim)).sort((a, b) => {
+        const sortEval = (item: string) => {
+            // TODO: make this less hacky
+            if(item == 'deep-dive') return -2;
+            if(item in OVERVIEW_DIMENSIONS) return 1;
+            return -1;
+        }
+        return sortEval(a) - sortEval(b)
+    })]
 
     return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
         {dims.filter(dim => excludeSelected? (dim != getPrimaryDimension()) : true).map(dim => 

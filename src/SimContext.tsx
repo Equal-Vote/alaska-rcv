@@ -113,9 +113,7 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
             exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
-            electionName: election?.tag, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
-            selectorElection: election?.tag, // params.get('selectorElection') ?? 'burlington-2009',
-            selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
+            electionName: election?.tag, 
             election: election
         };
 
@@ -123,10 +121,6 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
         setTimeout(() => {
             ctx.threeSecondsPassed = true
         }, 3000)
-
-        if(ctx.electionName == 'pick an election') ctx.electionName = '<pick an election>';
-        if(ctx.selectorElection == 'pick an election') ctx.selectorElection = '<pick an election>';
-        if(ctx.selectorFailure == 'pick a failure type') ctx.selectorFailure = '<pick a failure type>';
 
         // must be after the { ... } since that breaks the reference
 
@@ -178,14 +172,12 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
         while(i != nextIndex){
             if(i < nextIndex){
                 i++;
-                if(!simIndexIsVisible(i)) continue;
                 simState.transitions[i].apply(simState)
                 simState.transitions[i].moveVoters(simState)
                 prevI = i;
             }
             if(i > nextIndex){
                 i--;
-                if(!simIndexIsVisible(i)) continue;
                 simState.transitions[prevI].revertMove(simState)
                 simState.transitions[i].apply(simState);
                 prevI = i;
@@ -194,17 +186,6 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
 
         simIndex.current = i;
     }
-
-
-    const simIndexIsVisible = (index) => {
-        return true;
-        //let t = simState.transitions[index];
-        //return ( 
-        //    (t.electionTag == undefined || simState.selectorElection == t.electionTag) &&
-        //    (t.failureTag == undefined || simState.selectorFailure == t.failureTag)
-        //);
-    }
-
 
     const handleKeyPress = useCallback((event) => {
         // I'll worry about keyboard support later
@@ -226,5 +207,5 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
         };
     }, [handleKeyPress]);
 
-    return <SimContext.Provider value={{simState, updateSimIndex, simIndexIsVisible, refreshBool}}>{children}</SimContext.Provider>;
+    return <SimContext.Provider value={{simState, updateSimIndex, refreshBool}}>{children}</SimContext.Provider>;
 }

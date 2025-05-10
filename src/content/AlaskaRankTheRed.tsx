@@ -117,7 +117,7 @@
 //                <p>Perhaps these were votes against Palin rather than specifically for Peltola, and an olive branch from Palin would be enough to swing them.
 //                    Unfortunately the RCV ballot isn't expressive enough for us to guage how strong the Peltola support is
 //                    so it's hard to say how effective this would be
-//                    (<a href="https://rcvchangedalaska.com/?selectorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true">
+//                    (<a href="https://rcvchangedalaska.com/?electorElection=alaska-special-2022&selectorFailure=STAR+Conversion&onlySelector=true">
 //                            but a STAR Voting ballot could help with this
 //                    </a>).
 //                </p>

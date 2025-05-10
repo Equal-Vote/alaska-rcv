@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef} from "react";
 import { SimContext } from "../SimContext";
 
 const Explainer = ({setNavTop}) => {
-    const {simState, updateSimIndex, simIndexIsVisible, refreshBool} = useContext(SimContext);
+    const {simState, updateSimIndex, refreshBool} = useContext(SimContext);
     const explainerRefs = useRef([]);
     const containerRef = useRef(null);
 
@@ -14,23 +14,12 @@ const Explainer = ({setNavTop}) => {
         </div>
     })
 
-    //let selectorRange = simState.transitions.reduce((range, t, i) => {
-    //    if(t.electionTag != undefined || t.failureTag != undefined){
-    //        if(range.start == undefined) range.start = i;
-    //        if(simIndexIsVisible(i)) range.size++; // I can't set end directly since explainers is only a subset of simState.transitions
-    //    }
-    //    return range;
-    //}, {start: undefined, size: 0})
-    //selectorRange.end = selectorRange.start + selectorRange.size
-    //selectorRange.start--; // include the selector panel
-
     let prevScrollY = 0;
     let refreshExplainers = (event) => {
         let rect = containerRef.current.getBoundingClientRect();
         let mid = (rect.top + rect.bottom) / 2;
 
         let focusedElem = explainerRefs.current.reduce((prev, e, i) => {
-            if(!simIndexIsVisible(i)) return prev;
             const getDiff = (el) => mid - el.getBoundingClientRect().top 
             if(getDiff(e) < 0) return prev;
             if(getDiff(e) < getDiff(prev)) return e;
@@ -38,7 +27,6 @@ const Explainer = ({setNavTop}) => {
         });
 
         explainerRefs.current.forEach((e,i) => {
-            if(!simIndexIsVisible(i)) return;
             e.classList.remove('explainerFocused');
             e.classList.remove('explainerUnfocused');
             e.classList.add((e == focusedElem)? 'explainerFocused' : 'explainerUnfocused');

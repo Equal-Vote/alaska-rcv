@@ -402,44 +402,6 @@ a:hover{
   border-radius: 5px;
 }
 
-/* SELECTOR */
-.selectors{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: space-between;
-}
-
-.selectorButtons{
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  justify-content: space-between;
-}
-
-.selectorButtons button{
-  height: 50%;
-  min-height: 20px;
-  margin: auto;
-}
-
-.selectorsSwapped{
-  flex-direction: column-reverse;
-}
-
-.selectorPanel{
-  display: flex;
-  flex-direction: row;
-  justify-content: top;
-  gap: 40px;
-  margin-top: 50px;
-  flex-wrap: wrap;
-}
-
-.selectorPanel button{
-  width: 120px;
-}
-
 .nav{
   margin: 10px;
 }
@@ -546,13 +508,6 @@ a:hover{
 
   * {
     overflow-x: visible;
-  }
-
-  .selectorContainer{
-    border-radius: 20px;
-    width: 100%;
-    transform: revert;
-    padding: 0;
   }
 
   .explainer{

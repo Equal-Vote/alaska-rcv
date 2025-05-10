@@ -13,11 +13,11 @@ import VideoEmbed from './components/VideoEmbed';
 import Video from './components/Video';
 import { getTransitions, elections, ElectionDetails, DimensionTag } from './Transitions';
 import Burlington2009 from './content/Burlington2009';
-import { getPrimaryDimension } from './TransitionTemplates';
+import { getSecondaryDimension } from './TransitionTemplates';
 
 export const SimContext = createContext({});
 
-export function SimContextProvider({election, children}: {election: ElectionDetails, children: ReactNode[]}){
+export function SimContextProvider({election, primaryDimensionTag, children}: {election: ElectionDetails, primaryDimensionTag? : DimensionTag, children: ReactNode[]}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
     let isMobile = (window.innerWidth < 900);
     const campMappings = (isMobile)?
@@ -113,8 +113,8 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
-            electionName: election.tag, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
-            selectorElection: election.tag, // params.get('selectorElection') ?? 'burlington-2009',
+            electionName: election?.tag, // params.get('onlySelector') ? (params.get('selectorElection') ?? 'burlington-2009') : 'alaska-special-2022',
+            selectorElection: election?.tag, // params.get('selectorElection') ?? 'burlington-2009',
             selectorFailure: params.get('selectorFailure') ?? 'pick a failure type',
             election: election
         };
@@ -130,7 +130,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({electionTag: election.tag, dimension: getPrimaryDimension()})
+        ctx.transitions = getTransitions({electionTag: election.tag, dimension: election == undefined ? primaryDimensionTag : getSecondaryDimension()})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);

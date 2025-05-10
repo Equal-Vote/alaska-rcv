@@ -94,7 +94,7 @@ const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, co
     return intro;
 }
 
-export const getPrimaryDimension = () => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[1] ?? 'overview'
+export const getSecondaryDimension = () => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[1] ?? 'overview'
 
 export const DimensionButtons = ({election, excludeSelected=false}: {election: ElectionDetails, excludeSelected?: boolean}) => {
     const DimensionButton = ({title, href, selected, isExternal}: {title: string, href: string, selected: boolean, isExternal: boolean}) =>
@@ -130,7 +130,7 @@ export const DimensionButtons = ({election, excludeSelected=false}: {election: E
     ]
 
     return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
-        {dims.filter(dim => excludeSelected? (dim != getPrimaryDimension()) : true).map(dim => 
+        {dims.filter(dim => excludeSelected? (dim != getSecondaryDimension()) : true).map(dim => 
             <DimensionButton
                 title={dimensionNames[dim]}
                 href={
@@ -139,7 +139,7 @@ export const DimensionButtons = ({election, excludeSelected=false}: {election: E
                     `${host}/${election.tag}/${dim == 'overview' ? '' : dim
                 }`}
                 isExternal={typeof election.customDimensions?.[dim] === 'string'}
-                selected={dim == getPrimaryDimension()}
+                selected={dim == getSecondaryDimension()}
             />
         )}
     </Box>
@@ -149,7 +149,7 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
     new SimTransition({
         explainer: <>
         <DimensionButtons election={election}/>
-        <h1>{election.title}: <br/> {dimensionNames[getPrimaryDimension() as DimensionTag]}</h1>
+        <h1>{election.title}: <br/> {dimensionNames[getSecondaryDimension() as DimensionTag]}</h1>
         <p>
             <ul>
                 <li>1 voter = {election.ratio} real voters</li>
@@ -163,7 +163,7 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
             <p style={{textAlign: 'center'}}>scroll to see more</p>
             <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
         </div>
-        {election.dimensions.length > 1 && getPrimaryDimension() == 'overview' && <div style={{position: 'relative'}}>
+        {election.dimensions.length > 1 && getSecondaryDimension() == 'overview' && <div style={{position: 'relative'}}>
             <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
             <h1>Overview</h1>
             <p>This election had the following scenarios : 
@@ -177,7 +177,7 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
         // @ts-ignore
         voterMovements: [ new VoterMovement(election.camps) ] ,
         // HACK to keep the alaska deep dive working
-        ...((getPrimaryDimension() == 'deep-dive') ? {
+        ...((getSecondaryDimension() == 'deep-dive') ? {
             visible: [Candidate],
             voterMovements: [],
         }: {})

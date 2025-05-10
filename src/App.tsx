@@ -13,24 +13,28 @@ export default () => {
     // APP
     let [navTop, setNavTop] = useState(0);
     let parts = window.location.pathname.split('/');
-    let electionTag = parts?.[1];
+    let tag = parts?.[1];
     let election = undefined;
+    let primaryDimensionTag = undefined;
     if(window.location.pathname != '/'){
-        election = elections.filter(e => e.tag == electionTag)[0]
+        let electionMatches = elections.filter(e => e.tag == tag)
+        if(electionMatches.length > 0){
+            election = electionMatches[0];
+        }else{
+            primaryDimensionTag = tag;
+        }
     }
     return <div className="app" style={{overflowY: election ? 'none' : 'auto'}}>
         <Nav navTop={navTop} election={election}/>
-        {!election && <>
-            <CaseStudySelector/>
-        </>}
-
-        {election && 
-            <SimContextProvider election={election}>
+        {(election || primaryDimensionTag) ? 
+            <SimContextProvider election={election} primaryDimensionTag={primaryDimensionTag}>
                 <div className="columns">
                     <Simulation/>
                     <Explainer setNavTop={setNavTop}/>
                 </div>
             </SimContextProvider>
+        :
+            <CaseStudySelector/>
         }
     </div>;
 }

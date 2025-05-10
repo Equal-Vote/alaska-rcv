@@ -23,7 +23,8 @@ export default () => {
                 }>
                     <legend style={{fontSize: '1.2rem'}}>Start Here</legend>
                     <li style={{listStyleType: 'none'}}>
-                        <a href={`/${featuredItem}`}><Box display='flex' flexDirection='row' gap={2} alignItems='center' sx={{maxWidth: '800px'}}>
+                        {/* We're assuming that the featured item will have a deep-dive page*/}
+                        <a href={`/${featuredItem}/deep-dive`}><Box display='flex' flexDirection='row' gap={2} alignItems='center' sx={{maxWidth: '800px'}}>
                             {getIcon(featuredItem)}
                             <span>{mapper(featuredItem)}</span>
                         </Box></a>
@@ -36,7 +37,6 @@ export default () => {
                             <a href={`/${item}`}><Box display='flex' flexDirection='row' gap={2} alignItems='center' sx={{maxWidth: '800px'}}>
                                 {getIcon(item)}
                                 <div>{mapper(item)} {!featuredItem && '>'}</div>
-                                
                             </Box></a>
                         </li>
                     </Box>

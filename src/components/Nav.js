@@ -1,3 +1,6 @@
+import { dimensionNames } from '../Transitions';
+import { getDimensionFromURL } from '../TransitionTemplates';
+
 export default ({election, navTop}) => {
     let icon = undefined;
 
@@ -6,6 +9,7 @@ export default ({election, navTop}) => {
     }catch(e){
         icon = undefined;
     }
+    console.log()
 
     return <div className='Nav' style={{paddingLeft: '20px', top: `${navTop}px`}}>
         <a href='https://equal.vote'>
@@ -20,11 +24,11 @@ export default ({election, navTop}) => {
             <h4>RCV Case Studies</h4>
             </div>
         </a>
-        {election && <><span className='NavArrow'>{">"}</span>
+        {getDimensionFromURL(0) != '' && <><span className='NavArrow'>{">"}</span>
             <a href=''>
                 <div className='NavButton'>
                 {icon && <img src={icon}/>}
-                <h4>{election.title}</h4>
+                <h4>{election?.title ?? dimensionNames[getDimensionFromURL(0)]}</h4>
                 </div>
             </a>
         </>}

@@ -44,8 +44,8 @@ export const dimensionNames = {
     'overview': 'Overview',
     'condorcet': 'Condorcet Failure',
     'condorcet_success': 'Condorcet Success',
-    'spoiler': 'Spoiler Effect',
     'cycle': 'Condorcet Cycle',
+    'spoiler': 'Spoiler Effect',
     'majority': 'Majoritarian Failure',
     'upward-mono': 'Upward Monotonicity Pathology',
     'downward-mono': 'Downward Monotonicity Pathology',
@@ -66,8 +66,8 @@ export type DimensionTag = keyof typeof dimensionNames;
 export const OVERVIEW_DIMENSIONS: DimensionTag[] = [
     'condorcet',
     'condorcet_success',
-    'spoiler',
     'cycle',
+    'spoiler',
     'majority',
     'upward-mono',
     'downward-mono',
@@ -139,10 +139,7 @@ const allGetters = (): TransitionGetter[] => ([
 
 
 
-export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionDetails, dimension?: DimensionTag}): SimTransition[] => {
-    console.log('election', election, election === undefined)
-    console.log('election', election, election === undefined)
-    return [
+export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionDetails, dimension?: DimensionTag}): SimTransition[] => [
     new SimTransition({
         explainer: <div className='explainerTopPadding'/>
     }),
@@ -176,4 +173,4 @@ export const getTransitions = ({election=undefined, dimension='overview'}: {elec
     new SimTransition({
         explainer: <div className='explainerBottomPadding'/>
     }),
-]};
+];

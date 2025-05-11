@@ -14,7 +14,7 @@ import { VoterMovement } from "./VoterMovement";
 // @ts-ignore
 import Bars from "./components/Bars";
 import { Box, Button, Table, TableRow } from "@mui/material";
-import { dimensionNames, DimensionTag, ElectionDetails, ElectionTag, makeTransitionGetter, OVERVIEW_DIMENSIONS, TransitionGetter } from "./Transitions";
+import { dimensionNames, DimensionTag, ElectionDetails, elections, ElectionTag, makeTransitionGetter, OVERVIEW_DIMENSIONS, TransitionGetter } from "./Transitions";
 import LinkIcon from '@mui/icons-material/Link';
 
 export const [
@@ -62,41 +62,79 @@ export const [
     // Google slides case studies; https://docs.google.com/presentation/d/1G40n79tcUPdVkZWr-tNXSz7q9ddbwOUw4Ev0G_jKq6I/edit#slide=id.g1e29c24f2cf_0_7
     // There's a bunch more examples there, I'll need to research them
 
-const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, content: any) => {
-    let intro = [new SimTransition({
+const BackToTop = ({tag}: {tag: string}) => <>
+    <div id={tag} style={{position: 'absolute', top: '-30vh'}}/>
+    <a href='#toc'>️↑back to top️↑</a>
+    <hr style={{width: '100%'}}/>
+</>
+
+export const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, isDimensionPage: boolean) => [
+    new SimTransition({
         explainer: <div style={{position: 'relative'}}>
-            <div id={dimensionTag} style={{position: 'absolute', top: '-30vh'}}/>
-            <a href='#toc'>️↑back to top️↑</a>
-            <hr/>
+            {!isDimensionPage && <BackToTop tag={dimensionTag}/>}
+            {isDimensionPage && <DimensionButtons election={undefined} />}
             <h1>{dimensionNames[dimensionTag]}</h1>
-            {content}
+            {dimensionTag == 'spoiler' && <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>}
+            {dimensionTag == 'upward-mono' && <p>Upward Monotonicity Pathology<br/>
+                <i>A scenario where if the winning candidate had gained more support they would have lost</i>
+            </p>}
+            {dimensionTag == 'condorcet' && <>
+                <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+                <p>Condorcet Failure<br/><i>A scenario where the voting method doesn't elect the candidate who was preferred over all others.</i></p>
+                <p>Condorcet Failures are especially problematic for ranked methods like RCV that only look at voter preferences.
+                    In other methods, like STAR Voting, where voters can show their level of support for each candidate in addition to their preference order, the case
+                    can be made that the Condorcet Winner may not have been the most representative overall, but under ranked voting methods the Condorcet Winner is
+                    widely recognized as the correct winner and is used to assess the voting method's accuracy.</p>
+            </>}
+            {dimensionTag == 'condorcet_success' && <>
+                <p>For this election RCV did successfully elect the Condorcet Winner.</p>
+                <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+            </>}
+            {dimensionTag == 'cycle' && <>
+                <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
+                <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
+                <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list).
+                    In some scenarios, voter preferences are cyclical and there is no one candidate preferred over all others.</p>
+            </>}
+            {dimensionTag == 'cycle' && <>
+                <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
+                <p>
+                    Majoritarian Failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
+                    that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that <a href="https://arxiv.org/pdf/2301.12075.pdf">RCV
+                    had Majoritarian Failures 52% of the time</a>
+                </p>
+            </>}
+            {dimensionTag == 'downward-mono' && <>
+                <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>
+            </>}
+            {dimensionTag == 'no-show' && <>
+                <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
+            </>}
+            {dimensionTag == 'compromise' && <>
+                <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
+                    elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
+                <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite.</p>
+            </>}
+            {dimensionTag == 'repeal' && <>
+                <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>
+            </>}
+            {isDimensionPage && <ScrollMessage/>}
+            {isDimensionPage && <div style={{position: 'relative'}}>
+                <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
+                <p>Elections experiencing a "{dimensionNames[dimensionTag]}"</p>
+                <ul>{elections.filter(e => e.dimensions.includes(dimensionTag)).map((e,i) => <li><a href={`#${e.tag}`}>{e.title}</a></li>)}</ul>
+            </div>}
         </div>,
-        electionName: 'undefined',
+        electionName: election.tag,
         visible: 'undefined',
         runoffStage: 'firstRound',
         voterMovements: [ new VoterMovement(election.camps) ] 
-    })];
+    })
+];
 
-    //let electionsWithFailure = Object.values(ELECTIONS).filter(election => 
-    //    election != ELECTIONS.unselected && elections[election].failures.includes(failureTag)
-    //);
-    //if(electionsWithFailure.length  > 1){
-    //    intro.push(new SimTransition({
-    //        explainer: <p>{failureTag} occurred in the following elections : 
-    //            <ul>{electionsWithFailure.map((f,i) => <li>{f}</li>)}</ul>
-    //            Pick from the drop down above for more details</p>,
-    //        electionName: 'undefined',
-    //        visible: 'undefined',
-    //        runoffStage: 'undefined',
-    //    }));
-    //}
+export const getDimensionFromURL = (i=1) => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
 
-    return intro;
-}
-
-export const getSecondaryDimension = () => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[1] ?? 'overview'
-
-export const DimensionButtons = ({election, excludeSelected=false}: {election: ElectionDetails, excludeSelected?: boolean}) => {
+export const DimensionButtons = ({election=undefined, excludeSelected=false}: {election?: ElectionDetails, excludeSelected?: boolean}) => {
     const DimensionButton = ({title, href, selected, isExternal}: {title: string, href: string, selected: boolean, isExternal: boolean}) =>
         <Button disabled={selected} href={href} sx={{
             background: selected? 'black': 'white',
@@ -123,33 +161,56 @@ export const DimensionButtons = ({election, excludeSelected=false}: {election: E
 
     const host = window.location.href.split('/')[0]
 
-    let dims: DimensionTag[] = [
-        'overview',
-        ...(Object.keys(election.customDimensions ?? {}) as DimensionTag[]),
-        ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim) && !(dim in (election.customDimensions ?? {})))
-    ]
+    let dims: DimensionTag[] = [];
+    let tag: string = '';
+    let selected: string = '';
+    if(election === undefined){
+        tag = getDimensionFromURL(0);
+        selected = tag;
+        dims = OVERVIEW_DIMENSIONS;
+    }else{
+        tag = election.tag;
+        selected = getDimensionFromURL(1);
+        dims = [
+            'overview',
+            ...(Object.keys(election.customDimensions ?? {}) as DimensionTag[]),
+            ...election.dimensions.filter(dim => !OVERVIEW_DIMENSIONS.includes(dim) && !(dim in (election.customDimensions ?? {})))
+        ]
+    }
 
     return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
-        {dims.filter(dim => excludeSelected? (dim != getSecondaryDimension()) : true).map(dim => 
+        {dims.filter(dim => excludeSelected? (dim != selected) : true).map(dim => 
             <DimensionButton
                 title={dimensionNames[dim]}
                 href={
-                    typeof election.customDimensions?.[dim] === 'string' ?
-                    election.customDimensions[dim] as string :
-                    `${host}/${election.tag}/${dim == 'overview' ? '' : dim
-                }`}
-                isExternal={typeof election.customDimensions?.[dim] === 'string'}
-                selected={dim == getSecondaryDimension()}
+                    (election === undefined ? 
+                        `${host}/${dim}`
+                    : (
+                        (election && typeof election.customDimensions?.[dim] === 'string') ?
+                            election.customDimensions[dim] as string :
+                        `${host}/${tag}/${dim == 'overview' ? '' : dim}`
+                    ))
+                }
+                isExternal={election !== undefined && (typeof election.customDimensions?.[dim] === 'string')}
+                selected={dim == selected}
             />
         )}
     </Box>
 }
 
-export const electionInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => ([
+export const ScrollMessage = () => 
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', margin: 'auto', marginBottom: '200px'}}>
+        <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+        <p style={{textAlign: 'center'}}>scroll to see more</p>
+        <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
+    </div>
+
+export const electionInfo = (election: ElectionDetails, isElectionPage: boolean): TransitionGetter => (makeTransitionGetter(election, undefined, () => ([
     new SimTransition({
         explainer: <>
-        <DimensionButtons election={election}/>
-        <h1>{election.title}: <br/> {dimensionNames[getSecondaryDimension() as DimensionTag]}</h1>
+        {!isElectionPage && <BackToTop tag={election.tag}/>}
+        {isElectionPage && <DimensionButtons election={election}/>}
+        <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
         <p>
             <ul>
                 <li>1 voter = {election.ratio} real voters</li>
@@ -157,13 +218,9 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
                 {election?.extraBullets}
             </ul>
         </p>
+        {isElectionPage && <ScrollMessage/>}
         {election?.extraContext}
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', margin: 'auto', marginBottom: '200px'}}>
-            <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
-            <p style={{textAlign: 'center'}}>scroll to see more</p>
-            <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
-        </div>
-        {election.dimensions.length > 1 && getSecondaryDimension() == 'overview' && <div style={{position: 'relative'}}>
+        {isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
             <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
             <h1>Overview</h1>
             <p>This election had the following scenarios : 
@@ -177,7 +234,7 @@ export const electionInfo = (election: ElectionDetails): TransitionGetter => (ma
         // @ts-ignore
         voterMovements: [ new VoterMovement(election.camps) ] ,
         // HACK to keep the alaska deep dive working
-        ...((getSecondaryDimension() == 'deep-dive') ? {
+        ...((getDimensionFromURL() == 'deep-dive') ? {
             visible: [Candidate],
             voterMovements: [],
         }: {})
@@ -190,7 +247,6 @@ type GetterMap = Partial<{
 }>
 export const dimensionTemplates: GetterMap = {
     'spoiler': (election: ElectionDetails) => makeTransitionGetter(election, 'spoiler', () => ([
-        ...dimensionInfo(election, 'spoiler', <p>Spoiler Effect<br/><i>When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.</i></p>),
         new SimTransition({
             explainer: <>
                 <p>If the election was between {election.names.left} and {election.names.center} then {election.names.center} would have won</p>
@@ -215,8 +271,6 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'upward-mono': (election: ElectionDetails) => makeTransitionGetter(election, 'upward-mono', () => ([
-        ...dimensionInfo(election, 'upward-mono', <p>Upward Monotonicity Pathology<br/>
-        <i>A scenario where if the winning candidate had gained more support they would have lost</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -257,14 +311,6 @@ export const dimensionTemplates: GetterMap = {
 
     ])),
     'condorcet': (election: ElectionDetails) => makeTransitionGetter(election, 'condorcet', () => ([
-        ...dimensionInfo(election, 'condorcet', <>
-            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-            <p>Condorcet Failure<br/><i>A scenario where the voting method doesn't elect the candidate who was preferred over all others.</i></p>
-            <p>Condorcet Failures are especially problematic for ranked methods like RCV that only look at voter preferences.
-                In other methods, like STAR Voting, where voters can show their level of support for each candidate in addition to their preference order, the case
-                can be made that the Condorcet Winner may not have been the most representative overall, but under ranked voting methods the Condorcet Winner is
-                widely recognized as the correct winner and is used to assess the voting method's accuracy.</p>
-        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -296,10 +342,6 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'condorcet_success': (election: ElectionDetails) => makeTransitionGetter(election, 'condorcet_success', () => ([
-        ...dimensionInfo(election, 'condorcet_success', <>
-            <p>For this election RCV did successfully elect the Condorcet Winner.</p>
-            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -331,12 +373,6 @@ export const dimensionTemplates: GetterMap = {
         }),
     ])),
     'cycle': (election: ElectionDetails) => makeTransitionGetter(election, 'cycle', () => ([
-        ...dimensionInfo(election, 'cycle', <>
-            <p>Condorcet Winner<br/><i>A candidate who wins head-to-head against all other candidates</i></p>
-            <p>Condorcet Cycle<br/><i>A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups</i></p>
-            <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list).
-                In some scenarios, voter preferences are cyclical and there is no one candidate preferred over all others.</p>
-        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -373,14 +409,6 @@ export const dimensionTemplates: GetterMap = {
             election.camps[LEFT_THEN_CENTER] +
             election.camps[CENTER_THEN_LEFT];
         return [
-            ...dimensionInfo(election, 'majority', <>
-                <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
-                <p>
-                    Majoritarian Failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections
-                    that required multiple elimination rounds (i.e. the ones that would not have had a majority under plurality), and they found that <a href="https://arxiv.org/pdf/2301.12075.pdf">RCV
-                    had Majoritarian Failures 52% of the time</a>
-                </p>
-            </>),
             new SimTransition({
                 explainer: <>
                     <p>{election.names.left} won in the final round, but then only had {winnerVoteCount}/200 votes (that's {Math.round(100*winnerVoteCount/200)}% of the vote).</p>
@@ -400,7 +428,6 @@ export const dimensionTemplates: GetterMap = {
         ]
     }),
     'downward-mono': (election: ElectionDetails) => makeTransitionGetter(election, 'downward-mono', () => ([
-        ...dimensionInfo(election, 'downward-mono', <p>Downward Monotonicity Pathology<br/><i>A scenario where a losing candidate could have lost support and won</i></p>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -432,9 +459,6 @@ export const dimensionTemplates: GetterMap = {
         })
     ])),
     'no-show': (election: ElectionDetails) => makeTransitionGetter(election, 'no-show', () => ([
-        ...dimensionInfo(election, 'no-show', <>
-            <p>No Show Failure<br/><i>Scenario where a set of voters can get a better result by not voting at all</i></p>
-        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -466,11 +490,6 @@ export const dimensionTemplates: GetterMap = {
         })
     ])),
     'compromise': (election: ElectionDetails) => makeTransitionGetter(election, 'compromise', () => ([
-        ...dimensionInfo(election, 'compromise', <>
-            <p>Lesser-Evil Failure<br/><i>A scenario where a group of voters could have strategically
-                elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.</i></p>
-            <p>This is very familiar in Choose One Voting where you have to compromise to pick one of the front runners instead of picking your favorite.</p>
-        </>),
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
@@ -692,9 +711,6 @@ export const dimensionTemplates: GetterMap = {
         ]
     }),
     'repeal': (election: ElectionDetails) => makeTransitionGetter(election, 'repeal', () => ([
-        ...dimensionInfo(election, 'repeal', <>
-            <p>Repeal<br/><i>A scenario where a juristiction reverts back to Choose-One voting after trying RCV</i></p>
-        </>),
         new SimTransition({
             explainer: election.repealDetails,
             runoffstage: 'undefined',

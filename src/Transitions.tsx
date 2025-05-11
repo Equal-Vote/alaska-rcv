@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
-import { DimensionButtons, dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
+import { DimensionButtons, dimensionInfo, dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
 import { VoterMovement } from "./VoterMovement";
 import AlaskaGeneral2022 from "./content/AlaskaGeneral2022";
 import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
@@ -51,8 +51,9 @@ export const dimensionNames = {
     'downward-mono': 'Downward Monotonicity Pathology',
     'no-show': 'No Show Failure',
     'compromise': 'Lesser-Evil Failure',
-    'tally': 'Tally Error',
     'repeal': 'Repealed',
+    // custom
+    'tally': 'Tally Error',
     'bullet-allocation': 'Bullet Vote Allocation',
     'rank-the-red': 'What if Republican voters ranked all Republicans?',
     'star-conversion': 'What if we used STAR Voting?',
@@ -117,7 +118,7 @@ export interface ElectionDetails {
 
 const allGetters = (): TransitionGetter[] => ([
     ...elections.map(election => ([
-        electionInfo(election),
+        //electionInfo(election),
         ...election.dimensions 
             .filter((dim:DimensionTag) => dim in dimensionTemplates && !(dim in (election?.customDimensions ?? {})))
             .sort((a, b) => {
@@ -136,29 +137,43 @@ const allGetters = (): TransitionGetter[] => ([
     ).flat()
 ])
 
-export const getTransitions = ({electionTag=undefined, dimension='overview'}: {electionTag?: ElectionTag, dimension?: DimensionTag}): SimTransition[] => ([
+
+
+export const getTransitions = ({election=undefined, dimension='overview'}: {election?: ElectionDetails, dimension?: DimensionTag}): SimTransition[] => {
+    console.log('election', election, election === undefined)
+    console.log('election', election, election === undefined)
+    return [
     new SimTransition({
         explainer: <div className='explainerTopPadding'/>
     }),
+    ...(election === undefined ? makeTransitionGetter(elections[0], dimension, () => dimensionInfo(elections[0], dimension, true)).get() : electionInfo(election, true).get()),
     ...allGetters()
-        .filter(getter => electionTag === undefined ? true : getter.electionTag === electionTag)
-        .filter(getter => getter.dimension === undefined || (dimension == 'overview' ? OVERVIEW_DIMENSIONS.includes(getter.dimension) : getter.dimension === dimension))
-        .map(getter => getter.get())
+        .filter(getter => election?.tag === undefined ? true : getter.electionTag === election.tag)
+        .filter(getter => getter.dimension === undefined || (dimension == 'overview' ?
+            OVERVIEW_DIMENSIONS.includes(getter.dimension) :
+            getter.dimension === dimension)
+        )
+        .map(getter => [
+            ...(election === undefined?
+                electionInfo(elections.filter(e => e.tag == getter.electionTag)[0], false).get()
+            :
+                dimensionInfo(election, getter.dimension as DimensionTag, false)
+            ),
+            ...getter.get()
+        ])
         .flat(),
     new SimTransition({
         explainer: <Box>
             <a href='#toc'>️↑back to top️↑</a>
             <hr/>
             <p>Read more about this election:</p>
-            {electionTag &&
-                <DimensionButtons
-                    election={elections.filter(e => e.tag == electionTag)[0]}
-                    excludeSelected
-                />
-            }
+            <DimensionButtons
+                election={election === undefined ? undefined : elections.filter(e => e.tag == election?.tag)[0]}
+                excludeSelected
+            />
         </Box>
     }),
     new SimTransition({
         explainer: <div className='explainerBottomPadding'/>
     }),
-]);
+]};

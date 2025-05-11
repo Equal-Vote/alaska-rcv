@@ -13,7 +13,7 @@ import VideoEmbed from './components/VideoEmbed';
 import Video from './components/Video';
 import { getTransitions, elections, ElectionDetails, DimensionTag } from './Transitions';
 import Burlington2009 from './content/Burlington2009';
-import { getSecondaryDimension } from './TransitionTemplates';
+import { getDimensionFromURL } from './TransitionTemplates';
 
 export const SimContext = createContext({});
 
@@ -124,7 +124,7 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({electionTag: election.tag, dimension: election == undefined ? primaryDimensionTag : getSecondaryDimension()})
+        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? primaryDimensionTag : getDimensionFromURL()})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);
@@ -172,6 +172,7 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
         while(i != nextIndex){
             if(i < nextIndex){
                 i++;
+                console.log(simState.transitions[i]);
                 simState.transitions[i].apply(simState)
                 simState.transitions[i].moveVoters(simState)
                 prevI = i;

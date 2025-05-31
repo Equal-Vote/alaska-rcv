@@ -1,38 +1,62 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, FormHelperText, Radio, RadioGroup, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormHelperText, List, Radio, RadioGroup, Typography } from "@mui/material"
 import {DimensionTag, ElectionTag, dimensionNames, elections} from '../Transitions'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState } from "react";
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 interface FilterItem {
-    name: string,
     description: string,
-    tag?: DimensionTag
+    tag: DimensionTag | undefined,
 }
 export default () => {
     const filters: FilterItem[] = [
         {
-            name: 'Spoiler Effect',
-            description: 'When a losing candidate changes the winner',
-            tag: 'spoiler',
-        },
-        {
-            name: 'Monotonicity',
-            description: 'When a winning candidate could have gained supports and lost',
-            tag: 'upward-mono',
-        },
-        {
-            name: 'Condorcet Failure',
-            description: 'When a unrepresentative winner is selected',
-            tag: 'condorcet',
-        },
-        {
-            name: 'All Elections',
-            description: 'Show all elections',
             tag: undefined,
+            description: 'Show all case studies',
+        },
+        {
+            tag: 'spoiler',
+            description: 'When a minor candidate enters a race and pulls votes away from the otherwise winning candidate, causing the winner to change to a different major candidate.'
+        },
+        {
+            tag: 'majority',
+            description: 'When the winning candidate does not have the majority of votes in the final round.',
+        },
+        {
+            tag: 'condorcet',
+            description: 'A scenario where the voting method doesn\'t elect the candidate who was preferred over all others.',
+        },
+        {
+            tag: 'cycle',
+            description: 'A scenario where no Condorcet Winner is present due to a cycle in the head-to-head matchups.',
+        },
+        {
+            tag: 'upward-mono',
+            description: 'A scenario where if the winning candidate had gained more support they would have lost.',
+        },
+        {
+            tag: 'downward-mono',
+            description: 'A scenario where a losing candidate could have lost support and won.',
+        },
+        {
+            tag: 'compromise',
+            description: "A scenario where a group of voters could have strategically elevated the rank of a 'compromise' or 'lesser-evil' candidate over their actual favorite to get a better result.",
+        },
+        {
+            tag: 'no-show',
+            description: 'A scenario where a set of voters can get a better result by not voting at all.',
+        },
+        {
+            tag: 'repeal',
+            description: 'A scenario where a juristiction reverts back to Choose-One voting after trying RCV.',
+        },
+        {
+            tag: 'tally',
+            description: 'A scenario where the election administrators failed to compute the election correctly.',
         },
     ];
     const [filterOpen, setFilterOpen] = useState(false);
-    const [filterIndex, setFilterIndex] = useState<number>(filters.length-1);
+    const [filterIndex, setFilterIndex] = useState(0);
 
     const getIcon = (electionTag: ElectionTag | undefined) => {
         try{
@@ -49,9 +73,9 @@ export default () => {
             items = items.slice(1)
         }
         return <Box sx={{width: '100%', }}>
-            <ul >
-                {featuredItem && <fieldset style={
-                    {width: '600px', margin: 'auto', marginBottom: '80px', border: '3px solid white', borderRadius: '5px'}
+            <List sx={{p: 'unset'}}>
+                {featuredItem && <Box display='flex' alignItems='center' flexDirection='column'><FormControl component='fieldset' sx={
+                    {width: {xs: 'unset', md: '600px'}, marginBottom: {xs: '20px', md: '80px'}, border: '3px solid white', borderRadius: '5px'}
                 }>
                     <legend style={{fontSize: '1.2rem'}}>Featured Case Study</legend>
                     <li style={{listStyleType: 'none'}}>
@@ -61,20 +85,20 @@ export default () => {
                             <span>{mapper(featuredItem)}</span>
                         </Box></a>
                     </li>
-                </fieldset>}
-                <Box display='flex' gap={3} flexDirection='row' flexWrap='wrap' justifyContent='center' alignItems='center'>
+                </FormControl></Box>}
+                <Box display='flex' flexWrap='wrap' justifyContent='center' alignItems='center' sx={{gap:{xs: 0, md: 3}, flexDirection: {xs: 'column', md: 'row'}}}>
                 {items.map((item, i) =>
-                    <Box key={i} style={{border: 'none', width: '400px', height: (featuredItem ? '120px' : '60px')}}>
+                    <Box key={i} sx={{border: 'none', width: {xs: 'unset', md: '400px'}, height: (featuredItem ? '120px' : '60px')}}>
                         <li style={{listStyleType: 'none'}}>
                             <a href={`/${item}`}><Box display='flex' flexDirection='row' gap={2} alignItems='center' sx={{maxWidth: '800px'}}>
                                 {getIcon(item)}
-                                <div>{mapper(item)} {!featuredItem && '>'}</div>
+                                <div>{mapper(item)}</div>
                             </Box></a>
                         </li>
                     </Box>
                 )} 
                 </Box>
-            </ul>
+            </List>
         </Box>
     }
 
@@ -84,22 +108,22 @@ export default () => {
             <DialogContent sx={{background: '#111111'}}>
                 <RadioGroup value={filterIndex} onChange={(e) => setFilterIndex(Number(e.target.value))}>
                     {filters.map((f, i) =>
-                        <Box key={i}>
-                            <FormControlLabel value={i} control={<Radio sx={{color: 'white', fontWeight: 'bold'}}/>} label={f.name} sx={{ mb: 0, pb: 0}} />
-                            <FormHelperText sx={{ pl: 4, mt: -1, color: 'white' }}>{f.description}</FormHelperText>
+                        <Box key={i} sx={{width: {xs: 'unset', md: '500px'}}}>
+                            <FormControlLabel value={i} control={<Radio sx={{color: 'white', fontWeight: '2000'}}/>} label={<>{f.tag === undefined ? 'All Case Studies' : dimensionNames[f.tag]}</>} sx={{ mb: 0, pb: 0}} />
+                            {i == filterIndex && <FormHelperText sx={{ pl: 4, mt: 1, mb: 2, color: 'white' }}>{f.description}</FormHelperText>}
                         </Box>
                     )}
                 </RadioGroup>
             </DialogContent>
             <DialogActions sx={{background: '#111111'}}>
-                <Button onClick={() => setFilterOpen(false)}>Done</Button>
+                <Button onClick={() => setFilterOpen(false)} sx={{marginRight: {xs: 'auto', md: 'unset'} }}>Done</Button>
             </DialogActions>
         </Dialog>
         <h1 style={{color: 'white', textAlign: 'center'}}>Ranked Choice Voting - Case Studies</h1>
         <Box display='flex' flexDirection='column' flexWrap='wrap' justifyContent='center'
-            sx={{p: 5, background: '#111111', borderRadius: 2}}
+            sx={{p: {xs: 1, md: 5}, background: '#111111', borderRadius: 2,  }}
         >
-            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
+            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, marginBottom: '20px',}}>
                 <Button sx={{
                     background: 'black',
                     border: '2px solid gray',
@@ -109,7 +133,8 @@ export default () => {
                     padding: '5px',
                     px: '20px',
                 }} onClick={() => setFilterOpen(true)}>
-                    <strong>Filter</strong>&nbsp;<FilterListIcon/> : {filters[filterIndex].name}
+                    {/*@ts-ignore*/}
+                    <strong>Filter</strong>&nbsp;<FilterListIcon/> : {filters[filterIndex].tag === undefined ? 'All Case Studies' : dimensionNames[filters[filterIndex].tag]}
                 </Button>
             </Box>
             <ListBox items={

@@ -209,56 +209,63 @@ export const ScrollMessage = () =>
         <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
     </div>
 
-export const electionInfo = (election: ElectionDetails, isElectionPage: boolean): TransitionGetter => (makeTransitionGetter(election, undefined, () => ([
-    new SimTransition({
-        explainer: <>
-        {!isElectionPage && <BackToTop tag={election.tag}/>}
-        <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
-        {isElectionPage && <DimensionButtons election={election} excludeSelected/>}
-        <hr style={{marginTop: '30px', width: '100%'}}/>
-        <p>
-            <ul>
-                <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
-                <li>1 circle represents {election.ratio} real voters</li>
-                {election?.extraBullets}
-            </ul>
-        </p>
-        {isElectionPage && <ScrollMessage/>}
-        </>,
-        electionName: election.tag,
-        visible: [Candidate, Voter, VoterCamp, Pie],
-        runoffStage: 'firstRound',
-        // @ts-ignore
-        voterMovements: [ new VoterMovement(election.camps) ] ,
-        // HACK to keep the alaska deep dive working
-        ...((getDimensionFromURL() == 'deep-dive') ? {
-            visible: [Candidate],
-            voterMovements: [],
-        }: {})
-    }),
-    new SimTransition({
-        explainer: <>
-        {election?.extraContext}
-        {isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
-            <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
-            <h1>Overview</h1>
-            <p>This election had the following scenarios : 
-            <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
+export const electionInfo = (election: ElectionDetails, isElectionPage: boolean): TransitionGetter => (makeTransitionGetter(election, undefined, () => {
+    let items = [
+        new SimTransition({
+            explainer: <>
+            {!isElectionPage && <BackToTop tag={election.tag}/>}
+            <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
+            {isElectionPage && <DimensionButtons election={election} excludeSelected/>}
+            <hr style={{marginTop: '30px', width: '100%'}}/>
+            <p>
+                <ul>
+                    <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
+                    <li>1 circle represents {election.ratio} real voters</li>
+                    {election?.extraBullets}
+                </ul>
             </p>
-        </div>}
-        </>,
-        electionName: election.tag,
-        visible: [Candidate, Voter, VoterCamp, Pie],
-        runoffStage: 'firstRound',
-        // @ts-ignore
-        voterMovements: [ new VoterMovement(election.camps) ] ,
-        // HACK to keep the alaska deep dive working
-        ...((getDimensionFromURL() == 'deep-dive') ? {
-            visible: [Candidate],
-            voterMovements: [],
-        }: {})
-    })
-])));
+            {isElectionPage && <ScrollMessage/>}
+            </>,
+            electionName: election.tag,
+            visible: [Candidate, Voter, VoterCamp, Pie],
+            runoffStage: 'firstRound',
+            // @ts-ignore
+            voterMovements: [ new VoterMovement(election.camps) ] ,
+            // HACK to keep the alaska deep dive working
+            ...((getDimensionFromURL() == 'deep-dive') ? {
+                visible: [Candidate],
+                voterMovements: [],
+            }: {})
+        }),
+    ];
+    if((isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview') || election.extraContext){
+        items.push(
+            new SimTransition({
+                explainer: <>
+                {election?.extraContext}
+                {isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
+                    <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
+                    <h1>Overview</h1>
+                    <p>This election had the following scenarios : 
+                    <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
+                    </p>
+                </div>}
+                </>,
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+                // @ts-ignore
+                voterMovements: [ new VoterMovement(election.camps) ] ,
+                // HACK to keep the alaska deep dive working
+                ...((getDimensionFromURL() == 'deep-dive') ? {
+                    visible: [Candidate],
+                    voterMovements: [],
+                }: {})
+            })
+        );
+    }
+    return items;
+}));
 
 export type TransitionGetterGen = ((election: ElectionDetails) => TransitionGetter)
 type GetterMap = Partial<{

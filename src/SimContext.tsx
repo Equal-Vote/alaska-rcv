@@ -172,7 +172,6 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
         while(i != nextIndex){
             if(i < nextIndex){
                 i++;
-                console.log(simState.transitions[i]);
                 simState.transitions[i].apply(simState)
                 simState.transitions[i].moveVoters(simState)
                 prevI = i;

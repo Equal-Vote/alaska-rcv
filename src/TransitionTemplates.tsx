@@ -62,13 +62,17 @@ export const [
     // Google slides case studies; https://docs.google.com/presentation/d/1G40n79tcUPdVkZWr-tNXSz7q9ddbwOUw4Ev0G_jKq6I/edit#slide=id.g1e29c24f2cf_0_7
     // There's a bunch more examples there, I'll need to research them
 
-const BackToTop = ({tag}: {tag: string}) => <>
-    <div id={tag} style={{position: 'absolute', top: '-30vh'}}/>
-    <a href='#toc'>️↑back to top️↑</a>
-    <hr style={{width: '100%'}}/>
-</>
+const BackToTop = ({tag}: {tag: string}) => {
+    if(getDimensionFromURL() != 'overview') return <></>
+    return <> <div id={tag} style={{position: 'absolute', top: '-30vh'}}/>
+        <a href='#toc'>️↑back to top️↑</a>
+        <hr style={{width: '100%'}}/>
+    </>
+}
 
-export const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, isDimensionPage: boolean) => [
+export const dimensionInfo = (election: ElectionDetails, dimensionTag: DimensionTag, isDimensionPage: boolean) => {
+    if(getDimensionFromURL() != 'overview') return []
+    return [
     new SimTransition({
         explainer: <div style={{position: 'relative'}}>
             {!isDimensionPage && <BackToTop tag={dimensionTag}/>}
@@ -130,7 +134,7 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
         runoffStage: 'firstRound',
         voterMovements: [ new VoterMovement(election.camps) ] 
     })
-];
+]};
 
 export const getDimensionFromURL = (i=1) => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
 
@@ -209,8 +213,8 @@ export const electionInfo = (election: ElectionDetails, isElectionPage: boolean)
     new SimTransition({
         explainer: <>
         {!isElectionPage && <BackToTop tag={election.tag}/>}
-        {isElectionPage && <DimensionButtons election={election}/>}
         <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
+        {isElectionPage && <DimensionButtons election={election} excludeSelected/>}
         <p>
             <ul>
                 <li>1 voter = {election.ratio} real voters</li>

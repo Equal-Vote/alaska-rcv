@@ -9,7 +9,6 @@ export default ({election, navTop}) => {
     }catch(e){
         icon = undefined;
     }
-    console.log()
 
     return <div className='Nav' style={{paddingLeft: '20px', top: `${navTop}px`}}>
         <a href='https://equal.vote'>

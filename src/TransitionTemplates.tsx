@@ -215,14 +215,29 @@ export const electionInfo = (election: ElectionDetails, isElectionPage: boolean)
         {!isElectionPage && <BackToTop tag={election.tag}/>}
         <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
         {isElectionPage && <DimensionButtons election={election} excludeSelected/>}
+        <hr style={{marginTop: '30px', width: '100%'}}/>
         <p>
             <ul>
-                <li>1 voter = {election.ratio} real voters</li>
                 <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
+                <li>1 circle represents {election.ratio} real voters</li>
                 {election?.extraBullets}
             </ul>
         </p>
         {isElectionPage && <ScrollMessage/>}
+        </>,
+        electionName: election.tag,
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        runoffStage: 'firstRound',
+        // @ts-ignore
+        voterMovements: [ new VoterMovement(election.camps) ] ,
+        // HACK to keep the alaska deep dive working
+        ...((getDimensionFromURL() == 'deep-dive') ? {
+            visible: [Candidate],
+            voterMovements: [],
+        }: {})
+    }),
+    new SimTransition({
+        explainer: <>
         {election?.extraContext}
         {isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
             <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>

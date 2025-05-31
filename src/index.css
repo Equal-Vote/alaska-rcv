@@ -98,12 +98,6 @@ body, #root{
 }
 
 .Nav{
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  align-items: center;
-
-  background: #202020;
   position: absolute;
   width: 100%;
   top: 30px;

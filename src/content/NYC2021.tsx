@@ -1,4 +1,6 @@
 import {ElectionDetails} from '../Transitions';
+import NYCBulletAllocation from './NYCBulletAllocation';
+import NYCTallyError from './NYCTallyError';
 
 //...nycTallyError(ELECTIONS.nyc_2021),
 //...nycBulletAllocation(ELECTIONS.nyc_2021),
@@ -21,5 +23,9 @@ export default {
         'bullet-allocation',
         'star-conversion',
     ],
+    customDimensions: {
+        'bullet-allocation': NYCBulletAllocation,
+        'tally': NYCTallyError,
+    },
     centerBeatsRight: true,
 } satisfies ElectionDetails;

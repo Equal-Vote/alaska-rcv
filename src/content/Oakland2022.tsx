@@ -1,5 +1,6 @@
 import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
+import AlamedaCountyError from './AlamedaCountyError';
 
 //...electionNote(ELECTIONS.alameda_2022, FAILURE.spoiler, <>
     //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
@@ -11,7 +12,7 @@ import { VoterMovement } from '../VoterMovement';
 export default {
     tag: 'oakland-2022',
     title: 'Oakland 2022 School Director Election',
-    extraContext: <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>,
+    extraBullets: <li>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</li>,
     names: {
         left: 'Hutchinson',
         center: 'Manigo',
@@ -26,9 +27,11 @@ export default {
         'upward-mono',
         'compromise',
         'star-conversion',
+        'tally',
     ],
     customDimensions: {
         'bettervoting': 'https://bettervoting.com/bpqkqm/results',
+        'tally': AlamedaCountyError,
     },
     camps: [0, 14, 16, 24, 28, 23, 18, 18, 27, 32],
     ratio: 132.1,

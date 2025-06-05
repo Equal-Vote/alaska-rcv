@@ -1,6 +1,7 @@
 import {ElectionDetails, makeTransitionGetter} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 import AlaskaDeepDive from './AlaskaDeepDive';
+import AlaskaRankAllRepublicans from './AlaskaRankAllRepublicans';
 
 export default {
     tag: 'alaska-special-2022',
@@ -18,10 +19,11 @@ export default {
         'compromise',
         'no-show',
         'star-conversion',
-        'rank-the-red',
+        'rank-all-republicans',
     ],
     customDimensions: {
         'deep-dive': AlaskaDeepDive,
+        'rank-all-republicans': AlaskaRankAllRepublicans,
     },
     camps: [0, 12, 29, 36, 23, 4, 5, 25, 50, 16],
     ratio: 942.9,

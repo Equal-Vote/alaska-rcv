@@ -646,12 +646,12 @@ export const dimensionTemplates: GetterMap = {
                     {starBallot([5, 1, 0])}
                     {starBallot([5, 4, 0])}
                     </div>
-                    <p>Here's what we get if we add the 5,1,0 ballots to the previous data</p>
+                    <p>Here's what we get if we add the 5,1,0 ballots to the previous data:</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0, 0],
                         [5, 1, 0]
                     ])}/>
-                    <p>And then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,4,0 ballots</p>
+                    <p>And then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,4,0 ballots.</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0,      0],
                         [5, [1, 4], 0]
@@ -663,12 +663,12 @@ export const dimensionTemplates: GetterMap = {
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['rightThenCenter'],
                 explainer: <>
-                    <p>And then repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots</p>
+                    <p>And then repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots.</p>
                     <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
                     {starBallot([1, 5, 0])}
                     {starBallot([4, 5, 0])}
                     </div>
-                    <p>And then here's what the updated totals looks like</p>
+                    <p>And then here's what the updated totals looks like:</p>
                     <Bars election={election} data={dotCamp([
                         [5,        0,       0],
                         [5,        [1,4],   0],
@@ -680,7 +680,7 @@ export const dimensionTemplates: GetterMap = {
             new SimTransition({
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>After repeating the process for the remaining ballots, here are the final score ranges for STAR</p>
+                    <p>After repeating the process for the remaining ballots, here are the final score ranges for STAR:</p>
 
                     <Bars election={election} data={dotCamp([
                         [5,        0,       0       ],
@@ -701,13 +701,13 @@ export const dimensionTemplates: GetterMap = {
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
                     <p>There are several possible outcomes depending on where the votes land in those ranges, but for a specific example let's see what would happen if we assume each
-                        total ends up in the center of the ranges</p>
+                        total ends up in the center of the ranges:</p>
                     <Bars election={election} data={avgScore}/>
                     <p>If this happened then 
                         {avgLowScoreIndex == 0 && ` ${election.names.right} and ${election.names.left} `}
                         {avgLowScoreIndex == 1 && ` ${election.names.center} and ${election.names.left} `}
                         {avgLowScoreIndex == 2 && ` ${election.names.right} and ${election.names.center} `}
-                        would proceed to the runoff
+                        would proceed to the runoff.
                     </p>
                 </>,
                 runoffStage: 'default'
@@ -715,25 +715,25 @@ export const dimensionTemplates: GetterMap = {
             new SimTransition({
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And then in the runoff round each vote will go to the finalist they most preferred (just like RCV) and then the win would go to {runoffWinner(avgLowScoreIndex)}</p>
+                    <p>And then in the runoff round each vote will go to the finalist they most preferred (just like RCV) and then the win would go to {runoffWinner(avgLowScoreIndex)}.</p>
                     <p>So RCV and STAR work similarly in that they both narrow the field down to 2 candidates and end in a runoff, but they're very different in how they reduce the candidates.
-                        RCV only looks at first choice preferences so it ends up with many of the same problems as Choose-One, whereas STAR uses all the data to select the finalists with the most
-                        overall support
+                        First choice preference plays a outsized role in RCV so it ends up with many of the same problems as Choose-One, whereas STAR uses all the data to select the finalists with the most
+                        overall support.
                     </p>
                     <p>This ballot conversion method referenced <a target="_blank" href="https://arxiv.org/pdf/2303.00108.pdf">a paper by Jeanne N. Clelland simulating the Alaska election with other voting methods</a>.
-                    Check it out for more details</p>
+                    Check it out for more details.</p>
                 </>,
                 runoffStage: avgLowScoreIndex == 0? 'right_vs_left' : (avgLowScoreIndex == 1? 'center_vs_left' : 'center_vs_right')
             }),
-            new SimTransition({
-                visible: [Candidate, Voter, VoterCamp, Pie],
-                focused: ['centerBullet'],
-                explainer: <>
-                    <p>TODO: I could add a lot more detail here going over the different paths to victory for each candidate. Also I can explain
-                        if there's a condorcet winner then they'll win as long as they're in the top 2.
-                        If the condorcet winner is controversial (ex. 51% 5-star and 49% 0-star), then there's a a possibility that they won't get elected under STAR </p>
-                </>,
-            }),
+            // new SimTransition({
+                // visible: [Candidate, Voter, VoterCamp, Pie],
+                // focused: ['centerBullet'],
+                // explainer: <>
+                    // <p>TODO: I could add a lot more detail here going over the different paths to victory for each candidate. Also I can explain
+                        // if there's a condorcet winner then they'll win as long as they're in the top 2.
+                        // If the condorcet winner is controversial (ex. 51% 5-star and 49% 0-star), then there's a a possibility that they won't get elected under STAR </p>
+                // </>,
+            // }),
         ]
     }),
     'repeal': (election: ElectionDetails) => makeTransitionGetter(election, 'repeal', () => ([
@@ -747,22 +747,21 @@ export const dimensionTemplates: GetterMap = {
         
 //...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
 
-//const bulletVoteDefinition = (def) => {
-//    return new SimTransition({
-//        ...def,
-//        visible: [Candidate, Voter, VoterCamp, Pie],
-//        explainer: <>
-//            <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
-//            <p>Some voters who bullet vote genuinely only like one candidate. Others may do so because they aren't
-//                confident in their opinion, and that's okay. </p>
-//            <p>However, other voters bullet vote because they aren't confident with the voting system and
-//                likely would have ranked more candidates if they understood that it was safe to do so.
-//                Ranked Choice Voting's tabulation is not transparent, and voters may have a hard time
-//                navigating the incentives.</p>
-//        </>,
-//        runoffStage: 'undefined'
-//    });
-//}
+export const bulletVoteDefinition = () => {
+    return new SimTransition({
+        visible: [Candidate, Voter, VoterCamp, Pie],
+        explainer: <>
+            <p>Bullet Voting<br/><i>When a voter only chooses to rank their first choice preference</i></p>
+            <p>Some voters who bullet vote genuinely only like one candidate. Others may do so because they aren't
+                confident in their opinion, and that's okay. </p>
+            <p>However, other voters bullet vote because they aren't confident with the voting system and
+                likely would have ranked more candidates if they understood that it was safe to do so.
+                Ranked Choice Voting's tabulation is not transparent, and voters may have a hard time
+                navigating the incentives.</p>
+        </>,
+        runoffStage: 'undefined'
+    });
+}
 
 //const electionNote = (electionTag, failureTag, explainer) => {
 //    // this doesn't need to be an array, but I figured this will keep the functions more consistent

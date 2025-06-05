@@ -55,7 +55,7 @@ export const dimensionNames = {
     // custom
     'tally': 'Tally Error',
     'bullet-allocation': 'Bullet Vote Allocation',
-    'rank-the-red': 'What if Republican voters ranked all Republicans?',
+    'rank-all-republicans': 'What if Republican voters ranked all Republicans?',
     'star-conversion': 'What if we used STAR Voting?',
     'deep-dive': '🔍The Full Story🔍',
     'bettervoting': 'Full BetterVoting Results'

@@ -100,7 +100,7 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
                 <p>To be clear Condorcet Cycles ARE NOT failures of RCV (unlike the other failures in the list).
                     In some scenarios, voter preferences are cyclical and there is no one candidate preferred over all others.</p>
             </>}
-            {dimensionTag == 'cycle' && <>
+            {dimensionTag == 'majority' && <>
                 <p>Majoritarian Failure<br/><i>When the winning candidate does not have the majority of votes in the final round</i></p>
                 <p>
                     Majoritarian Failures differ from the other failures in that they're so prolific. Research was conducted on all US RCV elections

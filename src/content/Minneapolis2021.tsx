@@ -4,7 +4,7 @@ import { VoterMovement } from '../VoterMovement';
 export default {
     tag: 'minneapolis-2021',
     title: 'Minneapolis 2021 Ward 2 City Council Election',
-    extraContext: <p>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</p>,
+    extraBullets: <li>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</li>,
     names: {
         left: 'Worlobah',
         center: 'Gordon',

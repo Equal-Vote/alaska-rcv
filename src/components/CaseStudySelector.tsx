@@ -70,8 +70,8 @@ export default () => {
             <List sx={{p: 'unset'}}>
                 {featuredItem && <Box display='flex' alignItems='center' flexDirection='column'>
                     <FormControl component='fieldset' sx={
-                    {marginBottom: 10, py: 4, px: 8, width: {xs: '100%', md: '800px'}, color: 'var(--brand-yellow)', /*marginBottom: {xs: '20px', md: '80px'},*/ border: '3px solid var(--brand-yellow)', borderRadius: '5px'}
-                }>
+                        {marginBottom: 10, py: 4, px: 8, width: {xs: '100%', md: '800px'}, color: 'var(--brand-yellow)', /*marginBottom: {xs: '20px', md: '80px'},*/ border: '3px solid var(--brand-yellow)', borderRadius: '5px'}
+                    }>
                     <legend style={{fontSize: '1.6rem'}}>Featured Case Study</legend>
                     <li style={{listStyleType: 'none'}}>
                         {/* We're assuming that the featured item will have a deep-dive page*/}
@@ -98,7 +98,7 @@ export default () => {
                                 maxWidth: '800px',
                                 '&:hover': {
                                     textDecoration: 'underline',
-                                    color: 'var(--brand-yellow)'
+                                    textDecorationColor: 'var(--brand-yellow)'
                                 }
                             }}>
                                 <img src={require(`../assets/${elections.filter(e => e.tag == item)[0]?.names.left.toLowerCase() ?? ''}.jpg`)}

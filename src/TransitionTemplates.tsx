@@ -138,9 +138,23 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
 
 export const getDimensionFromURL = (i=1) => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
 
-export const DimensionButtons = ({election=undefined, excludeSelected=false}: {election?: ElectionDetails, excludeSelected?: boolean}) => {
+export const DimensionButtons = ({election=undefined, excludeSelected=false, center=false}: {election?: ElectionDetails, excludeSelected?: boolean, center?: boolean}) => {
     const DimensionButton = ({title, href, selected, isExternal}: {title: string, href: string, selected: boolean, isExternal: boolean}) =>
-        <Button disabled={selected} href={href} sx={{
+        <Button disabled={selected} href={href} sx={ center? {
+            background: selected? 'white': 'var(--brand-dkblue)',
+            border: selected? '2px solid white' : 'none',
+            //height: '30px',
+            borderRadius: '20px',
+            textTransform: 'none',
+            color: selected? 'var(--brand-dkblue)' : 'white',
+            ':visited': {
+                color: selected? 'var(--brand-dkblue)' : 'white',
+            },
+            ':hover': {
+                color: selected? 'white': 'var(--brand-dkblue)',
+                backgroundColor: 'white'
+            },
+        } : {
             background: selected? 'black': 'white',
             border: selected? '2px solid white' : 'none',
             //height: '30px',
@@ -154,7 +168,6 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false}: {e
             }
         }}>
             <Box display='flex' sx={{
-                color: selected? 'white' : 'black',
                 justifyContent: 'center',
                 gap: 1
             }}>
@@ -182,7 +195,7 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false}: {e
         ]
     }
 
-    return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={{ml: 5}}>
+    return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={center ? {margin: 'auto'} : {ml: 5}}>
         {dims.filter(dim => excludeSelected? (dim != selected) : true).map(dim => 
             <DimensionButton
                 title={dimensionNames[dim]}
@@ -209,23 +222,47 @@ export const ScrollMessage = () =>
         <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
     </div>
 
-export const electionInfo = (election: ElectionDetails, isElectionPage: boolean): TransitionGetter => (makeTransitionGetter(election, undefined, () => {
+export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => {
+    let titleMappers = {
+        'deep-dive': () => {
+            if(election.tag == 'alaska-special-2022'){
+                return <>
+                    <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
+                    <h2 style={{textAlign: 'center', marginBottom: '50px'}}>We've brought the data to life to find out what really happened</h2>
+                    <ScrollMessage/>
+                </>
+            }else{
+                // not used yet
+                return  <></>
+            }
+        },
+        'overview': () => <h1>{`Overview of ${election.title}`}</h1>,
+        'star-conversion': () => <h1>What if this election was rerun with STAR Voting?</h1>
+    }
+    let dim = getDimensionFromURL() as DimensionTag;
     let items = [
         new SimTransition({
             explainer: <>
-            {!isElectionPage && <BackToTop tag={election.tag}/>}
-            <h1>{election.title}{isElectionPage && <>{':'} <br/> {dimensionNames[getDimensionFromURL() as DimensionTag]}</>}</h1>
-            {isElectionPage && <DimensionButtons election={election} excludeSelected/>}
-            <hr style={{marginTop: '30px', width: '100%'}}/>
-            <p>
-                <ul>
-                    <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
-                    <li>1 circle represents {election.ratio} real voters</li>
-                    {election?.extraBullets}
-                </ul>
-            </p>
-            {isElectionPage && <ScrollMessage/>}
-            </>,
+                {dim in titleMappers ? <>
+                    {/*@ts-ignore*/}
+                    {titleMappers[dim]()}
+                </> : <>
+                    <h1>{dimensionNames[dim]}</h1>
+                </>}
+                {dim != 'deep-dive' && <>
+                    <hr style={{marginTop: '30px', width: '100%'}}/>
+                    <p>
+                        <ul>
+                            <li>Source: <a href={election.sourceURL}>{election.sourceTitle}</a></li>
+                            <li>1 circle represents {election.ratio} real voters</li>
+                            {election?.extraBullets}
+                        </ul>
+                    </p>
+                    <ScrollMessage/>
+                    </>
+                }
+            </>
+            ,
             electionName: election.tag,
             visible: [Candidate, Voter, VoterCamp, Pie],
             runoffStage: 'firstRound',
@@ -238,12 +275,12 @@ export const electionInfo = (election: ElectionDetails, isElectionPage: boolean)
             }: {})
         }),
     ];
-    if((isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview') || election.extraContext){
+    if((election.dimensions.length > 1 && getDimensionFromURL() == 'overview') || election.extraContext){
         items.push(
             new SimTransition({
                 explainer: <>
                 {election?.extraContext}
-                {isElectionPage && election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
+                {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
                     <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
                     <h1>Overview</h1>
                     <p>This election had the following scenarios : 
@@ -613,7 +650,6 @@ export const dimensionTemplates: GetterMap = {
             new SimTransition({
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <h1>What if this election was rerun with STAR Voting?</h1>
                     <p>STAR Voting is another alternative voting system that was designed to improve on the issues with Ranked Choice Voting.</p>
                     <img src={require(`./assets/exampleStarBallot.png`)} style={{maxWidth: '400px', width: '100%', marginLeft: '20px'}}/>
                     <p>Once voters have cast their ballots in a STAR Voting election, a winner is determined by adding up all the stars and then performing an automatic runoff between the top 2 score getters.</p>

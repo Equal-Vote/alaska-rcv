@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef} from "react";
 import { SimContext } from "../SimContext";
+import { NAV_HEIGHT } from "./Nav";
 
 const Explainer = ({setNavTop}) => {
     const {simState, updateSimIndex, refreshBool} = useContext(SimContext);
@@ -35,7 +36,11 @@ const Explainer = ({setNavTop}) => {
         updateSimIndex(explainerRefs.current.indexOf(focusedElem));
 
         // Update nav
-        setNavTop(v => Math.max(-100, Math.min(0, v-(containerRef.current.scrollTop - prevScrollY))));
+        //setNavTop(v => Math.max(-NAV_HEIGHT, Math.min(0, v-(containerRef.current.scrollTop - prevScrollY))));
+        setNavTop(v => 
+            // Readable? no, but I love it anyway
+            [0, v, -NAV_HEIGHT][Math.sign(containerRef.current.scrollTop - prevScrollY)+1]
+        );
         prevScrollY = containerRef.current.scrollTop;
     }
 

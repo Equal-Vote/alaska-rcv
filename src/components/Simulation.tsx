@@ -5,8 +5,9 @@ import Nav from "./Nav";
 import Voter from "./Voter";
 import { Box } from "@mui/material";
 import GameObject from "./GameObject";
+import { NAV_HEIGHT } from "./Nav";
 
-const Simulation = () => {
+const Simulation = ({navTop}) => {
     let [bool, setBool] = useState(false);
     let animID = useRef(null);
     let simRef = useRef(null);
@@ -68,14 +69,19 @@ const Simulation = () => {
         return () => cancelAnimationFrame(animID.current);
     }, [])
 
+    // 0 is normal, 1 is offset for nav
+    let navT = 1 - (Math.abs(navTop)/NAV_HEIGHT);
     return (
-        <div className="simPanel">
+        <Box className="simPanel" sx={{
+           transform: {xs: 'none', md: `translate(0px, ${navT*180}px) scale(${1-navT*.3})`},
+           transition: 'transform 1s',
+        }}>
             <div ref={simRef} className='simulation'>
                 {simState.objects.map((o, i) => <Box key={i}>{o.asComponent(
                     simState, simRef.current == null ? 800 : simRef.current.clientHeight
                 )}</Box>)}
             </div>
-        </div>
+        </Box>
     )
 }
 

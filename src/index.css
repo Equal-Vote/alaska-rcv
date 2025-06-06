@@ -5,7 +5,7 @@
   --brand-orange: #E69F00FF;
   --brand-yellow: #FFE156;
   --brand-green: #C4E44C;
-  --brand-green2: #60B33C;
+  --brand-green2: #86C66A;
   --brand-ltblue: #2AA2B3;
   --brand-dkblue: #02627C;
   --brand-purple: #552A99;/*#4D2586*/;
@@ -95,13 +95,6 @@ body, #root{
   height: 100vh;
   margin: 0;
   background: black;
-}
-
-.Nav{
-  position: absolute;
-  width: 100%;
-  top: 30px;
-  overflow: hidden;
 }
 
 .NavButton{
@@ -197,8 +190,8 @@ body, #root{
 }
 
 .explainerTopPadding{
-  height: 20vh;
-  min-height: 20vh;
+  height: 40vh;
+  min-height: 40vh;
 }
 
 .explainerBottomPadding{
@@ -366,7 +359,7 @@ img{
 }
 
 a, a:visited{
-  color: var(--brand-green2);
+  color: var(--brand-yellow);
   text-decoration: none;
 }
 
@@ -435,19 +428,11 @@ a:hover{
 }
 
 @media(max-width: 900px){
-  .Nav{
-    gap: 5px;
-  }
   .NavButton{
     height: 35px;
   }
   .NavButton h4{
     font-size: .7rem;
-  }
-
-
-  .explainerPadding{
-    height: 40vh;
   }
 
   .CandidateInner h3{
@@ -490,10 +475,6 @@ a:hover{
   .explainerBottomPadding{
     height: 150px;
     min-height: 150px;
-  }
-
-  .Voter{
-
   }
 
   .app{

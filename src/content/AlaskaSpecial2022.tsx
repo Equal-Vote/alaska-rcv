@@ -1,4 +1,4 @@
-import {ElectionDetails, makeTransitionGetter} from '../Transitions';
+import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 import AlaskaDeepDive from './AlaskaDeepDive';
 import AlaskaRankAllRepublicans from './AlaskaRankAllRepublicans';

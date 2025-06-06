@@ -29,7 +29,7 @@ export default () => {
         {(election || primaryDimensionTag) ? 
             <SimContextProvider election={election} primaryDimensionTag={primaryDimensionTag}>
                 <div className="columns">
-                    <Simulation/>
+                    <Simulation navTop={navTop}/>
                     <Explainer setNavTop={setNavTop}/>
                 </div>
             </SimContextProvider>

@@ -15,13 +15,13 @@ import { makeTransitionGetter } from '../Transitions';
 
 export default () => [
     // intro
-    new SimTransition({
-        visible: ['choose_one'],
-        explainer: <>
-            <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
-            <h2 style={{textAlign: 'center', marginBottom: '50px'}}>We've brought the data to life to find out what really happened</h2>
-        </>
-    }),
+    //new SimTransition({
+    //    visible: ['choose_one'],
+    //    explainer: <>
+    //        <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
+    //        <h2 style={{textAlign: 'center', marginBottom: '50px'}}>We've brought the data to life to find out what really happened</h2>
+    //    </>
+    //}),
     new SimTransition({
         visible: ['choose_one'],
         explainer: <p>For centuries, we've been cursed with a voting method where it's not necessarily safe to pick your favorite.</p>,

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 // @ts-ignore
 import { SimTransition } from "./SimTransition";
-import { DimensionButtons, dimensionInfo, dimensionTemplates, electionInfo, TransitionGetterGen } from "./TransitionTemplates";
+import { DimensionButtons, dimensionInfo, dimensionTemplates, pageInfo, TransitionGetterGen } from "./TransitionTemplates";
 import { VoterMovement } from "./VoterMovement";
 import AlaskaGeneral2022 from "./content/AlaskaGeneral2022";
 import AlaskaSpecial2022 from "./content/AlaskaSpecial2022";
@@ -118,7 +118,7 @@ export interface ElectionDetails {
 
 const allGetters = (): TransitionGetter[] => ([
     ...elections.map(election => ([
-        //electionInfo(election),
+        //pageInfo(election),
         ...election.dimensions 
             .filter((dim:DimensionTag) => dim in dimensionTemplates && !(dim in (election?.customDimensions ?? {})))
             .sort((a, b) => {
@@ -143,7 +143,7 @@ export const getTransitions = ({election=undefined, dimension='overview'}: {elec
     new SimTransition({
         explainer: <div className='explainerTopPadding'/>
     }),
-    ...(election === undefined ? makeTransitionGetter(elections[0], dimension, () => dimensionInfo(elections[0], dimension, true)).get() : electionInfo(election, true).get()),
+    ...(election === undefined ? [] : pageInfo(election).get()),
     ...allGetters()
         .filter(getter => election?.tag === undefined ? true : getter.electionTag === election.tag)
         .filter(getter => getter.dimension === undefined || (dimension == 'overview' ?
@@ -152,7 +152,7 @@ export const getTransitions = ({election=undefined, dimension='overview'}: {elec
         )
         .map(getter => [
             ...(election === undefined?
-                electionInfo(elections.filter(e => e.tag == getter.electionTag)[0], false).get()
+                []
             :
                 dimensionInfo(election, getter.dimension as DimensionTag, false)
             ),

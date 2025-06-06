@@ -1,8 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { dimensionNames } from '../Transitions';
-import { getDimensionFromURL } from '../TransitionTemplates';
+import { DimensionButtons, getDimensionFromURL } from '../TransitionTemplates';
 import EqualLogo from '../assets/equal_logo.png'
 import EqualLogoSmall from '../assets/equal_logo_small.png'
+import AlaskaSpecial2022 from '../content/AlaskaSpecial2022';
+
+export const NAV_HEIGHT=77+196+77;
 
 export default ({election, navTop}) => {
     let icon = undefined;
@@ -13,14 +16,22 @@ export default ({election, navTop}) => {
         icon = undefined;
     }
 
-    return <Box className='Nav' display='flex' flexDirection='column' sx={{width: '100%', top: `${navTop}px`}}>
+    return <Box className='Nav' display='flex' flexDirection='column' sx={{
+        width: '100%',
+        top: `${navTop == 0 ? 0 : '-100%'}`,
+        transition: 'top 1s',
+        position: election? 'absolute' : 'relative',
+        overflow: election? 'hidden' : 'unset',
+        //overflow: {xs: 'unset', md: 'hidden'},
+    }}>
         <Box
             display='flex'
             flexDirection='row'
             alignItems='center'
             sx={{
                 gap: {xs: '5px', md: '15px'},
-                background: '#202020', paddingLeft: '20px', 
+                background: 'black', paddingLeft: '20px', 
+                height: '77px'
             }}
         >
             <a href='https://equal.vote'>
@@ -44,11 +55,18 @@ export default ({election, navTop}) => {
             {getDimensionFromURL(0) != '' && <><span className='NavArrow'>{">"}</span>
                 <a href=''>
                     <div className='NavButton'>
-                    {icon && <img src={icon}/>}
                     <h4>{election?.title ?? dimensionNames[getDimensionFromURL(0)]}</h4>
                     </div>
                 </a>
             </>}
+        </Box>
+        <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '196px', background: 'var(--brand-ltblue)'}}>
+            <h1 style={{color: 'white', textAlign: 'center', fontSize: '48px'}}>
+                {election == undefined ? 'Ranked Choice Voting - Case Studies' : election.title}
+            </h1>
+        </Box>
+        <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '77px', background: 'var(--brand-dkblue)'}}>
+            <DimensionButtons election={AlaskaSpecial2022} excludeSelected center/>
         </Box>
         {/*<Box display='flex' flexDirection='row' gap='20px' sx={{color: 'white', background: 'black', ml: 10}}>
             <Typography >Articles for this election:</Typography>

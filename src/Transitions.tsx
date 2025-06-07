@@ -57,7 +57,7 @@ export const dimensionNames = {
     'bullet-allocation': 'Bullet Vote Allocation',
     'rank-all-republicans': 'What if Republican voters ranked all Republicans?',
     'star-conversion': 'What if we used STAR Voting?',
-    'deep-dive': '🔍The Full Story🔍',
+    'deep-dive': 'The Full Story',
     'bettervoting': 'Full BetterVoting Results'
 } as const;
 

@@ -5,7 +5,6 @@ import Nav from "./Nav";
 import Voter from "./Voter";
 import { Box } from "@mui/material";
 import GameObject from "./GameObject";
-import { NAV_HEIGHT } from "./Nav";
 
 const Simulation = ({navTop}) => {
     let [bool, setBool] = useState(false);
@@ -70,7 +69,7 @@ const Simulation = ({navTop}) => {
     }, [])
 
     // 0 is normal, 1 is offset for nav
-    let navT = 1 - (Math.abs(navTop)/NAV_HEIGHT);
+    let navT = 1 - Math.abs(navTop);
     return (
         <Box className="simPanel" sx={{
            transform: {xs: 'none', md: `translate(0px, ${navT*180}px) scale(${1-navT*.3})`},

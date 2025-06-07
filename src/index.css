@@ -48,7 +48,7 @@
 
   --pieGray: #111111;
   --voterGray: darkgray;
-  font-family: 'Montserrat';
+  font-family: 'Verdana';
   font-weight: bold;
 }
 
@@ -198,6 +198,11 @@ body, #root{
   height: 60vh;
   min-height: 60vh;
 }
+
+.Nav *{
+  font-family: 'Montserrat'
+}
+  
 
 .explainer h1, h2, h3, p, ol, ul, li, i, label{
   color: white;

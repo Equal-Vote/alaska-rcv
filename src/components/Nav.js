@@ -5,8 +5,6 @@ import EqualLogo from '../assets/equal_logo.png'
 import EqualLogoSmall from '../assets/equal_logo_small.png'
 import AlaskaSpecial2022 from '../content/AlaskaSpecial2022';
 
-export const NAV_HEIGHT=77+196+77;
-
 export default ({election, navTop}) => {
     let icon = undefined;
 
@@ -18,7 +16,7 @@ export default ({election, navTop}) => {
 
     return <Box className='Nav' display='flex' flexDirection='column' sx={{
         width: '100%',
-        top: `${navTop == 0 ? 0 : '-100%'}`,
+        top: `${navTop == 0 ? 0 : '-50%'}`, // I think this 50% is screen height, so we don't want to do 100
         transition: 'top 1s',
         position: election? 'absolute' : 'relative',
         overflow: election? 'hidden' : 'unset',
@@ -60,8 +58,8 @@ export default ({election, navTop}) => {
                 </a>
             </>}
         </Box>
-        <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '196px', background: 'var(--brand-ltblue)'}}>
-            <h1 style={{color: 'white', textAlign: 'center', fontSize: '48px'}}>
+        <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '128px', background: 'var(--brand-ltblue)'}}>
+            <h1 style={{color: 'white', textAlign: 'center', fontSize: '32px'}}>
                 {election == undefined ? 'Ranked Choice Voting - Case Studies' : election.title}
             </h1>
         </Box>

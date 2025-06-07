@@ -2,8 +2,6 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider
 import {DimensionTag, ElectionTag, dimensionNames, elections} from '../Transitions'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState } from "react";
-// @ts-ignore
-import { NAV_HEIGHT } from "./Nav";
 
 interface FilterItem {
     description: string,
@@ -121,7 +119,7 @@ export default () => {
     }
 
 
-    return <Box className='caseList' sx={{mb: 5, mx: 'auto', width: '100%', mt: 10}}>
+    return <Box className='caseList' sx={{mb: 5, mx: 'auto', width: '100%', mt: 0}}>
         <Dialog open={filterOpen}>
             <DialogTitle sx={{background: '#111111'}}><h2>Filter elections by pathology</h2></DialogTitle>
             <DialogContent sx={{background: '#111111'}}>

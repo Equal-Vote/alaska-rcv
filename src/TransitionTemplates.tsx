@@ -143,6 +143,7 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false, cen
         <Button disabled={selected} href={href} sx={ center? {
             background: selected? 'white': 'var(--brand-dkblue)',
             border: selected? '2px solid white' : 'none',
+            fontSize: '1rem',
             //height: '30px',
             borderRadius: '20px',
             textTransform: 'none',

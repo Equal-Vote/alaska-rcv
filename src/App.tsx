@@ -12,11 +12,11 @@ import { elections } from './Transitions';
 export default () => {
     // APP
     let [navTop, setNavTop] = useState(0);
-    let parts = window.location.pathname.split('/');
-    let tag = parts?.[1];
+    let parts = window.location.search.substring(1).split('/');
+    let tag = parts?.[0];
     let election = undefined;
     let primaryDimensionTag = undefined;
-    if(window.location.pathname != '/'){
+    if(window.location.search != ''){
         let electionMatches = elections.filter(e => e.tag == tag)
         if(electionMatches.length > 0){
             election = electionMatches[0];

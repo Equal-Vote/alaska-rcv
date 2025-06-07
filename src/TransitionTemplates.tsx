@@ -136,7 +136,11 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
     })
 ]};
 
-export const getDimensionFromURL = (i=1) => window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
+export const getDimensionFromURL = (i=1) => {
+    return window.location.search.substring(1).replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
+
+    //window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
+}
 
 export const DimensionButtons = ({election=undefined, excludeSelected=false, center=false}: {election?: ElectionDetails, excludeSelected?: boolean, center?: boolean}) => {
     const DimensionButton = ({title, href, selected, isExternal}: {title: string, href: string, selected: boolean, isExternal: boolean}) =>
@@ -202,11 +206,11 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false, cen
                 title={dimensionNames[dim]}
                 href={
                     (election === undefined ? 
-                        `${host}/${dim}`
+                        `${host}/?${dim}`
                     : (
                         (election && typeof election.customDimensions?.[dim] === 'string') ?
                             election.customDimensions[dim] as string :
-                        `${host}/${tag}/${dim == 'overview' ? '' : dim}`
+                        `${host}/?${tag}/${dim == 'overview' ? '' : dim}`
                     ))
                 }
                 isExternal={election !== undefined && (typeof election.customDimensions?.[dim] === 'string')}

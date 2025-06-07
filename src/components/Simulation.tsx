@@ -73,7 +73,7 @@ const Simulation = ({navTop}) => {
     return (
         <Box className="simPanel" sx={{
            transform: {xs: 'none', md: `translate(0px, ${navT*180}px) scale(${1-navT*.3})`},
-           transition: 'transform 1s',
+           transition: 'transform 0.5s',
         }}>
             <div ref={simRef} className='simulation'>
                 {simState.objects.map((o, i) => <Box key={i}>{o.asComponent(

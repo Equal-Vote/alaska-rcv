@@ -16,8 +16,8 @@ export default ({election, navTop}) => {
 
     return <Box className='Nav' display='flex' flexDirection='column' sx={{
         width: '100%',
-        top: `${navTop == 0 ? 0 : '-50%'}`, // I think this 50% is screen height, so we don't want to do 100
-        transition: 'top 1s',
+        top: `${navTop == 0 ? 0 : '-70%'}`, // I think this 70% is screen height, so we don't want to do 100
+        transition: 'top 0.5s',
         position: election? 'absolute' : 'relative',
         overflow: election? 'hidden' : 'unset',
         //overflow: {xs: 'unset', md: 'hidden'},
@@ -59,19 +59,12 @@ export default ({election, navTop}) => {
             </>}
         </Box>
         <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '128px', background: 'var(--brand-ltblue)'}}>
-            <h1 style={{color: 'white', textAlign: 'center', fontSize: '32px'}}>
+            <h1 style={{color: 'white', textAlign: 'center', fontSize: {xs: '24px', md: '32px'}}}>
                 {election == undefined ? 'Ranked Choice Voting - Case Studies' : election.title}
             </h1>
         </Box>
-        <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '77px', background: 'var(--brand-dkblue)'}}>
+        {election && <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '77px', background: 'var(--brand-dkblue)'}}>
             <DimensionButtons election={AlaskaSpecial2022} excludeSelected center/>
-        </Box>
-        {/*<Box display='flex' flexDirection='row' gap='20px' sx={{color: 'white', background: 'black', ml: 10}}>
-            <Typography >Articles for this election:</Typography>
-            <Typography sx={{textDecoration: 'underline'}}>Overview</Typography>
-            <Typography>The full story</Typography>
-            <Typography>What if we used STAR?</Typography>
-            <Typography>Rank all republicans?</Typography>
-        </Box>*/}
+        </Box>}
     </Box>
 }

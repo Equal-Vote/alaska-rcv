@@ -5,6 +5,7 @@ const Explainer = ({setNavTop}) => {
     const {simState, updateSimIndex, refreshBool} = useContext(SimContext);
     const explainerRefs = useRef([]);
     const containerRef = useRef(null);
+    const upScrollStartY = useRef(undefined);
 
     let explainers = simState.allExplainers.map((explainer, i) => {
         if(i == 0 || i == simState.allExplainers.length-1) return <div key={i}>{explainer}</div>;
@@ -34,11 +35,24 @@ const Explainer = ({setNavTop}) => {
 
         updateSimIndex(explainerRefs.current.indexOf(focusedElem));
 
+
+        upScrollStartY.current ??= containerRef.current.scrollTop;
+        if(containerRef.current.scrollTop > prevScrollY){
+            upScrollStartY.current = containerRef.current.scrollTop;
+        }
         // Update nav
-        setNavTop(v => 
-            // Readable? no, but I love it anyway
-            [0, v, -1][Math.sign(containerRef.current.scrollTop - prevScrollY)+1]
-        );
+        setNavTop(v => {
+            // when scrolling down use 0
+            if(containerRef.current.scrollTop > prevScrollY){
+                return -1;
+            }
+            
+            if(upScrollStartY.current - containerRef.current.scrollTop > 300 || containerRef.current.scrollTop == 0){
+                return 0;
+            }
+
+            return v;
+        });
         prevScrollY = containerRef.current.scrollTop;
     }
 

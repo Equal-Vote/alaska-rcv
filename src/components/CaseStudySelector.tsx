@@ -36,7 +36,7 @@ export default () => {
         },
         {
             tag: 'downward-mono',
-            description: 'A scenario where a losing candidate could have lost support and won.',
+            description: 'A scenario where if a losing candidate had lost support they could have won'
         },
         {
             tag: 'compromise',

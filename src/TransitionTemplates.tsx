@@ -139,7 +139,7 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
 export const getDimensionFromURL = (i=1) => {
     let parts = window.location.pathname.replaceAll('/', ' ').trim().split(' ');
     let electionTag = parts[0]
-    return parts?.[i] ?? (electionTag == 'alaska22special' ? 'deep-dive' : 'overview')
+    return parts?.[i] ?? (electionTag == 'alaska22' ? 'deep-dive' : 'overview')
 
     //window.location.pathname.replaceAll('/', ' ').trim().split(' ')?.[i] ?? 'overview'
 }
@@ -232,7 +232,7 @@ export const ScrollMessage = () =>
 export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTransitionGetter(election, undefined, () => {
     let titleMappers = {
         'deep-dive': () => {
-            if(election.tag == 'alaska22special'){
+            if(election.tag == 'alaska22'){
                 return <>
                     <h1 style={{textAlign: 'center'}}>Alaska mobilized the nation around Ranked Choice Voting -- for better or worse: </h1>
                     <h2 style={{textAlign: 'center', marginBottom: '50px'}}>We've brought the data to life to find out what really happened</h2>

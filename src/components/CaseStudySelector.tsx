@@ -60,8 +60,8 @@ export default () => {
 
     const ListBox = ({items, mapper}: {items: ElectionTag[], mapper: Function}) => {
         let featuredItem: ElectionTag | undefined = undefined;
-        if(items[0] == 'alaska22special'){
-            featuredItem = 'alaska22special';
+        if(items[0] == 'alaska22'){
+            featuredItem = 'alaska22';
             items = items.slice(1)
         }
         return <Box sx={{width: '100%', maxWidth: '1500px', margin: 'auto'}}>
@@ -155,10 +155,10 @@ export default () => {
             </Box>
             <ListBox items={
                 elections
-                    .sort((a, b) => a.tag == 'alaska22special' ? -1 : 1 )
+                    .sort((a, b) => a.tag == 'alaska22' ? -1 : 1 )
                     .filter(e => filters[filterIndex].tag === undefined || e.dimensions.includes(filters[filterIndex].tag as DimensionTag))
                     .map(e => e.tag)
-                //'alaska22special', ...elections.map(e => e.tag).filter(t => t != 'alaska22special')
+                //'alaska22', ...elections.map(e => e.tag).filter(t => t != 'alaska22')
             } mapper={(key: string) => elections.filter(e => e.tag == key)[0]?.title ?? ''}/>
         </Box>
     </Box>

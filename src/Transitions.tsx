@@ -29,7 +29,7 @@ export const elections: ElectionDetails[] = [
 ];
 
 export type ElectionTag = 
-    'alaska22special' |
+    'alaska22' |
     'alaska22general' | 
     'burlington09' |
     'minneapolis21' |

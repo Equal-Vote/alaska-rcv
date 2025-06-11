@@ -5,7 +5,7 @@ import NYCTallyError from './NYCTallyError';
 //...nycTallyError(ELECTIONS.nyc_2021),
 //...nycBulletAllocation(ELECTIONS.nyc_2021),
 export default {
-    tag: 'nyc-2021',
+    tag: 'nyc21',
     title: 'New York City 2021 Democratic Mayor Election',
     ratio: 4355.9,
     sourceTitle: 'Harvard Dataverse',

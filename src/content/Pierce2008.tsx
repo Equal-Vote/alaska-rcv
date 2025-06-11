@@ -2,7 +2,7 @@ import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 
 export default {
-    tag: 'pierce-2008',
+    tag: 'pierce08',
     title: 'Pierce County WA 2008 County Executive Election',
     sourceTitle: 'An Examination of Ranked-Choice Voting in the United States, 2004–2022',
     sourceURL: 'https://arxiv.org/abs/2301.12075',

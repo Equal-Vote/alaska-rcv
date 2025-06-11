@@ -29,16 +29,16 @@ export const elections: ElectionDetails[] = [
 ];
 
 export type ElectionTag = 
-    'alaska-special-2022' |
-    'alaska-general-2022' | 
-    'burlington-2009' |
-    'minneapolis-2021' |
-    'pierce-2008' |
-    'san-francisco-2020' |
-    'oakland-2022' |
-    'moab-2021' |
-    'nyc-2021' |
-    'aspen-2009';
+    'alaska22special' |
+    'alaska22general' | 
+    'burlington09' |
+    'minneapolis21' |
+    'pierce08' |
+    'san-francisco20' |
+    'oakland22' |
+    'moab21' |
+    'nyc21' |
+    'aspen09';
 
 export const dimensionNames = {
     'overview': 'Overview',

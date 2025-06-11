@@ -4,7 +4,7 @@ import { VoterMovement } from '../VoterMovement';
 
 
 export default {
-    tag: 'burlington-2009',
+    tag: 'burlington09',
     title: 'Burlington 2009 Mayor Election',
     names: {
         left: 'Kiss',

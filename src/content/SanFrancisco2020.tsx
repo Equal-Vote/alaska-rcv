@@ -5,7 +5,7 @@ import { VoterMovement } from '../VoterMovement';
     //<p>(It shows as a tie here because they only won by a fraction of a vote).</p>
 //),
 export default {
-    tag: 'san-francisco-2020',
+    tag: 'san-francisco20',
     title: 'San Francisco 2020 District 7 Board of Supervisors Election',
     extraContext: 
         <p>Despite picking this correct winner, the Downward Monotonicity Pathology is still concerning because it shows that the result isn't stable,

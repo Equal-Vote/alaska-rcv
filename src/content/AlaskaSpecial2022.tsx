@@ -4,7 +4,7 @@ import AlaskaDeepDive from './AlaskaDeepDive';
 import AlaskaRankAllRepublicans from './AlaskaRankAllRepublicans';
 
 export default {
-    tag: 'alaska-special-2022',
+    tag: 'alaska22special',
     title: 'Alaska 2022 US Representative Special Election',
     names: {
         left: 'Peltola',

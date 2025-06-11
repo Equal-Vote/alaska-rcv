@@ -1,7 +1,7 @@
 import {ElectionDetails} from '../Transitions';
 
 export default {
-    tag: 'alaska-general-2022',
+    tag: 'alaska22general',
     title: 'Alaska 2022 US Representative General Election',
     ratio: 1318.4,
     sourceTitle: 'Ranked Choice Voting And the Center Squeeze in the Alaska 2022 Special Election: How Might Other Voting Methods Compare?',

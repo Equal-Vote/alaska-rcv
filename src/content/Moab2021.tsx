@@ -2,7 +2,7 @@ import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 
 export default {
-    tag: 'moab-2021',
+    tag: 'moab21',
     title: 'Moab 2021 City Council Election',
     ratio: 8.7,
     sourceTitle: 'Analysis of the 2021 Instant Run-Off Elections in Utah',

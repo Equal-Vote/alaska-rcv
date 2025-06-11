@@ -2,7 +2,7 @@ import {ElectionDetails} from '../Transitions';
 import { VoterMovement } from '../VoterMovement';
 
 export default {
-    tag: 'aspen-2009',
+    tag: 'aspen09',
     title: 'Aspen 2009 Council Election',
     ratio: 11.1,
     sourceTitle: 'RangeVoting.org',

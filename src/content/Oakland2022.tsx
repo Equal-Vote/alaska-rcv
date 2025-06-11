@@ -10,7 +10,7 @@ import AlamedaCountyError from './AlamedaCountyError';
     //<p>Note that the Hutchinson vs Manigo head-to-head appears to be tied but this is because Manigo wins by a fraction of a simulated vote</p>
 //),
 export default {
-    tag: 'oakland-2022',
+    tag: 'oakland22',
     title: 'Oakland 2022 School Director Election',
     extraBullets: <li>Note that the existence of a condorcet cycle implies that there will be a spoiler candidate regardless of which winner is chosen.</li>,
     names: {

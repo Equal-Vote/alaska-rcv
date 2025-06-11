@@ -124,7 +124,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : election.tag})
+        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : getDimensionFromURL(1)})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);

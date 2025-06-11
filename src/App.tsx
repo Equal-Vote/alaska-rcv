@@ -15,19 +15,16 @@ export default () => {
     let parts = window.location.pathname.split('/');
     let tag = parts?.[1];
     let election = undefined;
-    let primaryDimensionTag = undefined;
     if(window.location.pathname != ''){
         let electionMatches = elections.filter(e => e.tag == tag)
         if(electionMatches.length > 0){
             election = electionMatches[0];
-        }else{
-            primaryDimensionTag = tag;
         }
     }
     return <div className="app" style={{overflowY: election ? 'none' : 'auto'}}>
         <Nav navTop={navTop} election={election}/>
-        {(election || primaryDimensionTag) ? 
-            <SimContextProvider election={election} primaryDimensionTag={primaryDimensionTag}>
+        {election ?
+            <SimContextProvider election={election}>
                 <div className="columns">
                     <Simulation navTop={navTop}/>
                     <Explainer setNavTop={setNavTop}/>

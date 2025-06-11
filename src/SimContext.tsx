@@ -17,7 +17,7 @@ import { getDimensionFromURL } from './TransitionTemplates';
 
 export const SimContext = createContext({});
 
-export function SimContextProvider({election, primaryDimensionTag, children}: {election: ElectionDetails, primaryDimensionTag? : DimensionTag, children: ReactNode[]}){
+export function SimContextProvider({election, children}: {election: ElectionDetails, children: ReactNode[]}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
     let isMobile = (window.innerWidth < 900);
     const campMappings = (isMobile)?
@@ -124,7 +124,7 @@ export function SimContextProvider({election, primaryDimensionTag, children}: {e
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? primaryDimensionTag : getDimensionFromURL()})
+        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : election.tag})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);

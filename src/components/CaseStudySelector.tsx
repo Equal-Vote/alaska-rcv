@@ -72,8 +72,7 @@ export default () => {
                     }>
                     <legend style={{fontSize: '1.6rem'}}>Featured Case Study</legend>
                     <li style={{listStyleType: 'none'}}>
-                        {/* We're assuming that the featured item will have a deep-dive page*/}
-                        <a href={`/?${featuredItem}/deep-dive`}><Box display='flex' gap={2} alignItems='center' sx={{
+                        <a href={`${featuredItem}`}><Box display='flex' gap={2} alignItems='center' sx={{
                             flexDirection: {xs: 'column', md: 'row'},
                             color: 'white',
                             maxWidth: '800px',
@@ -91,7 +90,7 @@ export default () => {
                 {items.map((item, i) =>
                     <Box key={i} sx={{border: 'none', width: {xs: 'unset', md: '400px'}, height: (featuredItem ? '120px' : '60px')}}>
                         <li style={{listStyleType: 'none'}}>
-                            <a href={`/?${item}`}><Box display='flex' flexDirection='row' gap={4} alignItems='center' sx={{
+                            <a href={`/${item}`}><Box display='flex' flexDirection='row' gap={4} alignItems='center' sx={{
                                 color: 'white',
                                 maxWidth: '800px',
                                 '&:hover': {

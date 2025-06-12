@@ -8,7 +8,7 @@ export default {
     sourceURL: 'https://arxiv.org/abs/2303.00108',
     extraContext: <>
         <p>This election was essentially a repeat of the special election 6 months prior, and it was interesting to see how the votes changed.</p>
-        <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general, but this wasn't the case.</p>
+        <p>Voting theorists wondered if the results from the previous election would cause voters to be more strategic in the general.</p>
         <p>Instead voters shifted left across the board and Peltola was the true Condorcet Winner this time.</p>
         <p>There are 2 primary explanations for this <ul>
             <li>The general election had many more voters, and voters in general elections tend to be more left leaning.</li>

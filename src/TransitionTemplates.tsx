@@ -429,7 +429,7 @@ export const dimensionTemplates: GetterMap = {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>and looks like {election.centerBeatsRight? election.names.center : election.names.right} also beats {election.centerBeatsRight? election.names.right : election.names.center} head-to-head (but it's not relevant for this case).</p>
+                <p>It looks like {election.centerBeatsRight? election.names.center : election.names.right} also beats {election.centerBeatsRight? election.names.right : election.names.center} head-to-head (but it's not relevant for this case).</p>
             </>,
             runoffStage: 'center_vs_right'
         }),
@@ -694,7 +694,7 @@ export const dimensionTemplates: GetterMap = {
                         [5, 0, 0],
                         [5, 1, 0]
                     ])}/>
-                    <p>And then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,4,0 ballots.</p>
+                    <p>Then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,4,0 ballots.</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0,      0],
                         [5, [1, 4], 0]
@@ -706,12 +706,12 @@ export const dimensionTemplates: GetterMap = {
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['rightThenCenter'],
                 explainer: <>
-                    <p>And then repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots.</p>
+                    <p>Repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots.</p>
                     <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
                     {starBallot([1, 5, 0])}
                     {starBallot([4, 5, 0])}
                     </div>
-                    <p>And then here's what the updated totals looks like:</p>
+                    <p>Here's what the updated totals looks like:</p>
                     <Bars election={election} data={dotCamp([
                         [5,        0,       0],
                         [5,        [1,4],   0],
@@ -758,7 +758,7 @@ export const dimensionTemplates: GetterMap = {
             new SimTransition({
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 explainer: <>
-                    <p>And then in the runoff round each vote will go to the finalist they most preferred (just like RCV) and then the win would go to {runoffWinner(avgLowScoreIndex)}.</p>
+                    <p>In the runoff round each vote will go to the finalist they most preferred (just like RCV) and then the win would go to {runoffWinner(avgLowScoreIndex)}.</p>
                     <p>So RCV and STAR work similarly in that they both narrow the field down to 2 candidates and end in a runoff, but they're very different in how they reduce the candidates.
                         First choice preference plays a outsized role in RCV so it ends up with many of the same problems as Choose-One, whereas STAR uses all the data to select the finalists with the most
                         overall support.

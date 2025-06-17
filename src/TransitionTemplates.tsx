@@ -661,7 +661,7 @@ export const dimensionTemplates: GetterMap = {
                     <img src={require(`./assets/exampleStarBallot.png`)} style={{maxWidth: '400px', width: '100%', marginLeft: '20px'}}/>
                     <p>Once voters have cast their ballots in a STAR Voting election, a winner is determined by adding up all the stars and then performing an automatic runoff between the top 2 score getters.</p>
                     <p>How would this election be different if the voters had used the STAR Voting system?</p>
-                    <p>Converting between voting methods is always tricky since we can't say for sure how voters would have changed their vote, but we can still get an estimate.</p>
+                    <p>Converting between voting methods with different ballots is tricky since we can't say for sure how voters would have filled out their ballot, but we can make some reasonable assumptions and go from there.</p>
                 </>,
                 runoffStage: 'default'
             }),

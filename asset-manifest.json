@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.665ac841.css",
-    "main.js": "/static/js/main.59038696.js",
+    "main.js": "/static/js/main.7acaa3ae.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
     "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
     "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
@@ -21,6 +21,7 @@
     "static/media/usa2.png": "/static/media/usa2.7d0792179e22b97efb8f.png",
     "static/media/usa3.png": "/static/media/usa3.c2d897cfeac7715f5b9e.png",
     "static/media/usa1.png": "/static/media/usa1.8b62c5fbd3c91c0f7993.png",
+    "static/media/nyc25.png": "/static/media/nyc25.2f39490fbf63a25387d9.png",
     "static/media/allElections2.mp4": "/static/media/allElections2.02083745b14aebd3cb6e.mp4",
     "static/media/ChooseOne.ogg": "/static/media/ChooseOne.cc96616104e133bad414.ogg",
     "static/media/montroll.jpg": "/static/media/montroll.22170bfa4341b99a4424.jpg",
@@ -86,11 +87,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.665ac841.css.map": "/static/css/main.665ac841.css.map",
-    "main.59038696.js.map": "/static/js/main.59038696.js.map",
+    "main.7acaa3ae.js.map": "/static/js/main.7acaa3ae.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.665ac841.css",
-    "static/js/main.59038696.js"
+    "static/js/main.7acaa3ae.js"
   ]
 }

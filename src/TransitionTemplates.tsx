@@ -272,7 +272,6 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
             ,
             electionName: election.tag,
             visible: [Candidate, Voter, VoterCamp, Pie],
-            runoffStage: 'firstRound',
             // @ts-ignore
             voterMovements: [ new VoterMovement(election.camps) ] ,
             // HACK to keep the alaska deep dive working
@@ -286,10 +285,67 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
         items.push(
             new SimTransition({
                 explainer: <>
+                {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
+                    <h1>Overview</h1>
+                    <p>This tool visualizes the Ranked Choice Voting ballots in the final rounds of tabulation. This election had {Math.round(election.ratio*200).toLocaleString()} voters, but the chart been simplified to 200 dots. Each visualized voter represents {election.ratio} actual voters, and each voter's position represents their preferences between the top 3 candidates based on the rankings from their ballot.</p>
+                </div>}
+                </>,
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                voterMovements: [ new VoterMovement(election.camps) ] ,
+            }),
+            new SimTransition({
+                explainer: <>
+                    <p>For example, the {election.camps[1]} voters next to {election.names.center} only showed a preference for {election.names.center} and didn't rank {election.names.left} or {election.names.right} on their ballot.</p>
+                </>,
+                focused: ['centerCandidate', 'centerBullet'],
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                voterMovements: [] ,
+            }),
+            new SimTransition({
+                explainer: <>
+                    <p>Whereas, the {election.camps[2]} next to them also ranked {election.names.center} highest among the top 3, but their next choice was {election.names.right}. Hence they're positioned slightly closer to {election.names.right}.</p>
+                </>,
+                focused: ['centerCandidate', 'centerThenRight', 'rightCandidate'],
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                voterMovements: [] ,
+            }),
+            new SimTransition({
+                explainer: <>
+                    <p>All the voters put together gives us a very clear picture of the final rounds of the Ranked Choice Voting tabulation.</p> 
+                </>,
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                voterMovements: [] ,
+            }),
+            new SimTransition({
+                explainer: <>
+                    <p>Grouping the voters by their preferences shows us that {election.camps[1]+election.camps[2]+election.camps[9]} were allocated to {election.names.center}, {election.camps[3]+election.camps[4]+election.camps[5]} were allocated to {election.names.right}, and {election.camps[6]+election.camps[7]+election.camps[8]} were allocated to {election.names.left}.</p> 
+                    <p>Then according to Ranked Choice Voting tabulation, {election.names.center} has the fewest votes and gets eliminated.</p> 
+                </>,
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'firstRound',
+                voterMovements: [] ,
+            }),
+            new SimTransition({
+                explainer: <>
+                    <p>{election.names.center}'s voters then get distributed to their next preferences, and {election.names.left} wins with {election.camps[6]+election.camps[7]+election.camps[8]+election.camps[9]} votes!</p>
+                </>,
+                electionName: election.tag,
+                visible: [Candidate, Voter, VoterCamp, Pie],
+                runoffStage: 'right_vs_left',
+                voterMovements: [] ,
+            }),
+            new SimTransition({
+                explainer: <>
                 {election?.extraContext}
                 {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
+                    {election?.extraContext}
                     <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
-                    <h1>Overview</h1>
+                    <p>There's many more insights to be gained from this visualization. For a fully fleshed out example we recommend reading <a href="https://rcvchangedalaska.com">our featured article covering the famous Alaska 2022 election</a>, but otherwise you can read on to learn more about the {election.title}.</p>
                     <p>This election had the following scenarios : 
                     <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
                     </p>
@@ -298,13 +354,7 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
                 electionName: election.tag,
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 runoffStage: 'firstRound',
-                // @ts-ignore
-                voterMovements: [ new VoterMovement(election.camps) ] ,
-                // HACK to keep the alaska deep dive working
-                ...((getDimensionFromURL() == 'deep-dive') ? {
-                    visible: [Candidate],
-                    voterMovements: [],
-                }: {})
+                voterMovements: [] ,
             })
         );
     }
@@ -669,7 +719,7 @@ export const dimensionTemplates: GetterMap = {
                 visible: [Candidate, Voter, VoterCamp, Pie],
                 focused: ['centerBullet'],
                 explainer: <>
-                    <p>Let's start with converting the {election.names.center} bullet voters. We'll assume that they would give 5 stars to {election.names.center} and then no stars to anyone else:</p>
+                    <p>Let's start with converting the voters who only preferred {election.names.center}. We'll assume that they would give 5 stars to {election.names.center} and then no stars to anyone else:</p>
                     {starBallot([5, 0, 0])}
                     <p>Since there are {c[1]} of those voters then that adds up to {c[1]*5} stars for {election.names.center}.</p>
                     <Bars election={election} data={dotCamp([
@@ -684,7 +734,7 @@ export const dimensionTemplates: GetterMap = {
                 explainer: <>
                     <p>Next we'll look at those who voted {election.names.center} 1st and {election.names.right} 2nd. We can assume they would have given {election.names.center} 5 stars,
                     and {election.names.left} 0 stars, but their level of support for {election.names.right} is not as clear.</p>
-                    <p>Depending on how strongly they felt about {election.names.right} they could have given a score anywhere between 1 and 4 stars and still maintained their relative ranking.</p>
+                    <p>Depending on how strongly they felt about {election.names.right} they could have given a score anywhere between 1 and 4 stars and still maintained their relative preference.</p>
                     <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
                     {starBallot([5, 1, 0])}
                     {starBallot([5, 4, 0])}

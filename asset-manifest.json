@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.d67edcdf.css",
-    "main.js": "/static/js/main.bb20f448.js",
+    "main.css": "/static/css/main.665ac841.css",
+    "main.js": "/static/js/main.c025d5fe.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
     "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
     "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
@@ -16,6 +16,7 @@
     "static/media/hutchinson.jpg": "/static/media/hutchinson.5bc32c4019a0528553dc.jpg",
     "static/media/parties.mp4": "/static/media/parties.8da4886527e64a2ffb92.mp4",
     "static/media/begichThenPalin.pdn": "/static/media/begichThenPalin.b96bbebd219aa898174d.pdn",
+    "static/media/lander.jpg": "/static/media/lander.1e992c7990b2b879c7eb.jpg",
     "static/media/alaska-general-2022.png": "/static/media/alaska-general-2022.e68ac8beee3202038843.png",
     "static/media/usa2.png": "/static/media/usa2.7d0792179e22b97efb8f.png",
     "static/media/usa3.png": "/static/media/usa3.c2d897cfeac7715f5b9e.png",
@@ -41,7 +42,9 @@
     "static/media/begichBullet.pdn": "/static/media/begichBullet.568839ab4a3494a1ba17.pdn",
     "static/media/australia.png": "/static/media/australia.a5120a53d463c884032b.png",
     "static/media/rankedBallot.png": "/static/media/rankedBallot.3f0300bc4da943f9c8e9.png",
+    "static/media/cuomo.jpg": "/static/media/cuomo.b9211db7ba80d4ed59fd.jpg",
     "static/media/johnson.jpg": "/static/media/johnson.09edc8d1923fa81b3ae7.jpg",
+    "static/media/mamdani.jpg": "/static/media/mamdani.af7894f80772a8f409aa.jpg",
     "static/media/minneapolis-2021.png": "/static/media/minneapolis-2021.ae75828da4dd323cd740.png",
     "static/media/begichThenPeltola.png": "/static/media/begichThenPeltola.5980a2f4f916219d4c34.png",
     "static/media/begichThenPalin.png": "/static/media/begichThenPalin.1b24df44e81e7693e9c8.png",
@@ -82,12 +85,12 @@
     "static/media/wiley.jpg": "/static/media/wiley.7b2cc1f00df44d39a8c3.jpg",
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
-    "main.d67edcdf.css.map": "/static/css/main.d67edcdf.css.map",
-    "main.bb20f448.js.map": "/static/js/main.bb20f448.js.map",
+    "main.665ac841.css.map": "/static/css/main.665ac841.css.map",
+    "main.c025d5fe.js.map": "/static/js/main.c025d5fe.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d67edcdf.css",
-    "static/js/main.bb20f448.js"
+    "static/css/main.665ac841.css",
+    "static/js/main.c025d5fe.js"
   ]
 }

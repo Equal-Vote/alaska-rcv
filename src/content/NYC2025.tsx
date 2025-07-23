@@ -20,4 +20,7 @@ export default {
     ],
     customDimensions: {},
     centerBeatsRight: true,
+    extraContext: <p>
+        While RCV was used for the primary it will not be used in the general election. That election which will feature Zohran Mamdani, the democratic nominee, as well as Andrew Cuomo and Eric Adams both of whom will be running as independents, and Curtis Sliwa (R). This election under Choose One Plurality voting will have a high likely of vote-splitting.
+    </p>,
 } satisfies ElectionDetails;

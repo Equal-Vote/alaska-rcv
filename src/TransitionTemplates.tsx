@@ -287,7 +287,7 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
                 explainer: <>
                 {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
                     <h1>Overview</h1>
-                    <p>This tool visualizes the Ranked Choice Voting ballots in the final rounds of tabulation. This election had {Math.round(election.ratio*200).toLocaleString()} voters, but the chart been simplified to 200 dots. Each visualized voter represents {election.ratio} actual voters, and each voter's position represents their preferences between the top 3 candidates based on the rankings from their ballot.</p>
+                    <p>This tool visualizes the Ranked Choice Voting ballots in the final rounds of tabulation. This election had {Math.round(election.ratio*200).toLocaleString()} voters who showed a preference between the top 3, but the chart has been simplified to 200 dots. Each visualized voter represents {election.ratio} actual voters, and each voter's position represents their preferences between the top 3 candidates based on the rankings from their ballot.</p>
                 </div>}
                 </>,
                 electionName: election.tag,
@@ -343,7 +343,6 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
                 explainer: <>
                 {election?.extraContext}
                 {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
-                    {election?.extraContext}
                     <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
                     <p>There's many more insights to be gained from this visualization. For a fully fleshed out example we recommend reading <a href="https://rcvchangedalaska.com">our featured article covering the famous Alaska 2022 election</a>, but otherwise you can read on to learn more about the {election.title}.</p>
                     <p>This election had the following scenarios : 

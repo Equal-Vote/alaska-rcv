@@ -281,7 +281,7 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
             }: {})
         }),
     ];
-    if((election.dimensions.length > 1 && getDimensionFromURL() == 'overview') || election.extraContext){
+    if((election.dimensions.length > 1 && getDimensionFromURL() == 'overview')){
         items.push(
             new SimTransition({
                 explainer: <>
@@ -733,20 +733,20 @@ export const dimensionTemplates: GetterMap = {
                 explainer: <>
                     <p>Next we'll look at those who voted {election.names.center} 1st and {election.names.right} 2nd. We can assume they would have given {election.names.center} 5 stars,
                     and {election.names.left} 0 stars, but their level of support for {election.names.right} is not as clear.</p>
-                    <p>Depending on how strongly they felt about {election.names.right} they could have given a score anywhere between 1 and 4 stars and still maintained their relative preference.</p>
+                    <p>RCV doesn't allow giving equal rankings, so depending on how strongly they felt about {election.names.right} they could have given any number of Stars on a STAR ballot. Whether it's 0-4 or even a 5 showing that they liked their second choice just as much as their first.  </p>
                     <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
-                    {starBallot([5, 1, 0])}
-                    {starBallot([5, 4, 0])}
+                    {starBallot([5, 0, 0])}
+                    {starBallot([5, 5, 0])}
                     </div>
-                    <p>Here's what we get if we add the 5,1,0 ballots to the previous data:</p>
+                    <p>Here's what we get if we add the 5,0,0 ballots to the previous data:</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0, 0],
-                        [5, 1, 0]
+                        [5, 0, 0]
                     ])}/>
-                    <p>Then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,4,0 ballots.</p>
+                    <p>Then we'll add a range to get a sense for how much bigger the {election.names.right} support could have been with the 5,5,0 ballots.</p>
                     <Bars election={election} data={dotCamp([
                         [5, 0,      0],
-                        [5, [1, 4], 0]
+                        [5, [0, 5], 0]
                     ])}/>
                 </>,
                 runoffStage: 'default'
@@ -757,14 +757,14 @@ export const dimensionTemplates: GetterMap = {
                 explainer: <>
                     <p>Repeating the same process for those who voted {election.names.right} 1st and {election.names.center} 2nd, here's the 2 extremes for those converted ballots.</p>
                     <div style={{display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap'}}>
-                    {starBallot([1, 5, 0])}
-                    {starBallot([4, 5, 0])}
+                    {starBallot([0, 5, 0])}
+                    {starBallot([5, 5, 0])}
                     </div>
                     <p>Here's what the updated totals looks like:</p>
                     <Bars election={election} data={dotCamp([
                         [5,        0,       0],
-                        [5,        [1,4],   0],
-                        [[1,4],    5,       0]
+                        [5,        [0,5],   0],
+                        [[0,5],    5,       0]
                     ])}/>
                 </>,
                 runoffStage: 'default'
@@ -776,14 +776,14 @@ export const dimensionTemplates: GetterMap = {
 
                     <Bars election={election} data={dotCamp([
                         [5,        0,       0       ],
-                        [5,        [1,4],   0       ],
-                        [[1,4],    5,       0       ],
+                        [5,        [0,5],   0       ],
+                        [[0,5],    5,       0       ],
                         [0,        5,       0       ],
-                        [0,        5,       [1,4]   ],
-                        [0,        [1,4],   5       ],
+                        [0,        5,       [0,5]   ],
+                        [0,        [0,5],   5       ],
                         [0,        0,       5       ],
-                        [[1,4],    0,       5       ],
-                        [5,        0,       [1,4]   ],
+                        [[0,5],    0,       5       ],
+                        [5,        0,       [0,5]   ],
                     ])}/>
 
                 </>,

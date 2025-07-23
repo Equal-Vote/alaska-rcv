@@ -10,6 +10,7 @@ import Burlington2009 from "./content/Burlington2009";
 import Minneapolis2021 from "./content/Minneapolis2021";
 import Moab2021 from "./content/Moab2021";
 import NYC2021 from "./content/NYC2021";
+import NYC2025 from "./content/NYC2025";
 import Oakland2022 from "./content/Oakland2022";
 import Pierce2008 from "./content/Pierce2008";
 import SanFrancisco2020 from "./content/SanFrancisco2020";
@@ -23,6 +24,7 @@ export const elections: ElectionDetails[] = [
     Minneapolis2021,
     Moab2021,
     NYC2021,
+    NYC2025,
     Oakland2022,
     Pierce2008,
     SanFrancisco2020,
@@ -38,6 +40,7 @@ export type ElectionTag =
     'oakland22' |
     'moab21' |
     'nyc21' |
+    'nyc25' |
     'aspen09';
 
 export const dimensionNames = {

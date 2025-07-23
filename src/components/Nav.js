@@ -64,7 +64,7 @@ export default ({election, navTop}) => {
             </h1>
         </Box>
         {election && <Box display='flex' flexDirection='column' justifyContent='center' sx={{minHeight: '77px', background: 'var(--brand-dkblue)'}}>
-            <DimensionButtons election={AlaskaSpecial2022} excludeSelected center/>
+            <DimensionButtons election={election} excludeSelected center/>
         </Box>}
     </Box>
 }

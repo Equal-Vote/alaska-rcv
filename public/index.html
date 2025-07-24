@@ -35,8 +35,8 @@
       let key = window.location.pathname.split('/')[1];
       const metas = Array.from(document.getElementsByTagName('meta'))
       const metaImageNode = metas.find((m) => m.attributes[0].nodeValue === 'og:image').attributes[1]
-      if(key == 'nyc25') metaImageNode = 'https://realrcv.equal.vote/nyc25.png'
-      if(key == 'alaska22') metaImageNode = 'https://realrcv.equal.vote/alaska22.png'
+      if(key == 'nyc25') metaImageNode.nodeValue = 'https://realrcv.equal.vote/nyc25.png'
+      if(key == 'alaska22') metaImageNode.nodeValue = 'https://realrcv.equal.vote/alaska22.png'
     </script>
     <!-- Matomo -->
     <script>

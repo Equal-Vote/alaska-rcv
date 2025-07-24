@@ -13,6 +13,7 @@
       name="description"
       content="Alaska RCV Simulation"
     />
+    <meta name="og:image" content=""/>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -29,6 +30,14 @@
     -->
     <title>Alaska RCV Simulation</title>
 
+    <!-- set OG -->
+    <script type="text/javascript">
+      let key = window.location.pathname.split('/')[1];
+      const metas = Array.from(document.getElementsByTagName('meta'))
+      const metaImageNode = metas.find((m) => m.attributes[0].nodeValue === 'og:image').attributes[1]
+      if(key == 'nyc25') metaImageNode = 'https://realrcv.equal.vote/nyc25.png'
+      if(key == 'alaska22') metaImageNode = 'https://realrcv.equal.vote/alaska22.png'
+    </script>
     <!-- Matomo -->
     <script>
       var _paq = window._paq = window._paq || [];

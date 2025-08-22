@@ -50,6 +50,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             expectedFailures: new ImageObject(25, 270, 60, 'expectedRCVFailures.png', 'contain'),
             australia: new ImageObject(0, 0, 100, 'australia.png', 'contain'),
             australia_house: new ImageObject(0, 0, 100, 'australiaHouse.jpg', 'contain'),
+            new_america: new ImageObject(0, 0, 85, 'new_america.png', 'contain'),
             usa_1: new ImageObject(0, 0, 100, 'usa1.png', 'contain'),
             usa_2: new ImageObject(0, 0, 100, 'usa2.png', 'contain'),
             usa_3: new ImageObject(0, 0, 100, 'usa3.png', 'contain'),

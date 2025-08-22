@@ -263,7 +263,8 @@ export default () => [
             <p>The outlets reported this as a majority because the 12 bullet votes for Begich
                 weren't able to transfer and weren't counted in the final round.</p>
             <p>So they reported that Peltola had 96/188 = 51% , but she actually had 96/200 = 45%.</p>
-            <p>The majority is an illusion! In reality, it's impossible for any voting method to guarantee a true Majority Winner because a Majority Winner doesn't always exist.</p>
+            <p>The majority is an illusion! In reality, it's impossible for any voting method to guarantee a true Majority Winner because a Majority Winner doesn't always exist. </p>
+            <p>If your voter base has 3 or more polarized factions, then you won’t have a majority winner regardless of the voting method. So this wouldn’t be a problem on its own except that it’s consistently over sold by advocates of Ranked Choice Voting.</p>
         </>,
         runoffStage: 'right_vs_left',
         exhaustedCamp: 'centerBullet'
@@ -345,6 +346,7 @@ export default () => [
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
             <p>And then Peltola loses in the final round!</p>
+            <p>Again, Peltola just GAINED supporters and yet, it caused her to LOSE the election.</p>
             <br/>
             <p>This is known as a Monotonicity Pathology.</p>
             <p>A Monotonicity Pathology is when increasing support for a winning candidate can cause them to lose or if decreasing support for a losing candidate causes them to win, and RCV is one of the only single-winner voting methods to have this problem.</p>
@@ -421,58 +423,41 @@ export default () => [
         visible: ['all_elections_2'],
         explainer: <>
             <p>...and also the elections where the 3rd candidate was too small to be threatening.</p>
-            <p>Now our failure rate has gone up to 3 out of 89, or 3.4%.
-                That's starting to get a little concerning but this is still a very small sample size.</p>
+            <p>Now that we’re only looking at the somewhat competitive elections, the failure rate has gone up to 3.4%. Meaning that once you have a competitive election, there’s a one in thirty chance of a failure.</p>
         </>
     }),
     new SimTransition({
-        visible: ['australia'],
-        explainer: <>
-            <p>For a bigger sample size, let's look at Australia. Their house of representatives have been using RCV for over 100 years, 
-                and their overall Condorcet Failure rate could range from <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4763372">1%</a> up to <a href="https://www.youtube.com/watch?v=wQs0k0P1LYU&t=1346s">7%</a>!</p>
-        </>
-    }),
-    new SimTransition({
-        visible: ['australia_house'],
-        explainer: <>
-            <p>And despite all of that time, the Australian house is still stuck in a 2 party dominated system. By contrast the Australian Senate uses a different method, <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">Single Transferable Vote</a>, and they have more 3rd party representation as a result.</p>
-            <p>These failure rates are extra devastating when you consider the damage that each of these causes.</p>
-        </>
-    }),
-    new SimTransition({
-        visible: ['usa_1'],
+        visible: [],
         explainer: <>
             <h1>❌ The Consequences</h1>
-            <p>After the failure in Alaska, do you think Republicans will ever feel safe running multiple candidates again? Or even voting honestly?</p>
+            <p>When parties are putting millions of dollars on the line a one in thirty chance is not a risk worth taking. It doesn’t matter what the voters think, if the main parties are afraid of running too many candidates, then voters won’t have competitive elections with meaningful choices. </p>
+            <p>
+                Alaska is the perfect example of this. After the failure in 2022, Peltola and Begich returned for another race in 2024. There were also 2 other viable candidates but <a href="https://thealaskacurrent.com/2024/09/04/a-dozen-candidates-have-dropped-out-of-alaskas-general-election/">they dropped out for fear that they might be spoilers. </a>
+                This is effective at reducing the chances of a failure, but it completely defeats the purpose of trying to adopt a voting method that gives voters more options.
+            </p>
         </>,
         voterMovements: [],
         runoffStage: 'default',
     }),
     new SimTransition({
-        visible: ['usa_2'],
+        visible: ['new_america'],
         explainer: <>
-            <p>The election inaccuracies and general voter confusion have
-                caused many RCV repeals including 3 jurisdictions that experienced Monotonicity Pathologies or Lesser-Evil Failures (Burlington, VT (later-reinstated); Pierce, WA; and Moab, UT).
-            </p>
+            <p>Zooming out, we see that Alaska is a microcosm of the situation across the US. <a href="https://www.newamerica.org/political-reform/reports/rcv-impact-on-candidate-entry-and-representation/">A study comparing the number of candidates across hundreds of RCV elections</a> found that there was an increase in the number of candidates immediately after RCV was adopted, but that increase quickly disappeared within just a few elections.</p>
         </>,
-        // reset so we can scrollback properly
-        voterMovements: [
-            new VoterMovement(7, 'leftBullet', 'rightBullet')
-        ]
-    }),
-    new SimTransition({
-        visible: ['usa_3'],
-        explainer: <>
-            <p>Many states have been considering legislation to limit RCV, and 10 have gone so far as to ban it entirely. The number of bans is growing rapidly
-                but <a href="https://ballotpedia.org/Ranked-choice_voting_(RCV)">the latest numbers are available on ballotpedia</a>.
-            </p>
-            <p>You can browse some of these failures and repeals in the tool below.</p>
-        </>,
-        voterMovements: [new VoterMovement([0, 12, 29, 36, 23, 4, 5, 25, 50, 16])] // reset to handle cases where you scroll back from the election selector
+        voterMovements: [],
+        runoffStage: 'default',
     }),
     new SimTransition({
         visible: [],
-        electionName: 'burlington-2009', // presetting burlington so it's ready at the next step
+        explainer: <>
+            <p>Alaska has also triggered direct backlash against RCV. Immediately following the 2022 elections Alaskans initiated a ballot measure to repeal RCV and this narrowly lost in 2024. Although RCV was able to protect its gains in Alaska, it was less successful across the country. In 2024 there were 7 states with ballot measures to expand RCV, but all failed despite millions being spent in their favor.</p>
+            <p>And on top of that RCV has now been completely banned in 17 states. The number of bans is growing rapidly but <a href="https://ballotpedia.org/Ranked-choice_voting_(RCV)">the latest numbers are available on ballotpedia</a></p>
+        </>,
+        voterMovements: [],
+        runoffStage: 'default',
+    }),
+    new SimTransition({
+        visible: [],
         explainer: <>
             <p>RCV has the most investment, but when it fails, it hurts the movement as a whole. This time it hurt Republicans in Alaska but it could just as easily hurt Democrats in a
                 blue state like Oregon if two Democrats ran against one Republican.</p>
@@ -506,9 +491,9 @@ export default () => [
             <ol>
                 <li>RCV does NOT guarantee a Condorcet Winner</li>
                 <li>RCV does NOT solve the Spoiler Effect</li>
-                <li>RCV does NOT guarantee a Majority Winner</li>
+                <li>RCV does NOT guarantee a Majority Winner (no method can)</li>
                 <li>RCV does NOT make it safe to rank your favorite first</li>
-                <li>RCV failures will become much more common as our elections become more competitive</li>
+                <li>RCV failures become much more common when our elections are more competitive</li>
             </ol>
             <p>We need to start considering other voting methods, but before we can do that, we need to stop overselling the claims of RCV.</p>
         </>,

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.665ac841.css",
-    "main.js": "/static/js/main.d2e78f8f.js",
+    "main.js": "/static/js/main.10f014b6.js",
     "static/js/453.f651fdee.chunk.js": "/static/js/453.f651fdee.chunk.js",
     "static/media/allElections1.ogg": "/static/media/allElections1.9332bcf5d4b3f5413ec8.ogg",
     "static/media/parties.ogg": "/static/media/parties.ed9c866164759ddb9fcf.ogg",
@@ -36,6 +36,7 @@
     "static/media/begichThenPeltola.pdn": "/static/media/begichThenPeltola.d6b6d6c5298785545773.pdn",
     "static/media/fargoQuote.png": "/static/media/fargoQuote.083030c4a6ee5c22124b.png",
     "static/media/worlobah.jpg": "/static/media/worlobah.23b38d37dfcdbe052e5e.jpg",
+    "static/media/new_america.png": "/static/media/new_america.1dabbc2962a2fadf1ff5.png",
     "static/media/moab-2021.png": "/static/media/moab-2021.7e601ded522a13bbe9d5.png",
     "static/media/resnick.jpg": "/static/media/resnick.bd92b2a2d17722eacb9a.jpg",
     "static/media/australiaHouse.jpg": "/static/media/australiaHouse.ee35cbcf75fc803f3ce7.jpg",
@@ -86,11 +87,11 @@
     "static/media/engardio.jpg": "/static/media/engardio.348c57d5aa0bf8946542.jpg",
     "index.html": "/index.html",
     "main.665ac841.css.map": "/static/css/main.665ac841.css.map",
-    "main.d2e78f8f.js.map": "/static/js/main.d2e78f8f.js.map",
+    "main.10f014b6.js.map": "/static/js/main.10f014b6.js.map",
     "453.f651fdee.chunk.js.map": "/static/js/453.f651fdee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.665ac841.css",
-    "static/js/main.d2e78f8f.js"
+    "static/js/main.10f014b6.js"
   ]
 }

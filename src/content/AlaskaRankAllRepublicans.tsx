@@ -15,7 +15,7 @@ export default () => [
     new SimTransition({
         visible: [Candidate, Voter, VoterCamp, Pie],
         explainer: <>
-            <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-all-republicans-to-win-in-november/">a movement to encourage republican voters to "Rank all Republicans" or "Rank the Red"</a>. </p>
+            <p>After the 2022 special election there has been <a href="https://thehill.com/opinion/campaign/3650562-alaska-republicans-should-rank-the-red-to-win-in-november/">a movement to encourage republican voters to "Rank all Republicans" or "Rank the Red"</a>. </p>
             <p>This speaks to one of the positives of RCV in that candidates are encouraged to form coalitions rather than strictly limit themselves to negative campaigning, but is it enough to overcome RCV's fundamental flaws?</p>
             <p>It turns out that "Rank all Republicans" would likely be an effective strategy for electing a Republican, however even with the improved voter education RCV will still fail to select winners that best represent the people.</p>
         </>,

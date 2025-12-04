@@ -32,5 +32,5 @@ COPY --chown=node:node --from=build /usr/src/app/build /usr/src/app/build
 COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --chown=node:node --from=build /usr/src/app/package*.json ./
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "serve"]
 EXPOSE 3000

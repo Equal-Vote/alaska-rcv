@@ -60,11 +60,11 @@ jobs:
         with:
           repository: 'Equal-Vote/argocd'
           token: ${{ secrets.GH_PAT }}
-      # - name: Update argocd repo
-      #   run: |
-      #     # Note: I can't use env.REPO here since that would expand to equal-vote/discord-bot
-      #     yq -i ".image.tag = \"sha-${GITHUB_SHA::7}\"" applications/discord-bot/values.yaml
-      #     git config user.name github-actions
-      #     git config user.email github-actions@github.com
-      #     git commit -am "Automatically updating ${{ env.REPO }} image."
-      #     git push
+      - name: Update argocd repo
+        run: |
+          # Note: I can't use env.REPO here since that would expand to equal-vote/alaska-rcv
+          yq -i ".image.tag = \"sha-${GITHUB_SHA::7}\"" applications/alaska-rcv/values.yaml
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "Automatically updating ${{ env.REPO }} image."
+          git push

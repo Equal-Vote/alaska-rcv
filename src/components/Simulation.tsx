@@ -1,27 +1,25 @@
-// @ts-nocheck
 import { useContext, useEffect, useRef, useState } from "react";
 import { SimContext } from '../SimContext';
-import Nav from "./Nav";
+// @ts-ignore
 import Voter from "./Voter";
 import { Box } from "@mui/material";
-import GameObject from "./GameObject";
 
-const Simulation = ({navTop}) => {
+const Simulation = ({navTop}: {navTop: number}) => {
     let [bool, setBool] = useState(false);
-    let animID = useRef(null);
-    let simRef = useRef(null);
+    let animID = useRef<number | null>(null);
+    let simRef = useRef<HTMLDivElement | null>(null);
 
     const {simState} = useContext(SimContext);
 
-    const gameLoop = (timestamp) => {
+    const gameLoop = (timestamp?: number) => {
         let objs = simState.objects;
 
         // update
-        objs.forEach(o => o.update(simState));
+        objs.forEach((o: any) => o.update(simState));
 
         // only do these steps if voters are visible
 
-        let allObjsAreMember = objs.reduce((prev, obj) => prev && (obj.className != 'Voter' || obj.isMember()), true)
+        let allObjsAreMember = objs.reduce((prev: boolean, obj: any) => prev && (obj.className != 'Voter' || obj.isMember()), true)
         if(allObjsAreMember) simState.activeFrames--;
         let isMobile = (window.innerWidth < 900);
         if(!isMobile || (simState.visible.includes(Voter) && simState.activeFrames > 0)){
@@ -31,11 +29,11 @@ const Simulation = ({navTop}) => {
             let anyCollision = true;
             let k = 0;
             let max_steps = 15;
-            let awakeObjects = objs.filter(o => o.phyMass != undefined && o.awake);
-            let asleepObjects = objs.filter(o => o.phyMass != undefined && !o.awake);
+            let awakeObjects = objs.filter((o: any) => o.phyMass != undefined && o.awake);
+            let asleepObjects = objs.filter((o: any) => o.phyMass != undefined && !o.awake);
 
             // move
-            awakeObjects.forEach(o => o.applyVelocity());
+            awakeObjects.forEach((o: any) => o.applyVelocity());
 
             let ii = 0;
             while(anyCollision && k < max_steps){
@@ -65,7 +63,7 @@ const Simulation = ({navTop}) => {
 
     useEffect(() => {
         animID.current = requestAnimationFrame(gameLoop);
-        return () => cancelAnimationFrame(animID.current);
+        return () => { if (animID.current !== null) cancelAnimationFrame(animID.current); };
     }, [])
 
     // 0 is normal, 1 is offset for nav
@@ -76,7 +74,7 @@ const Simulation = ({navTop}) => {
            transition: 'transform 0.5s',
         }}>
             <div ref={simRef} className='simulation'>
-                {simState.objects.map((o, i) => <Box key={i}>{o.asComponent(
+                {simState.objects.map((o: any, i: number) => <Box key={i}>{o.asComponent(
                     simState, simRef.current == null ? 800 : simRef.current.clientHeight
                 )}</Box>)}
             </div>

@@ -1,5 +1,5 @@
-import { Box, useMediaQuery, useTheme } from "@mui/system"
-import { BarChart, ResponsiveChartContainer } from "@mui/x-charts"
+import { Box } from "@mui/material"
+import { BarChart } from "@mui/x-charts"
 import { ElectionDetails } from "../Transitions";
 import { useEffect, useRef, useState } from "react";
 

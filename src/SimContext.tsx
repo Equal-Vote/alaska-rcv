@@ -1,23 +1,56 @@
-// @ts-nocheck
+// @ts-ignore
 import Voter from './components/Voter';
+// @ts-ignore
 import VoterCamp from './components/VoterCamp';
+// @ts-ignore
 import ImageObject from './components/ImageObject';
-import GameObject from './components/GameObject';
 import {createContext, useRef, useCallback, useEffect, useState} from 'react';
+import type { ReactNode } from 'react';
 //import transitions from './content/AlaskaDeepDive';
+// @ts-ignore
 import Candidate from './components/Candidate';
+// @ts-ignore
 import Pie from './components/Pie';
+// @ts-ignore
 import VoterCount from './components/VoterCount';
+// @ts-ignore
 import DarkenLayer from './components/DarkenLayer';
+// @ts-ignore
 import VideoEmbed from './components/VideoEmbed';
+// @ts-ignore
 import Video from './components/Video';
-import { getTransitions, ElectionDetails } from './Transitions';
-import Burlington2009 from './content/Burlington2009';
+import { getTransitions, ElectionDetails, DimensionTag } from './Transitions';
 import { getDimensionFromURL } from './TransitionTemplates';
 
-export const SimContext = createContext({});
+// simState stays `any` for now: it is a bag of GameObject instances from the
+// untyped .js modules, so typing it properly means typing those first (see the
+// note in tsconfig.json about allowJs). The other two members are typed, which
+// is what consumers actually destructure.
+// The simulation state: a bag of GameObject instances keyed by name, plus
+// fields attached after construction. The index signature covers the game
+// objects; the named fields are the ones code actually reads back.
+export interface SimState {
+    [key: string]: any;
+    objects: any[];
+    transitions: any[];
+    allExplainers: any[];
+    visibleObjects: () => any[];
+    startTime: number;
+    activeFrames: number;
+    threeSecondsPassed: boolean;
+    electionName: string | undefined;
+    election: ElectionDetails | undefined;
+}
 
-export function SimContextProvider({election, children}: {election: ElectionDetails, children: ReactNode[]}){
+export interface SimContextValue {
+    simState: any;
+    updateSimIndex: (nextIndex: number | ((i: number) => number), fullReset?: boolean) => void;
+    refreshBool: boolean;
+}
+
+export const SimContext = createContext<SimContextValue>({} as SimContextValue);
+
+export function SimContextProvider({election, children}: {election: ElectionDetails, children: ReactNode}){
     // this was genetated programatically, and then copied from the log and fed into a single line formatter
     let isMobile = (window.innerWidth < 900);
     const campMappings = (isMobile)?
@@ -34,7 +67,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         let voterRadius = 28;
         let candidateRadius = 43;
 
-        let ctx = {
+        let ctx: SimState = {
             // embed (must be on top so that it's interactable)
             star_vs_rcv_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/JDCQQEeSQlo?si=n2RdL4rsHo3Dj40m', 25, 90),
             approval_embed: new VideoEmbed(80, 'https://www.youtube.com/embed/m8VXIIaC9Zw?si=cTyOSt1pMmkCQAtv', 25, 270),
@@ -87,11 +120,16 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             leftThenCenter: new VoterCamp(voterRadius, 180, 'left', 'center'),
             centerThenLeft: new VoterCamp(voterRadius, 120, 'center', 'left'),
             // other
-            objects: undefined as GameObject[],
-        };
+            objects: undefined as unknown as any[],
+            // ctx is built progressively: transitions, allExplainers and
+            // visibleObjects are attached further down, after the game objects
+            // exist. The cast records that this literal is the incomplete first
+            // stage rather than making those fields optional, which would force
+            // a `?.` on every read site.
+        } as unknown as SimState;
 
-        let objects: GameObject[] = [];
-        
+        let objects: any[] = [];
+
         Object.entries(ctx).forEach(([key, o]) => {
             if(key == 'objects') return;
             objects.push(o);
@@ -103,7 +141,6 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             objects.push(new Voter(i, (isMobile? 20 : 80)+r, (i/200)*360+.3, ctx[campMappings[i]]));
         }
         ctx.objects = objects;
-        let params = new URLSearchParams(window.location.search)
         ctx = {...ctx,
             startTime: Date.now(),
             activeFrames: 0,
@@ -114,7 +151,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             exhaustedCamp: undefined,
             runoffStage: 'default',
             runoffTimeout: undefined,
-            electionName: election?.tag, 
+            electionName: election?.tag,
             election: election
         };
 
@@ -125,12 +162,12 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : getDimensionFromURL(1)})
+        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : (getDimensionFromURL(1) as DimensionTag)})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);
         //});
-        ctx.transitions.forEach((t, i) => {
+        ctx.transitions.forEach((t: any, i: number) => {
             if(i == 0) return;
             if(ctx.transitions[i-1].videoStopTime == 999999 || ctx.transitions[i-1].videoStopTime > t.videoStopTime){
                 t.videoStartTime = 0;
@@ -139,10 +176,10 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
             }
         });
 
-        ctx.allExplainers = ctx.transitions.map(t => {return t.explainer; });
+        ctx.allExplainers = ctx.transitions.map((t: any) => {return t.explainer; });
 
         ctx.visibleObjects = function(){
-            return this.objects.filter(o => o.isVisible(this));
+            return this.objects.filter((o: any) => o.isVisible(this));
         }
 
         ctx.transitions[0].apply(ctx);
@@ -154,8 +191,8 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         return ctx;
     }
-    
-    const updateSimIndex = (nextIndex, fullReset=false) => {
+
+    const updateSimIndex = (nextIndex: number | ((i: number) => number), fullReset=false) => {
         let i = simIndex.current;
 
         if(typeof nextIndex !== 'number') nextIndex = nextIndex(i);
@@ -166,7 +203,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         if(fullReset){
             // we're not resetting to undefined because we trust that this is called in a scenario where we don't need it
             //new VoterMovement(200, 'anywhere', undefined).apply(simState);
-            i = 0; 
+            i = 0;
         }
 
         let prevI = i;
@@ -188,7 +225,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         simIndex.current = i;
     }
 
-    const handleKeyPress = useCallback((event) => {
+    const handleKeyPress = useCallback((event: KeyboardEvent) => {
         // I'll worry about keyboard support later
         //if(event.key == 'a'){
         //    updateSimIndex(i => i+1);

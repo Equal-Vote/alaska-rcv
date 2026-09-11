@@ -1,4 +1,3 @@
-// @ts-nocheck
 // @ts-ignore
 import Voter from './components/Voter';
 
@@ -11,7 +10,7 @@ const campNames = [
 type CampName = typeof campNames[number] | undefined;
 
 export class VoterMovement {
-    count: number;
+    count: number | number[];
     counts: number[] = [];
     from: CampName;
     to: CampName;
@@ -40,19 +39,19 @@ export class VoterMovement {
             // first release the camps that have excess
             campNames.forEach((c, i) => {
                 let votersInCamp = simState.objects
-                    .filter(o => o instanceof Voter)
-                    .filter(o => o.camp == simState[c])
-                    .sort((l, r) => {
-                        let dist = (o) => o.pos.subtract(simState.home.pos).magnitude();
+                    .filter((o: any) => o instanceof Voter)
+                    .filter((o: any) => o.camp == simState[c])
+                    .sort((l: any, r: any) => {
+                        let dist = (o: any) => o.pos.subtract(simState.home.pos).magnitude();
                         return dist(l) - dist(r); // furthest first
                     });
-                
+
                 let diff = votersInCamp.length - n[i];
-                
+
                 if(diff > 0){
                     votersInCamp
-                        .filter((o, i) => i < diff)
-                        .forEach(o => {
+                        .filter((o: any, i: number) => i < diff)
+                        .forEach((o: any) => {
                             o.camp = simState.home;
                             o.phyMass = 1;
                         });
@@ -74,8 +73,8 @@ export class VoterMovement {
             });
 
             simState.objects
-                .filter(o => o instanceof Voter)
-                .forEach(o => {
+                .filter((o: any) => o instanceof Voter)
+                .forEach((o: any) => {
                     if(o.camp == undefined) return
                     o.finalCamp = o.camp;
                 })
@@ -87,8 +86,8 @@ export class VoterMovement {
         // adding undefined made this messy :'(
         if(to == undefined){
             simState.objects
-                .filter(o => o instanceof Voter)
-                .forEach(o => {
+                .filter((o: any) => o instanceof Voter)
+                .forEach((o: any) => {
                     o.resetToStartPos(); // must set position early so that voters can be assigned properly later
                     o.camp = undefined
                 });
@@ -99,23 +98,23 @@ export class VoterMovement {
             }
             return;
         }
-        
+
         simState.objects
-            .filter(o => o instanceof Voter)
-            .filter(o => {
-                if(from == 'anywhere') return true; 
+            .filter((o: any) => o instanceof Voter)
+            .filter((o: any) => {
+                if(from == 'anywhere') return true;
                 return from == undefined? o.camp == undefined : o.camp == simState[from]
             })
-            .sort((l, r) => {
-                let campScore = (o) => (o.finalCamp != simState[to]) ? 1 : 0;
+            .sort((l: any, r: any) => {
+                let campScore = (o: any) => (o.finalCamp != simState[to]) ? 1 : 0;
                 //let campScore = () => 0; // set to 0 if you're trying to print camp mappings
-                let dist = (o) => {
+                let dist = (o: any) => {
                     return o.pos.subtract(simState[to].pos).magnitude();
                 };
                 return 1000 * (campScore(l) - campScore(r)) + dist(l) - dist(r);
             })
-            .filter((_, i) => i < n)
-            .forEach(o => {
+            .filter((_: any, i: number) => i < n)
+            .forEach((o: any) => {
                 if(updateFinalCamp)
                     o.finalCamp = simState[to];
                 o.camp = simState[to];
@@ -129,20 +128,20 @@ export class VoterMovement {
         }
     }
 
-    apply(simState, updateFinalCamp=false) {
+    apply(simState: any, updateFinalCamp=false) {
         if(this.from == 'anywhere'){
             // only recording this for reverting
-            this.counts = campNames.map(c => 
+            this.counts = campNames.map(c =>
                 simState.objects
-                .filter(o => o instanceof Voter)
-                .filter(o => o.camp == c || o.camp == simState[c]).length
+                .filter((o: any) => o instanceof Voter)
+                .filter((o: any) => o.camp == c || o.camp == simState[c]).length
             );
         }
 
         this.move(this.count, this.from, this.to, simState, updateFinalCamp);
     }
 
-    revert(simState) {
+    revert(simState: any) {
         if(this.from == 'anywhere'){
             this.move(200, 'anywhere', 'home', simState);
             campNames.forEach((c, i) => this.move(this.counts[i], 'home', c, simState));

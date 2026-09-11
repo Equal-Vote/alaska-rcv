@@ -2,7 +2,7 @@
 # Build Stage # 
 ###############
 
-FROM node:20.11.1-bullseye-slim AS build
+FROM node:26.8-bullseye-slim AS build
 RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
 
 # Run "npm ci" first so node_modules container layers are cached. This should
@@ -23,7 +23,7 @@ RUN npm run build
 # Production Stage #
 ####################
 
-FROM node:20.11.1-bullseye-slim
+FROM node:26.8-bullseye-slim
 ENV NODE_ENV=production
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 USER node

@@ -1,0 +1,52 @@
+# Build check for pull requests.
+#
+# Without this, nothing verifies a pull request at all -- the only other
+# workflow runs on push to the default branch, after the merge. That makes
+# dependency bumps unreviewable in practice: the PR looks green because
+# nothing is checking it.
+#
+# Actions are pinned by commit SHA rather than tag, matching the convention
+# already used elsewhere in this org and required by the zizmor audit.
+#
+# Node is pinned to the version in this repo Dockerfile so CI matches what
+# actually ships. `npm test` is deliberately absent: the test script runs
+# rstest, the repo contains no test files, and rstest exits 1 in that case.
+# Add the step once real tests exist.
+name: PR CI
+
+"on":
+  pull_request:
+
+# Read-only: this workflow never needs to write to the repo.
+permissions:
+  contents: read
+
+# A new push to a PR makes the in-flight run redundant.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # checkout leaves the job token in .git/config unless told
+          # otherwise. Nothing here pushes, so drop it (zizmor:
+          # artipacked).
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "20.11.1"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint

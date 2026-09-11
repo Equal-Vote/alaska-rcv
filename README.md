@@ -41,6 +41,19 @@ every entry: `KNOWN_CONSOLE_ERRORS` in `routes.test.tsx` and
 `KNOWN_CAMP_SUM_DEVIATIONS` in `elections.test.ts`. Fix the underlying problem
 and delete the entry -- never add to them to silence a new regression.
 
+### `npm run typecheck`
+
+Runs `tsc --noEmit`. rsbuild only transpiles and never reads types, so this is
+the only step that checks them -- and it is the cheapest way to catch a
+dependency major that changes a prop type or a signature, which leaves the build
+green.
+
+### `npm run lint`
+
+Runs eslint with `--max-warnings` pinned to the current count, so the warning
+count can fall but never grow. Lower the number in `package.json` as warnings
+get fixed; do not raise it.
+
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\

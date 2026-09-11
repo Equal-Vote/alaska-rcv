@@ -11,10 +11,18 @@
 # Node is pinned to the version in this repo Dockerfile so CI matches what
 # actually ships.
 #
-# `npm test` runs rstest in jsdom: it renders the app across every
-# election/dimension route and fails on new React console errors, plus unit
-# tests for the simulation maths and the election content data. It runs before
-# the build because it is the faster of the two.
+# The four checks are ordered cheapest-first so a PR fails fast:
+#
+#   typecheck  tsc --noEmit. rsbuild only transpiles, so this is the only step
+#              that reads types at all. It is what catches a dependency major
+#              that changes a prop type or a signature -- the build stays green
+#              for those.
+#   test       rstest in jsdom: renders the app across every election/dimension
+#              route and fails on new React console errors, plus unit tests for
+#              the simulation maths and the election content data.
+#   build      the real rsbuild production bundle.
+#   lint       eslint, ratcheted at the current warning count (see package.json)
+#              so warnings cannot grow.
 name: PR CI
 
 "on":
@@ -47,6 +55,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Test
         run: npm test

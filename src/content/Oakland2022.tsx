@@ -20,14 +20,13 @@ export default {
     },
     dimensions: [
         'spoiler',
-        'cycle', 
+        'cycle',
         'tally',
         'majority',
         'downward-mono',
         'upward-mono',
         'compromise',
         'star-conversion',
-        'tally',
     ],
     customDimensions: {
         'bettervoting': 'https://bettervoting.com/bpqkqm/results',

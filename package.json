@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "@mui/x-charts": "^7.1.0",
@@ -15,7 +15,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.18.3",
-    "serve": "^14.2.5",
+    "serve": "^14.2.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -49,7 +49,7 @@
     "@rsbuild/core": "^1.6.12",
     "@rsbuild/plugin-eslint": "^1.2.0",
     "@rsbuild/plugin-react": "^1.4.2",
-    "@rstest/core": "^0.6.9",
+    "@rstest/core": "^0.11.12",
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
     "gh-pages": "^6.0.0",

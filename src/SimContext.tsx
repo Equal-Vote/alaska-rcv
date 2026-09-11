@@ -57,7 +57,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         ["centerThenRight","leftThenCenter","leftBullet","rightThenCenter","rightBullet","centerThenRight","rightBullet","leftThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","leftThenCenter","rightBullet","leftThenCenter","centerThenRight","rightThenCenter","leftBullet","leftThenCenter","centerThenRight","rightBullet","rightThenCenter","centerThenRight","leftThenCenter","leftBullet","rightBullet","leftThenCenter","centerThenRight","centerThenRight","centerThenRight","centerThenRight","rightThenCenter","leftBullet","leftThenCenter","centerBullet","rightThenCenter","centerThenRight","centerThenRight","rightThenCenter","centerThenRight","centerThenRight","rightThenCenter","centerThenRight","rightThenCenter","centerThenLeft","centerThenRight","leftThenRight","centerThenLeft","centerThenRight","centerThenRight","rightThenLeft","leftThenCenter","rightThenCenter","leftBullet","leftBullet","leftBullet","centerBullet","rightThenCenter","leftThenCenter","centerThenRight","leftThenRight","leftThenRight","leftBullet","rightThenCenter","leftBullet","rightBullet","centerBullet","rightThenCenter","leftThenCenter","rightThenCenter","leftThenCenter","centerThenRight","centerThenLeft","leftBullet","rightThenCenter","leftThenCenter","centerThenRight","rightThenCenter","centerThenLeft","leftThenCenter","rightBullet","leftThenCenter","leftThenCenter","rightThenLeft","leftThenCenter","centerThenLeft","leftBullet","leftThenCenter","leftThenCenter","leftBullet","rightThenLeft","rightThenCenter","leftThenCenter","rightBullet","leftBullet","leftBullet","centerThenLeft","leftBullet","centerThenRight","leftThenCenter","leftThenCenter","centerThenLeft","leftBullet","centerThenLeft","leftThenRight","leftBullet","rightBullet","leftThenCenter","centerThenLeft","centerThenLeft","rightBullet","centerThenLeft","leftThenCenter","rightThenLeft","rightThenCenter","centerBullet","leftThenCenter","leftBullet","leftThenCenter","centerBullet","leftThenCenter","centerThenLeft","leftThenCenter","leftThenCenter","centerBullet","centerBullet","rightThenCenter","rightBullet","centerThenLeft","leftThenCenter","leftThenCenter","leftBullet","leftThenRight","rightThenCenter","centerBullet","leftThenCenter","centerThenLeft","centerBullet","leftBullet","leftBullet","rightBullet","rightThenCenter","centerBullet","rightBullet","rightThenCenter","centerThenLeft","rightBullet","leftThenCenter","leftBullet","leftThenCenter","rightThenCenter","leftThenCenter","leftThenCenter","leftBullet","rightBullet","rightThenCenter","leftThenCenter","rightBullet","rightBullet","leftThenCenter","rightBullet","rightThenCenter","centerThenRight","centerBullet","rightBullet","rightBullet","centerThenRight","leftThenCenter","rightBullet","centerBullet","centerThenRight","rightThenCenter","leftBullet","leftThenCenter","centerThenRight","centerThenRight","leftThenCenter","rightThenCenter","centerThenRight","rightThenCenter","rightBullet","rightThenCenter","leftThenCenter","centerThenRight","leftThenCenter","leftThenCenter","leftBullet","rightThenCenter","leftThenCenter","leftThenCenter","rightBullet","rightThenCenter","centerThenRight","rightThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","centerThenLeft","rightThenCenter","leftThenCenter","rightThenCenter"]
     :
         ["rightThenCenter","leftThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","leftThenCenter","leftThenCenter","rightThenCenter","centerThenRight","rightThenCenter","centerThenLeft","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","rightThenCenter","centerThenRight","centerThenRight","leftThenCenter","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","leftThenCenter","leftThenCenter","centerThenRight","centerThenRight","rightBullet","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","centerThenRight","leftThenCenter","centerThenRight","leftThenCenter","leftThenCenter","centerThenRight","centerThenRight","centerThenLeft","centerThenRight","centerBullet","leftThenCenter","centerBullet","centerBullet","centerBullet","centerBullet","centerBullet","centerBullet","centerBullet","centerThenRight","centerBullet","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","rightThenCenter","centerThenLeft","leftThenCenter","centerThenLeft","centerBullet","centerBullet","leftThenCenter","leftThenCenter","centerThenRight","leftThenCenter","leftThenCenter","centerThenLeft","centerThenLeft","centerThenLeft","centerThenLeft","centerThenLeft","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","centerThenLeft","centerThenLeft","centerThenLeft","centerThenLeft","centerThenLeft","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","centerThenLeft","leftThenCenter","centerThenLeft","leftThenCenter","leftBullet","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftThenCenter","leftBullet","leftThenCenter","leftBullet","leftBullet","leftBullet","leftThenCenter","leftBullet","leftBullet","leftThenCenter","leftBullet","leftBullet","leftThenCenter","leftBullet","leftBullet","leftBullet","leftThenRight","leftThenRight","leftBullet","leftThenRight","leftBullet","leftBullet","leftBullet","leftThenRight","leftThenRight","rightBullet","leftThenCenter","leftBullet","leftThenCenter","leftThenCenter","leftBullet","rightThenLeft","leftBullet","leftThenCenter","rightThenLeft","rightThenCenter","leftBullet","leftBullet","rightThenCenter","rightBullet","leftBullet","rightBullet","leftBullet","leftThenCenter","rightThenLeft","leftBullet","leftThenCenter","leftBullet","rightBullet","rightBullet","rightBullet","leftThenCenter","rightBullet","rightBullet","rightBullet","rightBullet","rightBullet","rightThenLeft","rightThenCenter","rightBullet","rightBullet","rightBullet","rightThenCenter","rightBullet","rightBullet","rightThenCenter","rightThenCenter","rightBullet","rightBullet","rightThenCenter","rightThenCenter","rightBullet","rightBullet","rightThenCenter","rightThenCenter","leftThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","centerBullet","rightThenCenter","rightBullet","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","rightThenCenter","centerThenRight","rightBullet","leftThenCenter","rightThenCenter"]
-    let [refreshBool, setRefreshBool] = useState(false);
+    let [refreshBool] = useState(false);
     let simState = useRef(initSimContext()).current;
     let simIndex = useRef(0);
 
@@ -131,7 +131,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         let objects: any[] = [];
 
         Object.entries(ctx).forEach(([key, o]) => {
-            if(key == 'objects') return;
+            if(key === 'objects') return;
             objects.push(o);
         });
         let r = 5;
@@ -162,14 +162,14 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         // must be after the { ... } since that breaks the reference
 
-        ctx.transitions = getTransitions({election: election, dimension: election == undefined ? undefined : (getDimensionFromURL(1) as DimensionTag)})
+        ctx.transitions = getTransitions({election: election, dimension: election == null ? undefined : (getDimensionFromURL(1) as DimensionTag)})
 
         //ctx.transitions = transitions(ctx, setRefreshBool, () => {
         //    updateSimIndex(i => i, true);
         //});
         ctx.transitions.forEach((t: any, i: number) => {
-            if(i == 0) return;
-            if(ctx.transitions[i-1].videoStopTime == 999999 || ctx.transitions[i-1].videoStopTime > t.videoStopTime){
+            if(i === 0) return;
+            if(ctx.transitions[i-1].videoStopTime === 999999 || ctx.transitions[i-1].videoStopTime > t.videoStopTime){
                 t.videoStartTime = 0;
             }else{
                 t.videoStartTime = ctx.transitions[i-1].videoStopTime;
@@ -186,7 +186,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
 
         setTimeout(() => {
             let camps = new Array(200);
-            simState.objects.filter((o:any) => o.className == 'Voter').forEach((v: Voter) => camps[v.index] = v.campName(simState));
+            simState.objects.filter((o:any) => o.className === 'Voter').forEach((v: Voter) => camps[v.index] = v.campName(simState));
         }, 20000);
 
         return ctx;
@@ -207,7 +207,7 @@ export function SimContextProvider({election, children}: {election: ElectionDeta
         }
 
         let prevI = i;
-        while(i != nextIndex){
+        while(i !== nextIndex){
             if(i < nextIndex){
                 i++;
                 simState.transitions[i].apply(simState)

@@ -21,7 +21,7 @@
     "build": "rsbuild build",
     "test": "rstest run",
     "serve": "serve -s build -l 3000",
-    "lint": "eslint src --max-warnings 186",
+    "lint": "eslint src --max-warnings 168",
     "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {

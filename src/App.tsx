@@ -11,7 +11,7 @@ import { useState } from 'react';
 import CaseStudySelector from './components/CaseStudySelector';
 import { elections } from './Transitions';
 
-export default () => {
+const App = () => {
     // APP
     let [navTop, setNavTop] = useState(0);
     let parts = window.location.pathname.split('/');
@@ -43,3 +43,5 @@ export default () => {
         }
     </div>;
 }
+
+export default App;

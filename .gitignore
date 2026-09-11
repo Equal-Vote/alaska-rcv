@@ -7,6 +7,8 @@
 
 # testing
 /coverage
+# rstest writes its compiled test bundles here
+/dist
 
 # production
 /build

@@ -16,8 +16,30 @@ You may also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://rsbuild.rs/guide/advanced/testing) for more information.
+Runs the test suite once with [rstest](https://rstest.rs/) in a jsdom
+environment. Use `npx rstest watch` for interactive watch mode.
+
+The suite is built to make dependency bumps reviewable -- a bump that renames a
+prop does not throw, so a green build proves very little on its own:
+
+* **Route smoke tests** (`src/__tests__/routes.test.tsx`) render the whole app at
+  every election/dimension route the content defines, and fail on any React
+  console error that is not already in the known-issues list at the top of that
+  file. React reports unknown props, bad prop types and invalid DOM nesting
+  through `console.error` rather than by throwing, so that is where a renamed
+  MUI or x-charts prop actually shows up.
+* **Content data tests** (`src/__tests__/elections.test.ts`) check every
+  election's camp distribution, candidate names, dimensions and source URL, and
+  build the transitions for every route.
+* **Unit tests** for `Vector` and `VoterMovement`, the simulation maths.
+
+The route matrix is derived from the `elections` export, so new case studies are
+covered automatically with no test edit.
+
+Two known-issue lists act as ratchets, each with an in-file comment explaining
+every entry: `KNOWN_CONSOLE_ERRORS` in `routes.test.tsx` and
+`KNOWN_CAMP_SUM_DEVIATIONS` in `elections.test.ts`. Fix the underlying problem
+and delete the entry -- never add to them to silence a new regression.
 
 ### `npm run build`
 

@@ -34,6 +34,8 @@ multi-ecosystem-groups:
   all-dependencies:
     schedule:
       interval: weekly
+      day: monday
+      time: "06:00"
     open-pull-requests-limit: 3
     labels:
       - dependencies

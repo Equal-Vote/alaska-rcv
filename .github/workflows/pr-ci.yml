@@ -55,7 +55,12 @@ jobs:
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: "20.11.1"
+          # Read from .nvmrc so this and the Dockerfile's base image tag stay
+          # on the same Node version. Pinning the version inline here let the
+          # two drift: Dependabot bumps the Dockerfile (a docker image tag it
+          # can see) but cannot see a version string in workflow YAML, so CI
+          # sat on 20.11.1 while packages requiring ^20.19.0 landed.
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies

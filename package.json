@@ -24,6 +24,7 @@
     "start": "rsbuild dev",
     "build": "rsbuild build",
     "test": "rstest run",
+    "test:e2e": "npm run build && playwright test",
     "serve": "serve -s build -l 3000",
     "lint": "eslint src"
   },
@@ -46,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@rsbuild/core": "^1.6.12",
     "@rsbuild/plugin-eslint": "^1.2.0",
     "@rsbuild/plugin-react": "^1.4.2",

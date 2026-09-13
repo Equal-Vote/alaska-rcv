@@ -15,6 +15,19 @@
 # election/dimension route and fails on new React console errors, plus unit
 # tests for the simulation maths and the election content data. It runs before
 # the build because it is the faster of the two.
+#
+# The e2e step then runs Playwright against the built bundle in a real browser.
+# jsdom has to stub requestAnimationFrame and ResizeObserver to stay
+# deterministic (see src/setupTests.ts), which pins it to the first painted
+# frame and leaves @mui/x-charts measuring a 0x0 container -- so a MUI or
+# emotion bump can break layout with every other step green. Verified: setting
+# the chart width to 0 fails Playwright while all 242 jsdom tests still pass.
+#
+# That step asserts layout invariants (non-zero boxes, a page that cannot be
+# scrolled sideways, a chart that actually measured itself), NOT pixel
+# screenshots -- Voter.js mixes Math.random() into voter positions every physics
+# frame, so a pixel baseline would be flaky by construction. See the comment at
+# the top of playwright.config.ts.
 name: PR CI
 
 "on":
@@ -53,6 +66,25 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Only chromium: these assertions are about layout, which does not differ
+      # meaningfully across engines, so WebKit and Firefox would triple the
+      # install and run cost for close to no extra signal.
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # `playwright test` rather than `npm run test:e2e`, because that script
+      # rebuilds and the Build step above already produced build/.
+      - name: E2E
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
 
       - name: Lint
         run: npm run lint

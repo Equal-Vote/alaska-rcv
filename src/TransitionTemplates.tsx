@@ -21,7 +21,7 @@ export const [
     HOME,
     CENTER_BULLET,
     CENTER_THEN_RIGHT,
-    RIGHT_THEN_CENTER, 
+    RIGHT_THEN_CENTER,
     RIGHT_BULLET,
     RIGHT_THEN_LEFT,
     LEFT_THEN_RIGHT,
@@ -132,7 +132,7 @@ export const dimensionInfo = (election: ElectionDetails, dimensionTag: Dimension
         electionName: election.tag,
         visible: 'undefined',
         runoffStage: 'firstRound',
-        voterMovements: [ new VoterMovement(election.camps) ] 
+        voterMovements: [ new VoterMovement(election.camps) ]
     })
 ]};
 
@@ -203,11 +203,11 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false, cen
     }
 
     return <Box display='flex' flexDirection='row' flexWrap='wrap' gap={3} sx={center ? {margin: 'auto'} : {ml: 5}}>
-        {dims.filter(dim => excludeSelected? (dim != selected) : true).map(dim => 
+        {dims.filter(dim => excludeSelected? (dim != selected) : true).map(dim =>
             <DimensionButton
                 title={dimensionNames[dim]}
                 href={
-                    (election === undefined ? 
+                    (election === undefined ?
                         `${host}/${dim}`
                     : (
                         (election && typeof election.customDimensions?.[dim] === 'string') ?
@@ -222,7 +222,7 @@ export const DimensionButtons = ({election=undefined, excludeSelected=false, cen
     </Box>
 }
 
-export const ScrollMessage = () => 
+export const ScrollMessage = () =>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', margin: 'auto', marginBottom: '200px'}}>
         <img src={require("./assets/arrows.png")} style={{width: '40px'}}/>
         <p style={{textAlign: 'center'}}>scroll to see more</p>
@@ -314,7 +314,7 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
             }),
             new SimTransition({
                 explainer: <>
-                    <p>All the voters put together gives us a very clear picture of the final rounds of the Ranked Choice Voting tabulation.</p> 
+                    <p>All the voters put together gives us a very clear picture of the final rounds of the Ranked Choice Voting tabulation.</p>
                 </>,
                 electionName: election.tag,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -322,8 +322,8 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
             }),
             new SimTransition({
                 explainer: <>
-                    <p>Grouping the voters by their preferences shows us that {election.camps[1]+election.camps[2]+election.camps[9]} were allocated to {election.names.center}, {election.camps[3]+election.camps[4]+election.camps[5]} were allocated to {election.names.right}, and {election.camps[6]+election.camps[7]+election.camps[8]} were allocated to {election.names.left}.</p> 
-                    <p>Then according to Ranked Choice Voting tabulation, {election.names.center} has the fewest votes and gets eliminated.</p> 
+                    <p>Grouping the voters by their preferences shows us that {election.camps[1]+election.camps[2]+election.camps[9]} were allocated to {election.names.center}, {election.camps[3]+election.camps[4]+election.camps[5]} were allocated to {election.names.right}, and {election.camps[6]+election.camps[7]+election.camps[8]} were allocated to {election.names.left}.</p>
+                    <p>Then according to Ranked Choice Voting tabulation, {election.names.center} has the fewest votes and gets eliminated.</p>
                 </>,
                 electionName: election.tag,
                 visible: [Candidate, Voter, VoterCamp, Pie],
@@ -345,7 +345,7 @@ export const pageInfo = (election: ElectionDetails): TransitionGetter => (makeTr
                 {election.dimensions.length > 1 && getDimensionFromURL() == 'overview' && <div style={{position: 'relative'}}>
                     <div id='toc' style={{position: 'absolute', top: '-30vh'}}/>
                     <p>There's many more insights to be gained from this visualization. For a fully fleshed out example we recommend reading <a href="https://rcvchangedalaska.com">our featured article covering the famous Alaska 2022 election</a>, but otherwise you can read on to learn more about the {election.title}.</p>
-                    <p>This election had the following scenarios : 
+                    <p>This election had the following scenarios :
                     <ul>{OVERVIEW_DIMENSIONS.filter(d => election.dimensions.includes(d)).map((d,i) => <li><a href={`#${d}`}>{dimensionNames[d]}</a></li>)}</ul>
                     </p>
                 </div>}
@@ -407,7 +407,7 @@ export const dimensionTemplates: GetterMap = {
         new SimTransition({
             visible: [Candidate, Voter, VoterCamp, Pie],
             explainer: <>
-                <p>And pretend {election.names.left} gained {election.upwardMonoMovements?.reduce((p, m) => p + m.count, 0)} voters from {election.names.right}.</p>
+                <p>And pretend {election.names.left} gained {election.upwardMonoMovements?.reduce((p, m) => p + (typeof m.count === 'number' ? m.count : 0), 0)} voters from {election.names.right}.</p>
             </>,
             runoffStage: 'firstRound',
             voterMovements: election.upwardMonoMovements ?? []
@@ -644,7 +644,7 @@ export const dimensionTemplates: GetterMap = {
         const c: number[] = election.camps;
 
         // @ts-ignore
-        const starBallot = (stars) => 
+        const starBallot = (stars) =>
             <table style={{border: 'none', background: '#222222', color: 'white', marginLeft: '20px', width: '300px'}}>
                 {['center', 'right', 'left'].map((key: string, i) => <tr>
                     <td style={{textAlign: 'right'}}>{
@@ -795,7 +795,7 @@ export const dimensionTemplates: GetterMap = {
                     <p>There are several possible outcomes depending on where the votes land in those ranges, but for a specific example let's see what would happen if we assume each
                         total ends up in the center of the ranges:</p>
                     <Bars election={election} data={avgScore}/>
-                    <p>If this happened then 
+                    <p>If this happened then
                         {avgLowScoreIndex == 0 && ` ${election.names.right} and ${election.names.left} `}
                         {avgLowScoreIndex == 1 && ` ${election.names.center} and ${election.names.left} `}
                         {avgLowScoreIndex == 2 && ` ${election.names.right} and ${election.names.center} `}
@@ -836,7 +836,7 @@ export const dimensionTemplates: GetterMap = {
         })
     ]))
 }
-        
+
 //...failureInfo(FAILURE.tally, <p>Tally Error<br/><i>A scenario where the election administrators failed to compute the election correctly</i></p>),
 
 export const bulletVoteDefinition = () => {

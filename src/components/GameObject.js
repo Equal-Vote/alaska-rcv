@@ -1,4 +1,3 @@
-import { toHaveDisplayValue } from "@testing-library/jest-dom/matchers";
 import { Vector } from "./Vector";
 
 export class GameObject {
@@ -82,7 +81,7 @@ export class GameObject {
         if(key == '') return false;
         return simState.visible.includes(key);
     }
-    
+
     onCollide(other){}
 
     applyVelocity(){
@@ -103,7 +102,7 @@ export class GameObject {
         if(!this.canCollidWith(other) || ! other.canCollidWith(this)) return;
 
         let diff = this.pos.subtract(other.pos);
-        
+
         // normalize
         diff = diff.scale(this.size.add(other.size).scale(.5).invert());
 

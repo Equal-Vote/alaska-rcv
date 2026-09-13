@@ -37,8 +37,9 @@ version: 2
 multi-ecosystem-groups:
   all-dependencies:
     schedule:
-      interval: daily
-      time: "22:27"
+      interval: weekly
+      day: monday
+      time: "06:00"
     labels:
       - dependencies
 

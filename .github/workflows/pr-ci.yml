@@ -88,3 +88,19 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      # Last because it is by far the slowest: it repeats npm ci and the bundle
+      # inside the image.
+      #
+      # Nothing verified the Dockerfile before this. The deploy workflow only
+      # runs on push to main, so a Dockerfile or dependency problem was invisible
+      # until after the merge -- which is exactly how `npm run build` came to be
+      # broken in the image while every PR stayed green. Building here (without
+      # pushing) moves that signal to the PR, where a Dependabot bump can still
+      # be declined.
+      #
+      # Plain `docker build` rather than docker/build-push-action: the runner
+      # ships docker, this needs no registry, no cache and no multi-arch, and it
+      # keeps the workflow from taking on another pinned action.
+      - name: Docker build
+        run: docker build --tag alaska-rcv:ci .
